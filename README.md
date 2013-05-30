@@ -1,5 +1,7 @@
 #Amrita
 
+[![Build Status](https://travis-ci.org/josephwilk/amrita.png?branch=master)](https://travis-ci.org/josephwilk/amrita)
+
 A polite, well mannered and throughly upstanding testing framework for Elixir.
 
 ![Elixir of life](http://s9.postimg.org/uv0ubzjm7/elixir.jpg)
