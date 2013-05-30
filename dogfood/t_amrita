@@ -1,8 +1,8 @@
-Code.require_file "../test_helper.exs", __FILE__
 
 defmodule AmritaTest do
-  use ExUnit.Case
+  use Amrita.Sweet
 
-  test "it should be awesome" do
+  fact "equality" do
+    1 + 1 => 2
   end
 end
