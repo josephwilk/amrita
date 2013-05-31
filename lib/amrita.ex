@@ -37,6 +37,27 @@ defmodule Amrita do
     def even?(number) do
       assert rem(number, 2) == 0
     end
+
+    def truthy?(thing) do
+      if thing do
+        r = true
+      else
+        r = false
+      end
+
+      assert r == true
+    end
+
+    def falsey?(thing) do
+      if thing do
+        r = true
+      else
+        r = false
+      end
+
+      assert r == false
+    end
+
   end
 
 end

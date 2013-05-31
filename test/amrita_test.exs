@@ -40,6 +40,18 @@ defmodule AmritaFacts do
     fact "about even?" do
       2 |> even?
     end
+
+    fact "truthy?" do
+      true |> truthy?
+      []   |> truthy?
+      ""   |> truthy?
+    end
+
+    fact "falsey?" do
+      false |> falsey?
+      nil   |> falsey?
+    end
+
   end
 
   test "Backwards compatible with ExUnit" do
