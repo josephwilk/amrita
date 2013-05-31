@@ -13,17 +13,22 @@ A polite, well mannered and throughly upstanding testing framework for Elixir.
 defmodule MathFacts do
   use Amrita.Sweet
 
-  fact "arithmetic" do
+  #Backwards compatible with ExUnit
+  test "arithmetic" do
     assert 1 + 1 == 2
   end
 
+  #Nested tests
   facts "about substraction" do
+
+    #Using assert
     fact "positive numbers" do
       assert 1 - 1 == 0
     end
 
+    #Using ->
     fact "negative numbers" do
-      assert -1 - -1 == 0
+      -1 - -1 -> 0
     end
   end
 end
