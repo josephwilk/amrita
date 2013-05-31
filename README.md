@@ -25,16 +25,16 @@ defmodule MathFacts do
       assert 2 - 1 == 1
     end
 
-    #Using ->
-    #(Still on branch: https://github.com/josephwilk/amrita/blob/%3D%3E/test/amrita_test.exs)
-    fact "negative numbers" do
-      1 - 10 -> -9
-    end
-
     #Using |>
     # Default fn of |> is equality
     fact "negative numbers" do
       1 - 10 |> -9
+    end
+
+    #Using ->
+    #(Still on branch: https://github.com/josephwilk/amrita/blob/%3D%3E/test/amrita_test.exs)
+    fact "negative numbers" do
+      1 - 10 -> -9
     end
 
   end
