@@ -6,7 +6,19 @@ A polite, well mannered and throughly upstanding testing framework for Elixir.
 
 ![Elixir of life](http://s9.postimg.org/uv0ubzjm7/elixir.jpg)
 
-#Usage
+##Install
+
+Add to your mix.exs
+
+```elixir
+  defp deps do
+    [
+      {:amrita, "0.1.0", github: "josephwilk/amrita"}
+    ]
+  end
+```
+
+##Usage
 
 ```elixir
 defmodule MathFacts do
@@ -22,12 +34,12 @@ defmodule MathFacts do
       2 |> even?
     end
   end
-  
+
   facts "about true and false" do
     fact "nil is false" do
       nil |> falsey?
     end
-    
+
     fact "empty list is true" do
       "" |> truthy
     end
