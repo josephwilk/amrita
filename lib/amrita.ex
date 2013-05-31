@@ -1,7 +1,12 @@
 defmodule Amrita do
+
   defmodule Sweet do
-    import :all, ExUnit.Case
-    use ExUnit.Case
+    defmacro __using__(opts // []) do
+      quote do
+        use ExUnit.Case
+        import :all, Amrita.Sweet
+      end
+    end
 
     defmacro fact(description, var // quote(do: _), contents) do
       quote do
