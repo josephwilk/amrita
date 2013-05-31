@@ -1,4 +1,4 @@
-#Amrita (Work in Progress)
+#Amrita
 
 [![Build Status](https://travis-ci.org/josephwilk/amrita.png?branch=master)](https://travis-ci.org/josephwilk/amrita)
 
