@@ -23,13 +23,14 @@ defmodule MathFacts do
 
     #Using assert
     fact "positive numbers" do
-      assert 1 - 1 == 0
+      assert 2 - 1 == 1
     end
 
     #Using ->
     fact "negative numbers" do
-      -1 - -1 -> 0
+      1 - 10 -> -9
     end
+
   end
 end
 ```
