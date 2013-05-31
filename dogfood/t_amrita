@@ -1,8 +1,0 @@
-
-defmodule AmritaTest do
-  use Amrita.Sweet
-
-  fact "equality" do
-    1 + 1 => 2
-  end
-end
