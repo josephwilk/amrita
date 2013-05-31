@@ -12,13 +12,14 @@ defmodule Amrita do
   defmodule Facts do
     defmacro facts(description, var // quote(do: _), contents) do
       quote do
+        @name_stack  (@name_stack || "") <> unquote(description) <> ": "
         unquote(contents)
       end
     end
 
     defmacro fact(description, var // quote(do: _), contents) do
       quote do
-        test unquote(description) do
+        test  (@name_stack || "") <> unquote(description) do
           unquote(contents)
         end
       end
