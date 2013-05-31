@@ -7,6 +7,28 @@ A polite, well mannered and throughly upstanding testing framework for Elixir.
 ![Elixir of life](http://s9.postimg.org/uv0ubzjm7/elixir.jpg)
 
 
+#Usage
+
+```elixir
+defmodule MathFacts do
+  use Amrita.Sweet
+
+  fact "arithmetic" do
+    assert 1 + 1 == 2
+  end
+
+  facts "about substraction" do
+    fact "positive numbers" do
+      assert 1 - 1 == 0
+    end
+
+    fact "negative numbers" do
+      assert -1 - -1 == 0
+    end
+  end
+end
+```
+
 ##License
 (The MIT License)
 
