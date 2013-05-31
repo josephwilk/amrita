@@ -22,6 +22,16 @@ defmodule MathFacts do
       2 |> even?
     end
   end
+  
+  facts "about true and false" do
+    fact "nil is false" do
+      nil |> falsey?
+    end
+    
+    fact "empty list is true" do
+      "" |> truthy
+    end
+  end
 
   #Nested tests
   facts "about substraction" do
