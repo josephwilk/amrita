@@ -3,8 +3,8 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule AmritaFacts do
   use Amrita.Sweet
 
-  fact "it should run like a test" do
-    assert "1" == ""
+  test "Backwards compatible with ExUnit" do
+    assert 2 + 2 == 4
   end
 
 
