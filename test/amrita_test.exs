@@ -3,10 +3,6 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule AmritaFacts do
   use Amrita.Sweet
 
-  test "Backwards compatible with ExUnit" do
-    assert 2 + 2 == 4
-  end
-
   #Testing a single fact
   fact "addition" do
     assert 1 + 1 == 2
@@ -33,6 +29,21 @@ defmodule AmritaFacts do
         assert -2 - -2 == 0
       end
     end
+  end
+
+  #Matchers
+  facts "about matchers" do
+    fact "about odd?" do
+      1 |> odd?
+    end
+
+    fact "about even?" do
+      2 |> even?
+    end
+  end
+
+  test "Backwards compatible with ExUnit" do
+    assert 2 + 2 == 4
   end
 
 end

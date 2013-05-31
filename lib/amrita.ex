@@ -5,6 +5,7 @@ defmodule Amrita do
       quote do
         use ExUnit.Case
         import Amrita.Facts
+        import Amrita.Matchers
       end
     end
   end
@@ -23,6 +24,18 @@ defmodule Amrita do
           unquote(contents)
         end
       end
+    end
+  end
+
+  defmodule Matchers do
+    import ExUnit.Assertions
+
+    def odd?(number) do
+      assert rem(number, 2) == 1
+    end
+
+    def even?(number) do
+      assert rem(number, 2) == 0
     end
   end
 
