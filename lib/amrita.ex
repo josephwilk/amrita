@@ -10,6 +10,12 @@ defmodule Amrita do
   end
 
   defmodule Facts do
+    defmacro facts(description, var // quote(do: _), contents) do
+      quote do
+        unquote(contents)
+      end
+    end
+
     defmacro fact(description, var // quote(do: _), contents) do
       quote do
         test unquote(description) do
