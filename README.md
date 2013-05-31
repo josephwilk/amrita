@@ -31,6 +31,12 @@ defmodule MathFacts do
       1 - 10 -> -9
     end
 
+    #Using |>
+    # Default fn of |> is equality
+    fact "negative numbers" do
+      1 - 10 |> -9
+    end
+
   end
 end
 ```
