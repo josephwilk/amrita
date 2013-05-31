@@ -7,13 +7,18 @@ defmodule AmritaFacts do
     assert "1" == ""
   end
 
-  facts "a group of facts" do
-    fact "it should run like a nested test" do
-      assert "2" == "3"
+
+  fact "addition" do
+    assert 1 + 1 == 2
+  end
+
+  facts "about subtraction" do
+    fact "postive numbers" do
+      assert 2 - 2 == 0
     end
 
-    fact "it should run like another nested test" do
-      assert "2" == "3"
+    fact "negative numbers" do
+      assert -2 - -2 == 0
     end
   end
 
