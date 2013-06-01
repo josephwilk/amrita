@@ -182,6 +182,22 @@ defmodule Amrita do
       if (not r), do: Fail.msg prefix, collection, "has_prefix"
     end
 
+    @doc """
+    Checks that the actual result ends with the expected result:
+
+    ## Examples:
+    [1 2 3] |> has-suffix [2 3]) ; true
+    [1 2 3] |> has-suffix [3 2]  ; false
+    """
+    def has_suffix(collection, suffix) do
+      suffix_length = Enum.count(suffix)
+      collection_length = Enum.count(collection)
+
+      r = Enum.drop(collection, collection_length - suffix_length) == suffix
+
+      if (not r), do: Fail.msg suffix, collection, "has_suffix"
+    end
+
   end
 
 end

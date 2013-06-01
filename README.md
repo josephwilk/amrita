@@ -47,6 +47,10 @@ defmodule ExampleFacts do
 
       {1, 2, 3, 4} |> has_prefix {1, 2}
     end
+
+    fact "has a suffix" do
+      [1, 2, 3, 4 ,5] |> has_suffix [4, 5]
+    end
   end
 
   facts "about numbers" do
