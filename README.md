@@ -89,6 +89,11 @@ defmodule ExampleFacts do
 end
 ```
 
+### Polite error messages:
+
+![Polite error message](http://s24.postimg.org/vlj6epnmt/Screen_Shot_2013_06_01_at_22_12_16.png)
+
+
 ## Development
 
 ###Running tests
