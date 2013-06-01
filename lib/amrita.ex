@@ -1,3 +1,25 @@
+defexception Amrita.FactError,  message: "fact failed"
+
+defexception Amrita.FactError,
+                    expected: nil,
+                    actual: nil,
+                    reason: "",
+                    negation: false,
+                    prelude: "Expected" do
+
+  def message(exception) do
+    "#{exception.prelude}:\n" <>
+    "     #{exception.expected}\n" <>
+    "     #{exception.full_reason}:\n" <>
+    "     #{exception.actual}"
+  end
+
+  def full_reason(exception) do
+    "to" <> if(exception.negation, do: " not ", else: " ")
+    <> exception.reason
+  end
+end
+
 defmodule Amrita do
 
   defmodule Sweet do
@@ -77,7 +99,14 @@ defmodule Amrita do
     import ExUnit.Assertions
 
     def contains(collection, element) do
-      assert true == Enum.any?(collection, fn x -> x == element end)
+      r = Enum.any?(collection, fn x -> x == element end)
+
+      if (not r) do
+        raise Amrita.FactError,
+                     expected: inspect(collection),
+                     actual: inspect(element),
+                     reason: "contain"
+      end
     end
   end
 
