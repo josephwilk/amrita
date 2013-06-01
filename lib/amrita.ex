@@ -161,11 +161,23 @@ defmodule Amrita do
     ## Examples
     [1 2 3] |> has-prefix  [1 2]) ; true
     [1 2 3] |> has-prefix  [2 1]) ; false
+
+    {1, 2, 3} |> has-prefix {1, 2} ; true
     """
     def has_prefix(collection, prefix) do
-      prefix_length = Enum.count(prefix)
+      if is_tuple(collection) do
+        list_collection = (tuple_to_list collection)
+      else
+        list_collection = collection
+      end
 
-      r = Enum.take(collection, prefix_length) == prefix
+      if is_tuple(prefix) do
+        list_prefix = (tuple_to_list prefix)
+      else
+        list_prefix = prefix
+      end
+
+      r = Enum.take(list_collection, Enum.count(list_prefix)) == list_prefix
 
       if (not r), do: Fail.msg prefix, collection, "has_prefix"
     end

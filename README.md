@@ -44,6 +44,8 @@ defmodule ExampleFacts do
 
     fact "has a prefix" do
       [1, 2, 3, 4] |> has_prefix [1, 2]
+
+      {1, 2, 3, 4} |> has_prefix {1, 2}
     end
   end
 

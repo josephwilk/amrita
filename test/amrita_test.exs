@@ -72,6 +72,8 @@ defmodule AmritaFacts do
 
     fact "has_prefix" do
       [1, 2, 3] |> has_prefix [1, 2]
+
+      {4, 5, 6} |> has_prefix {4, 5}
     end
 
   end
