@@ -83,7 +83,7 @@ defmodule ExampleFacts do
 end
 ```
 
-## Developerment
+## Development
 
 ###Running tests
 
