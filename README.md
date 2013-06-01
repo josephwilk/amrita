@@ -52,15 +52,8 @@ defmodule MathFacts do
   #Nested tests
   facts "about substraction" do
 
-    #Using assert
-    fact "positive numbers" do
-      assert 2 - 1 == 1
-    end
-
-    #Using |>
-    # Default fn of |> is equality
     fact "negative numbers" do
-      1 - 10 |> -9
+      1 - 10 |> equals -9
     end
   end
 

@@ -67,6 +67,10 @@ defmodule Amrita do
       roughly(actual, expected, 0.01)
     end
 
+    def equals(actual, expected) do
+      assert actual == expected
+    end
+
   end
 
   defmodule CollectionMatchers do

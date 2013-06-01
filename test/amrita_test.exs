@@ -56,6 +56,9 @@ defmodule AmritaFacts do
       0.1001 |> roughly 0.1
     end
 
+    fact "equals" do
+      999 |> equals 999
+    end
   end
 
   test "Backwards compatible with ExUnit" do
