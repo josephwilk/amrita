@@ -64,6 +64,7 @@ defmodule AmritaFacts do
   facts "about collection matchers" do
     fact "contains" do
       [1, 2, 3] |> contains 3
+      {4, 5, 6} |> contains 5
     end
   end
 

@@ -124,7 +124,13 @@ defmodule Amrita do
     import ExUnit.Assertions
 
     def contains(collection, element) do
-      r = Enum.any?(collection, fn x -> x == element end)
+      if is_tuple(collection) do
+        list_collection = (tuple_to_list collection)
+      else
+        list_collection = collection
+      end
+
+      r = Enum.any?(list_collection, fn x -> x == element end)
 
       if (not r), do: Fail.msg element, collection, "contains"
     end
