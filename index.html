@@ -46,55 +46,52 @@
   <span class="k">end</span>
 </pre></div>
 
-<h2>Usage</h2>
+<h2>Examples</h2>
 
-  <div class="highlight"><pre><span class="k">defmodule</span> <span class="no">MathFacts</span> <span class="k">do</span>
-  <span class="k">  </span><span class="kn">use</span> <span class="no">Amrita</span><span class="o">.</span><span class="no">Sweet</span>
+<div class="highlight"><pre><span class="k">defmodule</span> <span class="no">ExampleFacts</span> <span class="k">do</span>
+<span class="k">  </span><span class="kn">use</span> <span class="no">Amrita</span><span class="o">.</span><span class="no">Sweet</span>
 
-    <span class="c1">#Matchers</span>
-    <span class="n">facts</span> <span class="s2">"about numbers"</span> <span class="k">do</span>
-  <span class="k">    </span><span class="n">fact</span> <span class="s2">"odd?"</span> <span class="k">do</span>
-  <span class="k">      </span><span class="m">1</span> <span class="o">|&gt;</span> <span class="n">odd?</span>
-      <span class="k">end</span>
+  <span class="n">facts</span> <span class="s2">"about collections of numbers"</span> <span class="k">do</span>
+<span class="k">    </span><span class="n">fact</span> <span class="s2">"contains an element"</span> <span class="k">do</span>
+<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">4</span>
 
-      <span class="n">fact</span> <span class="s2">"even?"</span> <span class="k">do</span>
-  <span class="k">      </span><span class="m">2</span> <span class="o">|&gt;</span> <span class="n">even?</span>
-      <span class="k">end</span>
+      <span class="p">{</span><span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">9</span>
+
+      <span class="p">[</span><span class="ss">a:</span> <span class="m">1</span><span class="p">,</span> <span class="ss">:b</span> <span class="m">2</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="p">{</span><span class="ss">:a</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
     <span class="k">end</span>
-
-    <span class="n">facts</span> <span class="s2">"about true and false"</span> <span class="k">do</span>
-  <span class="k">    </span><span class="n">fact</span> <span class="s2">"nil is false"</span> <span class="k">do</span>
-  <span class="k">      </span><span class="no">nil</span> <span class="o">|&gt;</span> <span class="n">falsey?</span>
-      <span class="k">end</span>
-
-      <span class="n">fact</span> <span class="s2">"empty list is true"</span> <span class="k">do</span>
-  <span class="k">      </span><span class="s2">""</span> <span class="o">|&gt;</span> <span class="n">truthy</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-
-    <span class="c1">#Nested tests</span>
-    <span class="n">facts</span> <span class="s2">"about substraction"</span> <span class="k">do</span>
-
-  <span class="k">    </span><span class="c1">#Using assert</span>
-      <span class="n">fact</span> <span class="s2">"positive numbers"</span> <span class="k">do</span>
-  <span class="k">      </span><span class="n">assert</span> <span class="m">2</span> <span class="o">-</span> <span class="m">1</span> <span class="o">==</span> <span class="m">1</span>
-      <span class="k">end</span>
-
-      <span class="c1">#Using |&gt;</span>
-      <span class="c1"># Default fn of |&gt; is equality</span>
-      <span class="n">fact</span> <span class="s2">"negative numbers"</span> <span class="k">do</span>
-  <span class="k">      </span><span class="m">1</span> <span class="o">-</span> <span class="m">10</span> <span class="o">|&gt;</span> <span class="o">-</span><span class="m">9</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-
-    <span class="c1">#Backwards compatible with ExUnit</span>
-    <span class="n">test</span> <span class="s2">"arithmetic"</span> <span class="k">do</span>
-  <span class="k">    </span><span class="n">assert</span> <span class="m">1</span> <span class="o">+</span> <span class="m">1</span> <span class="o">==</span> <span class="m">2</span>
-    <span class="k">end</span>
-
   <span class="k">end</span>
-  </pre></div>
 
+  <span class="n">facts</span> <span class="s2">"about numbers"</span> <span class="k">do</span>
+<span class="k">    </span><span class="n">fact</span> <span class="s2">"1 is odd"</span> <span class="k">do</span>
+<span class="k">      </span><span class="m">1</span> <span class="o">|&gt;</span> <span class="n">odd</span>
+    <span class="k">end</span>
+
+    <span class="n">fact</span> <span class="s2">"2 is even"</span> <span class="k">do</span>
+<span class="k">      </span><span class="m">2</span> <span class="o">|&gt;</span> <span class="n">even</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="n">fact</span> <span class="s2">"about floats"</span> <span class="k">do</span>
+<span class="k">    </span><span class="m">0.1001</span> <span class="o">|&gt;</span> <span class="n">roughly</span> <span class="m">0.1</span>
+  <span class="k">end</span>
+
+  <span class="n">facts</span> <span class="s2">"about true and false"</span> <span class="k">do</span>
+<span class="k">    </span><span class="n">fact</span> <span class="s2">"nil is false"</span> <span class="k">do</span>
+<span class="k">      </span><span class="no">nil</span> <span class="o">|&gt;</span> <span class="n">falsey</span>
+    <span class="k">end</span>
+
+    <span class="n">fact</span> <span class="s2">"empty list is true"</span> <span class="k">do</span>
+<span class="k">      </span><span class="s2">""</span> <span class="o">|&gt;</span> <span class="n">truthy</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="c1">#Backwards compatible with ExUnit</span>
+  <span class="n">test</span> <span class="s2">"arithmetic"</span> <span class="k">do</span>
+<span class="k">    </span><span class="n">assert</span> <span class="m">1</span> <span class="o">+</span> <span class="m">1</span> <span class="o">==</span> <span class="m">2</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
 </section>
 
     </div>
