@@ -84,6 +84,9 @@ defmodule Amrita do
       if (not r), do: Fail.msg number, "even"
     end
 
+    @doc """
+    Returns precisely true if actual is not nil and not false.
+    """
     def truthy(thing) do
       if thing do
         r = true
@@ -94,6 +97,9 @@ defmodule Amrita do
       if (not r), do: Fail.msg thing, "truthy"
     end
 
+    @doc """
+    Returns precisely true if actual is nil or false.
+    """
     def falsey(thing) do
       if thing do
         r = false
@@ -104,6 +110,11 @@ defmodule Amrita do
       if (not r), do: Fail.msg thing, "falsey"
     end
 
+    @doc """
+    With two arguments, accepts a value within delta of the
+    expected value. With one argument, the delta is 1/1000th
+    of the expected value.
+    """
     def roughly(actual, expected, delta) do
       assert_in_delta(expected, actual, delta)
     end
@@ -123,6 +134,12 @@ defmodule Amrita do
   defmodule CollectionMatchers do
     import ExUnit.Assertions
 
+    @doc """
+    Checks that the collection contains element:
+
+    ## Examples
+      [1, 2, 3] |> contains 3
+    """
     def contains(collection, element) do
       if is_tuple(collection) do
         list_collection = (tuple_to_list collection)
