@@ -9,15 +9,21 @@ defexception Amrita.FactError,
 
   def message(exception) do
     "#{exception.prelude}:\n" <>
-    "     #{exception.expected}\n" <>
-    "     #{exception.full_reason}:\n" <>
-    "     #{exception.actual}"
+    "     #{exception.actual} => #{exception.full_matcher}"
   end
 
-  def full_reason(exception) do
-    "to" <> if(exception.negation, do: " not ", else: " ")
-    <> exception.reason
+  def full_matcher(exception) do
+    "#{exception.reason}#{exception.arguments}"
   end
+
+  def arguments(exception) do
+    if exception.expected do
+      "(#{exception.expected})"
+    else
+      ""
+    end
+  end
+
 end
 
 defmodule Amrita do
@@ -50,15 +56,32 @@ defmodule Amrita do
     end
   end
 
+  defmodule Fail do
+    def msg(candidate, matcher) do
+      raise Amrita.FactError, actual: candidate,
+                              reason: matcher
+    end
+
+    def msg(expected, actual, matcher) do
+      raise Amrita.FactError, expected: inspect(expected),
+                              actual: inspect(actual),
+                              reason: matcher
+    end
+  end
+
   defmodule SimpleMatchers do
     import ExUnit.Assertions
 
     def odd(number) do
-      assert rem(number, 2) == 1
+      r = rem(number, 2) == 1
+
+      if (not r), do: Fail.msg number, "odd"
     end
 
     def even(number) do
-      assert rem(number, 2) == 0
+      r = rem(number, 2) == 0
+
+      if (not r), do: Fail.msg number, "even"
     end
 
     def truthy(thing) do
@@ -68,17 +91,17 @@ defmodule Amrita do
         r = false
       end
 
-      assert r == true
+      if (not r), do: Fail.msg thing, "truthy"
     end
 
     def falsey(thing) do
       if thing do
-        r = true
-      else
         r = false
+      else
+        r = true
       end
 
-      assert r == false
+      if (not r), do: Fail.msg thing, "falsey"
     end
 
     def roughly(actual, expected, delta) do
@@ -90,7 +113,9 @@ defmodule Amrita do
     end
 
     def equals(actual, expected) do
-      assert actual == expected
+      r = (actual == expected)
+
+      if (not r), do: Fail.msg actual, expected, "equals"
     end
 
   end
@@ -101,12 +126,7 @@ defmodule Amrita do
     def contains(collection, element) do
       r = Enum.any?(collection, fn x -> x == element end)
 
-      if (not r) do
-        raise Amrita.FactError,
-                     expected: inspect(collection),
-                     actual: inspect(element),
-                     reason: "contain"
-      end
+      if (not r), do: Fail.msg element, collection, "contains"
     end
   end
 
