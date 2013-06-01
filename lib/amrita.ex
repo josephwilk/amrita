@@ -33,7 +33,7 @@ defmodule Amrita do
   end
 
   defmodule Sweet do
-    defmacro __using__(opts // []) do
+    defmacro __using__(_ // []) do
       quote do
         use ExUnit.Case
         import Amrita.Facts
@@ -44,14 +44,14 @@ defmodule Amrita do
   end
 
   defmodule Facts do
-    defmacro facts(description, var // quote(do: _), contents) do
+    defmacro facts(description, _ // quote(do: _), contents) do
       quote do
         @name_stack  (@name_stack || "") <> unquote(description) <> ": "
         unquote(contents)
       end
     end
 
-    defmacro fact(description, var // quote(do: _), contents) do
+    defmacro fact(description, _ // quote(do: _), contents) do
       quote do
         test  (@name_stack || "") <> unquote(description) do
           unquote(contents)
@@ -136,7 +136,6 @@ defmodule Amrita do
   end
 
   defmodule CollectionMatchers do
-    import ExUnit.Assertions
 
     @doc """
     Checks that the collection contains element:
