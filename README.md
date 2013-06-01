@@ -26,11 +26,11 @@ defmodule ExampleFacts do
 
   #Matchers
   facts "about numbers" do
-    fact "odd" do
+    fact "1 is odd" do
       1 |> odd
     end
 
-    fact "even" do
+    fact "2 is even" do
       2 |> even
     end
   end
