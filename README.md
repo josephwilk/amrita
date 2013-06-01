@@ -24,7 +24,16 @@ Add to your mix.exs
 defmodule ExampleFacts do
   use Amrita.Sweet
 
-  #Matchers
+  facts "about collections of numbers" do
+    fact "contains an element" do
+      [1, 2, 4, 5] |> contains 4
+
+      {6, 7, 8, 9} |> contains 9
+
+      [a: 1, :b 2] |> contains {:a, 1}
+    end
+  end
+
   facts "about numbers" do
     fact "1 is odd" do
       1 |> odd
@@ -49,16 +58,6 @@ defmodule ExampleFacts do
     end
   end
 
-  facts "about collections of numbers" do
-    fact "contains an element" do
-      [1, 2, 4, 5] |> contains 4
-
-      {6, 7, 8, 9} |> contains 9
-
-      [a: 1, :b 2] |> contains {:a, 1}
-    end
-  end
-
   #Nested tests
   facts "about substraction" do
 
@@ -74,6 +73,16 @@ defmodule ExampleFacts do
 
 end
 ```
+
+## Running tests
+
+```
+make
+```
+
+### Docs
+
+http://josephwilk.github.io/amrita/docs
 
 ##License
 (The MIT License)
