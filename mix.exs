@@ -12,6 +12,6 @@ defmodule Amrita.Mixfile do
   end
 
   defp deps do
-    []
+    [{ :ex_doc, github: "elixir-lang/ex_doc" }]
   end
 end
