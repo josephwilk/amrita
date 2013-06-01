@@ -93,6 +93,21 @@ defmodule ExampleFacts do
 end
 ```
 
+##Custom matchers
+
+Its simple to create your own matchers:
+
+```elixir
+  def a_thousand(actual) do
+    rem(actual, 1000) |> equals 0
+  end
+
+  fact "about 1000s" do
+    1000 |> a_thousand ; true
+    1200 |> a_thousand ; false
+  end
+```
+
 ### Polite error messages:
 
 ![Polite error message](http://s24.postimg.org/vlj6epnmt/Screen_Shot_2013_06_01_at_22_12_16.png)
