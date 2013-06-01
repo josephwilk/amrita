@@ -35,7 +35,7 @@ defmodule MathFacts do
     end
   end
 
-  facts "about floats" do
+  fact "about floats" do
     0.1001 |> roughly 0.1
   end
 
