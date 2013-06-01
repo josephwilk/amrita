@@ -28,7 +28,7 @@ Amrita.start
 ##Usage
 
 ```elixir
-Code.require_file "../support.exs", __FILE__
+Code.require_file "../test_helper.exs", __FILE__
 
 defmodule ExampleFacts do
   use Amrita.Sweet
