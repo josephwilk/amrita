@@ -27,12 +27,19 @@ defexception Amrita.FactError,
 end
 
 defmodule Amrita do
+    @moduledoc """
+    A polite, well mannered and throughly upstanding testing framework for Elixir
+    """
 
   def start do
     ExUnit.start
   end
 
   defmodule Sweet do
+    @moduledoc """
+    Responsable for loading Amrita within test.
+    """
+
     defmacro __using__(_ // []) do
       quote do
         use ExUnit.Case
