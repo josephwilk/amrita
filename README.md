@@ -83,7 +83,9 @@ defmodule ExampleFacts do
 end
 ```
 
-## Running tests
+## Developerment
+
+###Running tests
 
 ```
 make
