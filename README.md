@@ -18,9 +18,18 @@ Add to your mix.exs
   end
 ```
 
+##Setup
+
+Ensure you start Amrita in: test/test_helper.exs
+```elixir
+Amrita.start
+```
+
 ##Usage
 
 ```elixir
+Code.require_file "../support.exs", __FILE__
+
 defmodule ExampleFacts do
   use Amrita.Sweet
 
