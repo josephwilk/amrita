@@ -41,6 +41,10 @@ defmodule ExampleFacts do
 
       [a: 1, :b 2] |> contains {:a, 1}
     end
+
+    fact "has a prefix" do
+      [1, 2, 3, 4] |> has_prefix [1, 2]
+    end
   end
 
   facts "about numbers" do

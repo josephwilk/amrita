@@ -69,6 +69,11 @@ defmodule AmritaFacts do
 
       [a: 1, b: 2] |> contains({:a, 1})
     end
+
+    fact "has_prefix" do
+      [1, 2, 3] |> has_prefix [1, 2]
+    end
+
   end
 
   test "Backwards compatible with ExUnit" do

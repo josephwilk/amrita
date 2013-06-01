@@ -154,6 +154,22 @@ defmodule Amrita do
 
       if (not r), do: Fail.msg element, collection, "contains"
     end
+
+    @doc """
+    Checks that the actual result starts with the expected result:
+
+    ## Examples
+    [1 2 3] |> has-prefix  [1 2]) ; true
+    [1 2 3] |> has-prefix  [2 1]) ; false
+    """
+    def has_prefix(collection, prefix) do
+      prefix_length = Enum.count(prefix)
+
+      r = Enum.take(collection, prefix_length) == prefix
+
+      if (not r), do: Fail.msg prefix, collection, "has_prefix"
+    end
+
   end
 
 end
