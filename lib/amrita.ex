@@ -28,6 +28,10 @@ end
 
 defmodule Amrita do
 
+  def start do
+    ExUnit.start
+  end
+
   defmodule Sweet do
     defmacro __using__(opts // []) do
       quote do
