@@ -5,7 +5,8 @@ defmodule Amrita do
       quote do
         use ExUnit.Case
         import Amrita.Facts
-        import Amrita.Matchers
+        import Amrita.SimpleMatchers
+        import Amrita.CollectionMatchers
       end
     end
   end
@@ -27,7 +28,7 @@ defmodule Amrita do
     end
   end
 
-  defmodule Matchers do
+  defmodule SimpleMatchers do
     import ExUnit.Assertions
 
     def odd?(number) do
@@ -59,8 +60,7 @@ defmodule Amrita do
     end
 
     def roughly(actual, expected, delta) do
-      r = (expected >= (actual - delta) and expected <= (actual + delta))
-      assert true == r
+      assert_in_delta(expected, actual, delta)
     end
 
     def roughly(actual, expected) do
@@ -74,6 +74,11 @@ defmodule Amrita do
   end
 
   defmodule CollectionMatchers do
+    import ExUnit.Assertions
+
+    def contains(collection, element) do
+      assert true == Enum.any?(collection, fn x -> x == element end)
+    end
   end
 
 end

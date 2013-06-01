@@ -49,6 +49,12 @@ defmodule MathFacts do
     end
   end
 
+  facts "about lists of numbers" do
+    fact "contains an element" do
+      [1, 2, 4, 5] |> contains 4
+    end
+  end
+
   #Nested tests
   facts "about substraction" do
 

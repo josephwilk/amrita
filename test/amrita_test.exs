@@ -32,7 +32,7 @@ defmodule AmritaFacts do
   end
 
   #Matchers
-  facts "about matchers" do
+  facts "about simple matchers" do
     fact "about odd?" do
       1 |> odd?
     end
@@ -58,6 +58,12 @@ defmodule AmritaFacts do
 
     fact "equals" do
       999 |> equals 999
+    end
+  end
+
+  facts "about collection matchers" do
+    fact "contains" do
+      [1, 2, 3] |> contains 3
     end
   end
 
