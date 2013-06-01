@@ -58,6 +58,18 @@ defmodule Amrita do
       assert r == false
     end
 
+    def roughly(actual, expected, delta) do
+      r = (expected >= (actual - delta) and expected <= (actual + delta))
+      assert true == r
+    end
+
+    def roughly(actual, expected) do
+      roughly(actual, expected, 0.01)
+    end
+
+  end
+
+  defmodule CollectionMatchers do
   end
 
 end

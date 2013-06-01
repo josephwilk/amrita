@@ -35,13 +35,17 @@ defmodule MathFacts do
     end
   end
 
+  facts "about floats" do
+    0.1001 |> roughly 0.1
+  end
+
   facts "about true and false" do
     fact "nil is false" do
       nil |> falsey?
     end
 
     fact "empty list is true" do
-      "" |> truthy
+      "" |> truthy?
     end
   end
 

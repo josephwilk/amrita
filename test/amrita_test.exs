@@ -52,6 +52,10 @@ defmodule AmritaFacts do
       nil   |> falsey?
     end
 
+    fact "roughly" do
+      0.1001 |> roughly 0.1
+    end
+
   end
 
   test "Backwards compatible with ExUnit" do
