@@ -64,7 +64,10 @@ defmodule AmritaFacts do
   facts "about collection matchers" do
     fact "contains" do
       [1, 2, 3] |> contains 3
+
       {4, 5, 6} |> contains 5
+
+      [a: 1, b: 2] |> contains({:a, 1})
     end
   end
 

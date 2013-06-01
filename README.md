@@ -52,7 +52,10 @@ defmodule ExampleFacts do
   facts "about collections of numbers" do
     fact "contains an element" do
       [1, 2, 4, 5] |> contains 4
+
       {6, 7, 8, 9} |> contains 9
+
+      [a: 1, :b 2] |> contains {:a, 1}
     end
   end
 
