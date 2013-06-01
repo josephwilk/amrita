@@ -31,15 +31,15 @@ defmodule Amrita do
   defmodule SimpleMatchers do
     import ExUnit.Assertions
 
-    def odd?(number) do
+    def odd(number) do
       assert rem(number, 2) == 1
     end
 
-    def even?(number) do
+    def even(number) do
       assert rem(number, 2) == 0
     end
 
-    def truthy?(thing) do
+    def truthy(thing) do
       if thing do
         r = true
       else
@@ -49,7 +49,7 @@ defmodule Amrita do
       assert r == true
     end
 
-    def falsey?(thing) do
+    def falsey(thing) do
       if thing do
         r = true
       else

@@ -21,17 +21,17 @@ Add to your mix.exs
 ##Usage
 
 ```elixir
-defmodule MathFacts do
+defmodule ExampleFacts do
   use Amrita.Sweet
 
   #Matchers
   facts "about numbers" do
-    fact "odd?" do
-      1 |> odd?
+    fact "odd" do
+      1 |> odd
     end
 
-    fact "even?" do
-      2 |> even?
+    fact "even" do
+      2 |> even
     end
   end
 
@@ -41,15 +41,15 @@ defmodule MathFacts do
 
   facts "about true and false" do
     fact "nil is false" do
-      nil |> falsey?
+      nil |> falsey
     end
 
     fact "empty list is true" do
-      "" |> truthy?
+      "" |> truthy
     end
   end
 
-  facts "about lists of numbers" do
+  facts "about collections of numbers" do
     fact "contains an element" do
       [1, 2, 4, 5] |> contains 4
     end

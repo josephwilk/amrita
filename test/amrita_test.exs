@@ -33,23 +33,23 @@ defmodule AmritaFacts do
 
   #Matchers
   facts "about simple matchers" do
-    fact "about odd?" do
-      1 |> odd?
+    fact "about odd" do
+      1 |> odd
     end
 
-    fact "about even?" do
-      2 |> even?
+    fact "about even" do
+      2 |> even
     end
 
-    fact "truthy?" do
-      true |> truthy?
-      []   |> truthy?
-      ""   |> truthy?
+    fact "truthy" do
+      true |> truthy
+      []   |> truthy
+      ""   |> truthy
     end
 
-    fact "falsey?" do
-      false |> falsey?
-      nil   |> falsey?
+    fact "falsey" do
+      false |> falsey
+      nil   |> falsey
     end
 
     fact "roughly" do
