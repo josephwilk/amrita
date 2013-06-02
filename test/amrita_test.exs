@@ -88,6 +88,10 @@ defmodule AmritaFacts do
       [2, 4, 6, 8] |> Enum.all? even(&1)
     end
 
+    future_fact "for_some" do
+      [2, 4, 7, 8] |> for_some odd(&1)
+    end
+
   end
 
   test "Backwards compatible with ExUnit" do

@@ -74,6 +74,48 @@ defmodule Amrita do
     end
 
     @doc """
+    A future_facts is a pending fact. Its body is *NEVER* run.
+    Instead it simply prints an reminder that it is yet to be run.
+
+    ## Example:
+        future_fact "about something that does not work yet" do
+          ..
+        end
+    """
+    defmacro future_fact(description, _ // quote(do: _), contents) do
+      quote do
+        IO.puts "Future fact: " <>  unquote(description)
+      end
+    end
+
+    @doc """
+    facts are used to group with a name a number of fact tests.
+    You can nest as many facts as you feel you need.
+
+    ## Example
+        facts "about arithmetic" do
+          fact "about addition" do
+            ...
+          end
+        end
+    """
+    defmacro facts(description, _ // quote(do: _), contents) do
+      quote do
+        @name_stack List.concat((@name_stack || []), [unquote(description) <> ": "])
+        unquote(contents)
+        if Enum.count(@name_stack) > 0 do
+          @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
+        end
+      end
+    end
+
+    defmacro future_fact(description, _ // quote(do: _), contents) do
+      quote do
+        IO.puts "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
+      end
+    end
+
+    @doc """
     facts are used to group with a name a number of fact tests.
     You can nest as many facts as you feel you need.
 
@@ -261,6 +303,10 @@ defmodule Amrita do
     """
     def for_all(collection, fun) do
       Enum.all?(collection, fun)
+    end
+
+    @doc false
+    def for_some(collection, fun) do
     end
 
   end

@@ -91,12 +91,16 @@ defmodule ExampleFacts do
     end
   end
 
-  #Nested tests
   facts "about substraction" do
 
     fact "negative numbers" do
       1 - 10 |> equals -9
     end
+  end
+
+  future_fact "I'm not run yet, just printed as a reminder. Like a TODO" do
+    #Never run
+    false |> truthy
   end
 
   #Backwards compatible with ExUnit
