@@ -82,6 +82,10 @@ defmodule AmritaFacts do
       {1, 2, 3, 4, 5} |> has_suffix {3, 4, 5}
     end
 
+    fact "for_all" do
+      [2, 4, 6, 8] |> for_all odd(&1)
+    end
+
   end
 
   test "Backwards compatible with ExUnit" do

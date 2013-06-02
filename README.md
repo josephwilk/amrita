@@ -53,6 +53,14 @@ defmodule ExampleFacts do
 
       {1, 2, 3, 4} |> has_suffix {3, 4}
     end
+
+    fact "evens" do
+      [2, 4, 6, 8] |> for_all even(&1)
+    end
+
+    fact "odds" do
+      [1, 3, 5, 7] |> for_all odd(&1)
+    end
   end
 
   facts "about numbers" do

@@ -251,6 +251,18 @@ defmodule Amrita do
 
       if (not r), do: Fail.msg suffix, collection, "has_suffix"
     end
+
+    @doc """
+    Checks whether a predicate holds for all elements in a collection
+
+    ## Examples:
+        [1, 3, 5, 7] |> for_all odd(&1)  ; true
+        [2, 3, 5, 7] |> for_all odd(&1)  ; false
+    """
+    def for_all(collection, fun) do
+      Enum.all?(collection, fun)
+    end
+
   end
 
 end
