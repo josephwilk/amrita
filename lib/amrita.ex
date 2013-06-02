@@ -38,8 +38,13 @@ defmodule Amrita do
   defmodule Sweet do
     @moduledoc """
     Responsible for loading Amrita within test.
+
+        defmodule TestsAboutSomething do
+          use Amrita.Sweet
+        end
     """
 
+    @doc false
     defmacro __using__(_ // []) do
       quote do
         use ExUnit.Case
@@ -56,9 +61,9 @@ defmodule Amrita do
     A fact is the container of your test logic.
 
     ## Example
-      fact "about addition" do
-        ...
-      end
+        fact "about addition" do
+          ...
+        end
     """
     defmacro fact(description, _ // quote(do: _), contents) do
       quote do
@@ -73,11 +78,11 @@ defmodule Amrita do
     You can nest as many facts as you feel you need.
 
     ## Example
-      facts "about arithmetic" do
-        fact "about addition" do
-          ...
+        facts "about arithmetic" do
+          fact "about addition" do
+            ...
+          end
         end
-      end
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
@@ -90,6 +95,7 @@ defmodule Amrita do
     end
   end
 
+  @doc false
   defmodule Fail do
     defp msg(candidate, matcher) do
       raise Amrita.FactError, actual: candidate,
@@ -106,12 +112,18 @@ defmodule Amrita do
   defmodule SimpleMatchers do
     import ExUnit.Assertions
 
+    @doc """
+    Returns if actual is odd
+    """
     def odd(number) do
       r = rem(number, 2) == 1
 
       if (not r), do: Fail.msg number, "odd"
     end
 
+    @doc """
+    Returns if actual is even
+    """
     def even(number) do
       r = rem(number, 2) == 0
 
@@ -145,19 +157,22 @@ defmodule Amrita do
     end
 
     @doc """
-    Accepts a value within delta of the expected value.
+    Checks if actual is within delta of the expected value.
     """
     def roughly(actual, expected, delta) do
       assert_in_delta(expected, actual, delta)
     end
 
     @doc """
-    Accepts a value within 1/1000th of the expected value.
+    Checks if actual is a value within 1/1000th of the expected value.
     """
     def roughly(actual, expected) do
       roughly(actual, expected, 0.01)
     end
 
+    @doc """
+    Checks if actual == expected
+    """
     def equals(actual, expected) do
       r = (actual == expected)
 
@@ -175,7 +190,7 @@ defmodule Amrita do
     Checks that the collection contains element:
 
     ## Examples
-      [1, 2, 3] |> contains 3
+        [1, 2, 3] |> contains 3
     """
     def contains(collection, element) do
       if is_tuple(collection) do
@@ -193,10 +208,10 @@ defmodule Amrita do
     Checks that the actual result starts with the expected result:
 
     ## Examples
-      [1 2 3] |> has-prefix  [1 2]) ; true
-      [1 2 3] |> has-prefix  [2 1]) ; false
+        [1 2 3] |> has-prefix  [1 2]) ; true
+        [1 2 3] |> has-prefix  [2 1]) ; false
 
-      {1, 2, 3} |> has-prefix {1, 2} ; true
+        {1, 2, 3} |> has-prefix {1, 2} ; true
     """
     def has_prefix(collection, prefix) do
       if is_tuple(collection) do
@@ -220,8 +235,8 @@ defmodule Amrita do
     Checks that the actual result ends with the expected result:
 
     ## Examples:
-      [1 2 3] |> has-suffix [2 3]) ; true
-      [1 2 3] |> has-suffix [3 2]  ; false
+        [1 2 3] |> has-suffix [2 3]) ; true
+        [1 2 3] |> has-suffix [3 2]  ; false
     """
     def has_suffix(collection, suffix) do
       suffix_length = Enum.count(suffix)
