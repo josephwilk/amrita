@@ -48,7 +48,8 @@
 
 <h2>Examples</h2>
 
-<div class="highlight"><pre><span class="k">defmodule</span> <span class="no">ExampleFacts</span> <span class="k">do</span>
+<div class="highlight"><pre>
+<span class="k">defmodule</span> <span class="no">ExampleFacts</span> <span class="k">do</span>
 <span class="k">  </span><span class="kn">use</span> <span class="no">Amrita</span><span class="o">.</span><span class="no">Sweet</span>
 
   <span class="n">facts</span> <span class="s2">"about collections of numbers"</span> <span class="k">do</span>
@@ -58,6 +59,16 @@
       <span class="p">{</span><span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">9</span>
 
       <span class="p">[</span><span class="ss">a:</span> <span class="m">1</span><span class="p">,</span> <span class="ss">:b</span> <span class="m">2</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="p">{</span><span class="ss">:a</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">fact</span> <span class="s2">"has a prefix"</span> <span class="k">do</span>
+<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">has_prefix</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">]</span>
+
+      <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">has_prefix</span> <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">fact</span> <span class="s2">"has a suffix"</span> <span class="k">do</span>
+<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span> <span class="p">,</span><span class="m">5</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">has_suffix</span> <span class="p">[</span><span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">]</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
