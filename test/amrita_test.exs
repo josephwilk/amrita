@@ -83,7 +83,9 @@ defmodule AmritaFacts do
     end
 
     fact "for_all" do
-      [2, 4, 6, 8] |> for_all odd(&1)
+      [2, 4, 6, 8] |> for_all even(&1)
+
+      [2, 4, 6, 8] |> Enum.all? even(&1)
     end
 
   end
