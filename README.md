@@ -56,6 +56,10 @@ defmodule ExampleFacts do
 
     fact "evens" do
       [2, 4, 6, 8] |> for_all even(&1)
+
+      ; or alternatively you could write
+
+      [2, 4, 6, 8] |> Enum.all? even(&1)
     end
 
     fact "odds" do
@@ -141,9 +145,9 @@ http://josephwilk.github.io/amrita/docs
 
 ## Bloody good show
 
-Thanks for reading me, I appreciate it. 
+Thanks for reading me, I appreciate it.
 
-Have a good day. 
+Have a good day.
 
 Maybe drink some tea.
 
