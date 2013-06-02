@@ -27,9 +27,9 @@ defexception Amrita.FactError,
 end
 
 defmodule Amrita do
-    @moduledoc """
-    A polite, well mannered and throughly upstanding testing framework for Elixir
-    """
+  @moduledoc """
+  A polite, well mannered and throughly upstanding testing framework for Elixir.
+  """
 
   def start do
     ExUnit.start
@@ -37,7 +37,7 @@ defmodule Amrita do
 
   defmodule Sweet do
     @moduledoc """
-    Responsable for loading Amrita within test.
+    Responsible for loading Amrita within test.
     """
 
     defmacro __using__(_ // []) do
@@ -51,6 +51,34 @@ defmodule Amrita do
   end
 
   defmodule Facts do
+
+    @doc """
+    A fact is the container of your test logic.
+
+    ## Example
+      fact "about addition" do
+        ...
+      end
+    """
+    defmacro fact(description, _ // quote(do: _), contents) do
+      quote do
+        test Enum.join((@name_stack || []), "") <> unquote(description) do
+          unquote(contents)
+        end
+      end
+    end
+
+    @doc """
+    facts are used to group with a name a number of fact tests.
+    You can nest as many facts as you feel you need.
+
+    ## Example
+      facts "about arithmetic" do
+        fact "about addition" do
+          ...
+        end
+      end
+    """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
         @name_stack List.concat((@name_stack || []), [unquote(description) <> ": "])
@@ -60,23 +88,15 @@ defmodule Amrita do
         end
       end
     end
-
-    defmacro fact(description, _ // quote(do: _), contents) do
-      quote do
-        test Enum.join((@name_stack || []), "") <> unquote(description) do
-          unquote(contents)
-        end
-      end
-    end
   end
 
   defmodule Fail do
-    def msg(candidate, matcher) do
+    defp msg(candidate, matcher) do
       raise Amrita.FactError, actual: candidate,
                               reason: matcher
     end
 
-    def msg(expected, actual, matcher) do
+    defp msg(expected, actual, matcher) do
       raise Amrita.FactError, expected: inspect(expected),
                               actual: inspect(actual),
                               reason: matcher
@@ -125,14 +145,15 @@ defmodule Amrita do
     end
 
     @doc """
-    With two arguments, accepts a value within delta of the
-    expected value. With one argument, the delta is 1/1000th
-    of the expected value.
+    Accepts a value within delta of the expected value.
     """
     def roughly(actual, expected, delta) do
       assert_in_delta(expected, actual, delta)
     end
 
+    @doc """
+    Accepts a value within 1/1000th of the expected value.
+    """
     def roughly(actual, expected) do
       roughly(actual, expected, 0.01)
     end
@@ -146,6 +167,9 @@ defmodule Amrita do
   end
 
   defmodule CollectionMatchers do
+    @moduledoc """
+    Matchers which are designed to work with collections (lists, tuples, keyword lists)
+    """
 
     @doc """
     Checks that the collection contains element:
@@ -169,10 +193,10 @@ defmodule Amrita do
     Checks that the actual result starts with the expected result:
 
     ## Examples
-    [1 2 3] |> has-prefix  [1 2]) ; true
-    [1 2 3] |> has-prefix  [2 1]) ; false
+      [1 2 3] |> has-prefix  [1 2]) ; true
+      [1 2 3] |> has-prefix  [2 1]) ; false
 
-    {1, 2, 3} |> has-prefix {1, 2} ; true
+      {1, 2, 3} |> has-prefix {1, 2} ; true
     """
     def has_prefix(collection, prefix) do
       if is_tuple(collection) do
@@ -196,8 +220,8 @@ defmodule Amrita do
     Checks that the actual result ends with the expected result:
 
     ## Examples:
-    [1 2 3] |> has-suffix [2 3]) ; true
-    [1 2 3] |> has-suffix [3 2]  ; false
+      [1 2 3] |> has-suffix [2 3]) ; true
+      [1 2 3] |> has-suffix [3 2]  ; false
     """
     def has_suffix(collection, suffix) do
       suffix_length = Enum.count(suffix)
