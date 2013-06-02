@@ -50,6 +50,8 @@ defmodule ExampleFacts do
 
     fact "has a suffix" do
       [1, 2, 3, 4 ,5] |> has_suffix [4, 5]
+
+      {1, 2, 3, 4} |> has_suffix {3, 4}
     end
   end
 

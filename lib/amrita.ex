@@ -97,12 +97,12 @@ defmodule Amrita do
 
   @doc false
   defmodule Fail do
-    defp msg(candidate, matcher) do
+    def msg(candidate, matcher) do
       raise Amrita.FactError, actual: candidate,
                               reason: matcher
     end
 
-    defp msg(expected, actual, matcher) do
+    def msg(expected, actual, matcher) do
       raise Amrita.FactError, expected: inspect(expected),
                               actual: inspect(actual),
                               reason: matcher
@@ -133,27 +133,27 @@ defmodule Amrita do
     @doc """
     Returns precisely true if actual is not nil and not false.
     """
-    def truthy(thing) do
-      if thing do
+    def truthy(actual) do
+      if actual do
         r = true
       else
         r = false
       end
 
-      if (not r), do: Fail.msg thing, "truthy"
+      if (not r), do: Fail.msg actual, "truthy"
     end
 
     @doc """
     Returns precisely true if actual is nil or false.
     """
-    def falsey(thing) do
-      if thing do
+    def falsey(actual) do
+      if actual do
         r = false
       else
         r = true
       end
 
-      if (not r), do: Fail.msg thing, "falsey"
+      if (not r), do: Fail.msg actual, "falsey"
     end
 
     @doc """
@@ -214,19 +214,16 @@ defmodule Amrita do
         {1, 2, 3} |> has-prefix {1, 2} ; true
     """
     def has_prefix(collection, prefix) do
-      if is_tuple(collection) do
+      if is_tuple(collection) && is_tuple(prefix) do
         list_collection = (tuple_to_list collection)
+        prefix_length = tuple_size(prefix)
+        collection_prefix = Enum.take(list_collection, prefix_length)
+        collection_prefix = list_to_tuple(collection_prefix)
       else
-        list_collection = collection
+        collection_prefix = Enum.take(collection, Enum.count(prefix))
       end
 
-      if is_tuple(prefix) do
-        list_prefix = (tuple_to_list prefix)
-      else
-        list_prefix = prefix
-      end
-
-      r = Enum.take(list_collection, Enum.count(list_prefix)) == list_prefix
+      r = collection_prefix  == prefix
 
       if (not r), do: Fail.msg prefix, collection, "has_prefix"
     end
@@ -239,14 +236,21 @@ defmodule Amrita do
         [1 2 3] |> has-suffix [3 2]  ; false
     """
     def has_suffix(collection, suffix) do
-      suffix_length = Enum.count(suffix)
-      collection_length = Enum.count(collection)
+      if is_tuple(collection) && is_tuple(suffix) do
+        suffix_length = tuple_size(suffix)
+        collection_length = tuple_size(collection)
+        collection_suffix = Enum.drop(tuple_to_list(collection), collection_length - suffix_length)
+        collection_suffix = list_to_tuple(collection_suffix)
+      else
+        suffix_length = Enum.count(suffix)
+        collection_length = Enum.count(collection)
+        collection_suffix = Enum.drop(collection, collection_length - suffix_length)
+      end
 
-      r = Enum.drop(collection, collection_length - suffix_length) == suffix
+      r =  collection_suffix == suffix
 
       if (not r), do: Fail.msg suffix, collection, "has_suffix"
     end
-
   end
 
 end
