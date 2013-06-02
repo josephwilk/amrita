@@ -110,12 +110,16 @@ Its simple to create your own matchers:
   end
 ```
 
-### Polite error messages:
+## Polite error messages:
+
+Amrita tries its best to be polite with its errors:
 
 ![Polite error message](http://s24.postimg.org/vlj6epnmt/Screen_Shot_2013_06_01_at_22_12_16.png)
 
 
 ## Development
+
+Hacking on Amrita.
 
 ###Running tests
 
@@ -126,6 +130,20 @@ make
 ### Docs
 
 http://josephwilk.github.io/amrita/docs
+
+## Bloody good show
+
+Thanks for reading me, I appreciate it. 
+
+Have a good day. 
+
+Maybe drink some tea.
+
+Its good for the constitution.
+
+Tally-ho!
+
+![Tea](http://s15.postimg.org/9dqs4g0wr/tea.png)
 
 ##License
 (The MIT License)
