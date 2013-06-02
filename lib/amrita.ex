@@ -208,8 +208,8 @@ defmodule Amrita do
     Checks that the actual result starts with the expected result:
 
     ## Examples
-        [1 2 3] |> has-prefix  [1 2]) ; true
-        [1 2 3] |> has-prefix  [2 1]) ; false
+        [1 2 3] |> has-prefix  [1 2]   ; true
+        [1 2 3] |> has-prefix  [2 1]   ; false
 
         {1, 2, 3} |> has-prefix {1, 2} ; true
     """
@@ -235,7 +235,7 @@ defmodule Amrita do
     Checks that the actual result ends with the expected result:
 
     ## Examples:
-        [1 2 3] |> has-suffix [2 3]) ; true
+        [1 2 3] |> has-suffix [2 3]  ; true
         [1 2 3] |> has-suffix [3 2]  ; false
     """
     def has_suffix(collection, suffix) do
