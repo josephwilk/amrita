@@ -134,7 +134,6 @@ Amrita tries its best to be polite with its errors:
 
 ![Polite error message](http://s24.postimg.org/vlj6epnmt/Screen_Shot_2013_06_01_at_22_12_16.png)
 
-
 ## Development
 
 Hacking on Amrita.
@@ -158,8 +157,6 @@ Have a good day.
 Maybe drink some tea.
 
 Its good for the constitution.
-
-Tally-ho!
 
 ![Tea](http://s15.postimg.org/9dqs4g0wr/tea.png)
 
