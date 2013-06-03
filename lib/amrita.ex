@@ -56,6 +56,9 @@ defmodule Amrita do
   end
 
   defmodule Facts do
+    @moduledoc """
+    Express facts about your code.
+    """
 
     @doc """
     A fact is the container of your test logic.
