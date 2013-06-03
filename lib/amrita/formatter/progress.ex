@@ -112,11 +112,13 @@ defmodule Amrita.Formatter.Progress do
   defp print_test_failure(ExUnit.Test[case: test_case, name: test, failure: { kind, reason, stacktrace }], acc, cwd) do
 
     test_string = "#{test}"
-    if String.starts_with? test_string, "test" do
-      test = "fact" <> String.slice(test_string, 4, String.length(test_string))
+    if String.starts_with?(test_string, "test") do
+      fact_string = "fact" <> String.slice(test_string, 4, String.length(test_string))
+    else
+      fact_string = test
     end
 
-    IO.puts "  #{acc}) #{test} (#{inspect test_case.name})"
+    IO.puts "  #{acc}) #{fact_string} (#{inspect test_case.name})"
     print_kind_reason(kind, reason)
     print_stacktrace(stacktrace, test_case.name, test, cwd)
     IO.write "\n"
