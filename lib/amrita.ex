@@ -1,5 +1,3 @@
-Code.require_file "amrita/formatter/progress.exs", __DIR__
-
 defexception Amrita.FactError,  message: "fact failed"
 
 defexception Amrita.FactError,
