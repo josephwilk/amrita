@@ -126,12 +126,6 @@ defmodule Amrita do
       end
     end
 
-    defmacro future_fact(description, _ // quote(do: _), _) do
-      quote do
-        Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
-      end
-    end
-
     @doc """
     facts are used to group with a name a number of fact tests.
     You can nest as many facts as you feel you need.
