@@ -1,4 +1,4 @@
-defexception Amrita.FactError,  message: "fact failed"
+defexception Amrita.FactError, message: "fact failed"
 
 defexception Amrita.FactError,
                     expected: nil,
