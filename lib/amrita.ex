@@ -123,7 +123,7 @@ defmodule Amrita do
       end
     end
 
-    defmacro future_fact(description, _ // quote(do: _), contents) do
+    defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
         Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
       end
