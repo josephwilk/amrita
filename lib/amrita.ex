@@ -74,7 +74,21 @@ defmodule Amrita do
     end
 
     @doc """
-    A future_facts is a pending fact. Its body is *NEVER* run.
+    A fact without a body is a pending fact. Much like a TODO.
+    It prints a reminder when the tests are run.
+
+    ## Example
+        fact "something thing I need to implement at somepoint"
+
+    """
+    defmacro fact(description) do
+      quote do
+        IO.puts "Future fact: " <> unquote(description)
+      end
+    end
+
+    @doc """
+    A future_fact is a pending fact. Its body is *NEVER* run.
     Instead it simply prints an reminder that it is yet to be run.
 
     ## Example:

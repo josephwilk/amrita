@@ -103,6 +103,8 @@ defmodule ExampleFacts do
     false |> truthy
   end
 
+  fact "a fact without a body is much like a TODO"
+
   #Backwards compatible with ExUnit
   test "arithmetic" do
     assert 1 + 1 == 2

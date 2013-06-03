@@ -92,6 +92,8 @@ defmodule AmritaFacts do
       [2, 4, 7, 8] |> for_some odd(&1)
     end
 
+    fact "without a body is considered pending"
+
   end
 
   test "Backwards compatible with ExUnit" do
