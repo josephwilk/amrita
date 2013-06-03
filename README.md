@@ -92,7 +92,6 @@ defmodule ExampleFacts do
   end
 
   facts "about substraction" do
-
     fact "negative numbers" do
       1 - 10 |> equals -9
     end
