@@ -83,7 +83,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        Amrita.Message.pending "Future fact: " <> unquote(description)
+        Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
       end
     end
 
@@ -98,7 +98,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), contents) do
       quote do
-        Amrita.Message.pending "Future fact: " <>  unquote(description)
+        Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <>  unquote(description)
       end
     end
 
@@ -125,7 +125,7 @@ defmodule Amrita do
 
     defmacro future_fact(description, _ // quote(do: _), contents) do
       quote do
-        IO.puts "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
+        Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
       end
     end
 
