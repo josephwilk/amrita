@@ -165,7 +165,7 @@ defmodule Amrita do
     end
 
     def pending(message) do
-      IO.puts message
+      IO.puts IO.ANSI.escape("%{yellow}" <>  message)
     end
   end
 
