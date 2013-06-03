@@ -84,7 +84,7 @@ defmodule Amrita.Formatter.Progress do
   defp print_suite(counter, [], [], run_us, load_us) do
     IO.write "\n\n"
     print_time(run_us, load_us)
-    IO.puts success("#{counter} tests, 0 failures")
+    IO.puts success("#{counter} facts, 0 failures")
   end
 
   defp print_suite(counter, test_failures, case_failures, run_us, load_us) do
@@ -96,7 +96,7 @@ defmodule Amrita.Formatter.Progress do
     print_time(run_us, load_us)
 
     num_fails = num_fails - 1
-    message = "#{counter} tests, #{num_fails} failures"
+    message = "#{counter} facts, #{num_fails} failures"
     if num_invalids > 0, do: message = message <>  ", #{num_invalids} invalid"
     cond do
       num_fails > 0    -> IO.puts failure(message)
