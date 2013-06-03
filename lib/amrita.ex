@@ -83,7 +83,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        IO.puts "Future fact: " <> unquote(description)
+        Amrita.Message.pending "Future fact: " <> unquote(description)
       end
     end
 
@@ -98,7 +98,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), contents) do
       quote do
-        IO.puts "Future fact: " <>  unquote(description)
+        Amrita.Message.pending "Future fact: " <>  unquote(description)
       end
     end
 
@@ -152,16 +152,20 @@ defmodule Amrita do
   end
 
   @doc false
-  defmodule Fail do
-    def msg(candidate, matcher) do
+  defmodule Message do
+    def fail(candidate, matcher) do
       raise Amrita.FactError, actual: candidate,
                               predicate: matcher
     end
 
-    def msg(expected, actual, matcher) do
+    def fail(expected, actual, matcher) do
       raise Amrita.FactError, expected: inspect(expected),
                               actual: inspect(actual),
                               predicate: matcher
+    end
+
+    def pending(message) do
+      IO.puts message
     end
   end
 
@@ -174,7 +178,7 @@ defmodule Amrita do
     def odd(number) do
       r = rem(number, 2) == 1
 
-      if (not r), do: Fail.msg number, "odd"
+      if (not r), do: Message.fail number, "odd"
     end
 
     @doc """
@@ -183,7 +187,7 @@ defmodule Amrita do
     def even(number) do
       r = rem(number, 2) == 0
 
-      if (not r), do: Fail.msg number, "even"
+      if (not r), do: Message.fail number, "even"
     end
 
     @doc """
@@ -196,7 +200,7 @@ defmodule Amrita do
         r = false
       end
 
-      if (not r), do: Fail.msg actual, "truthy"
+      if (not r), do: Message.fail actual, "truthy"
     end
 
     @doc """
@@ -209,7 +213,7 @@ defmodule Amrita do
         r = true
       end
 
-      if (not r), do: Fail.msg actual, "falsey"
+      if (not r), do: Message.fail actual, "falsey"
     end
 
     @doc """
@@ -232,7 +236,7 @@ defmodule Amrita do
     def equals(actual, expected) do
       r = (actual == expected)
 
-      if (not r), do: Fail.msg actual, expected, "equals"
+      if (not r), do: Message.fail actual, expected, "equals"
     end
 
   end
@@ -257,7 +261,7 @@ defmodule Amrita do
 
       r = Enum.any?(list_collection, fn x -> x == element end)
 
-      if (not r), do: Fail.msg element, collection, "contains"
+      if (not r), do: Message.fail element, collection, "contains"
     end
 
     @doc """
@@ -281,7 +285,7 @@ defmodule Amrita do
 
       r = collection_prefix  == prefix
 
-      if (not r), do: Fail.msg prefix, collection, "has_prefix"
+      if (not r), do: Message.fail prefix, collection, "has_prefix"
     end
 
     @doc """
@@ -305,7 +309,7 @@ defmodule Amrita do
 
       r =  collection_suffix == suffix
 
-      if (not r), do: Fail.msg suffix, collection, "has_suffix"
+      if (not r), do: Message.fail suffix, collection, "has_suffix"
     end
 
     @doc """
