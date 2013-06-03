@@ -3,7 +3,7 @@ defexception Amrita.FactError,  message: "fact failed"
 defexception Amrita.FactError,
                     expected: nil,
                     actual: nil,
-                    reason: "",
+                    predicate: "",
                     negation: false,
                     prelude: "Expected" do
 
@@ -13,7 +13,7 @@ defexception Amrita.FactError,
   end
 
   def full_matcher(exception) do
-    "#{exception.reason}#{exception.arguments}"
+    "#{exception.predicate}#{exception.arguments}"
   end
 
   def arguments(exception) do
@@ -155,13 +155,13 @@ defmodule Amrita do
   defmodule Fail do
     def msg(candidate, matcher) do
       raise Amrita.FactError, actual: candidate,
-                              reason: matcher
+                              predicate: matcher
     end
 
     def msg(expected, actual, matcher) do
       raise Amrita.FactError, expected: inspect(expected),
                               actual: inspect(actual),
-                              reason: matcher
+                              predicate: matcher
     end
   end
 
