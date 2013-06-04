@@ -48,9 +48,9 @@ end
 
 Now all thats left is to  write some tests!
 
-## Matchers
+## Checkers
 
-Amrita is all about matchers!
+Amrita is all about checkers!
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
@@ -58,7 +58,7 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule ExampleFacts do
   use Amrita.Sweet
 
-  facts "about collections of numbers" do
+  facts "about Amrita checkers" do
     fact "contains checks if an element is in a collection" do
       [1, 2, 4, 5] |> contains 4
 
