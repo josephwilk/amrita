@@ -109,27 +109,6 @@ defmodule Amrita do
         end
       end
     end
-
-    @doc """
-    facts are used to group with a name a number of fact tests.
-    You can nest as many facts as you feel you need.
-
-    ## Example
-        facts "about arithmetic" do
-          fact "about addition" do
-            ...
-          end
-        end
-    """
-    defmacro facts(description, _ // quote(do: _), contents) do
-      quote do
-        @name_stack List.concat((@name_stack || []), [unquote(description) <> ": "])
-        unquote(contents)
-        if Enum.count(@name_stack) > 0 do
-          @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
-        end
-      end
-    end
   end
 
   @doc false
