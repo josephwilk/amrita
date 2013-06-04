@@ -151,7 +151,7 @@ defmodule Amrita do
   end
 
   defmodule SimpleMatchers do
-    import ExUnit.Assertions
+    import ExUnit.Assertions, only: [assert_in_delta: 3]
 
     @doc """
     Returns if actual is odd
