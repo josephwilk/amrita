@@ -217,7 +217,7 @@ defmodule Amrita do
 
   defmodule CollectionMatchers do
     @moduledoc """
-    Matchers which are designed to work with collections (lists, tuples, keyword lists)
+    Matchers which are designed to work with collections (lists, tuples, keyword lists, strings)
     """
 
     @doc """
@@ -225,18 +225,35 @@ defmodule Amrita do
 
     ## Examples
         [1, 2, 3] |> contains 3
+        {1, 2, 3} |> contains 2
+
+        "elixir of life" |> contains "of"
+
     """
     def contains(collection, element) do
-      if is_tuple(collection) do
-        list_collection = (tuple_to_list collection)
-      else
-        list_collection = collection
-      end
+      list_collection = case collection do
+                          c when is_tuple(c) -> tuple_to_list(c)
+                          c when is_list(c)  -> c
+                          _ -> collection
+                        end
 
-      r = Enum.any?(list_collection, fn x -> x == element end)
+      if is_bitstring(collection) do
+        r = matches?(collection, element)
+      else
+        r = element in list_collection
+      end
 
       if (not r), do: Message.fail element, collection, "contains"
     end
+
+    @doc false
+    defp matches?(string, element) do
+      case :binary.matches(string, element) do
+        [_] -> true
+        []  -> false
+      end
+    end
+
 
     @doc """
     Checks that the actual result starts with the expected result:
