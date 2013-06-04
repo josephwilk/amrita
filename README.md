@@ -41,7 +41,6 @@ Code.require_file "../test_helper.exs", __FILE__
 
 Define a new module and mix in "Amrita.Sweet" which will bring in everything you need to use Amrita:
 
-test/example_facts_test.exs
 ```elixir
 defmodule ExampleFacts do
   use Amrita.Sweet
@@ -148,7 +147,7 @@ Use mix to run your tests:
 
 ```
 mix test
-``
+```
 
 ##Custom matchers
 
