@@ -151,6 +151,10 @@ defmodule Amrita do
   end
 
   defmodule SimpleMatchers do
+    @moduledoc """
+    Matchers for operating on single forms like numbers, atoms, bools, floats, etc.
+    """
+
     import ExUnit.Assertions, only: [assert_in_delta: 3]
 
     @doc """
