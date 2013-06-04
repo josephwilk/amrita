@@ -150,8 +150,8 @@ defmodule Amrita do
     end
   end
 
-defmodule Matchers.Simple do
-  @moduledoc """
+  defmodule Matchers.Simple do
+    @moduledoc """
     Matchers for operating on single forms like numbers, atoms, bools, floats, etc.
     """
 
@@ -240,25 +240,22 @@ defmodule Matchers.Simple do
 
         "elixir of life" |> contains "of"
 
-    """
-    def contains(collection, element) do
-      list_collection = case collection do
-                          c when is_tuple(c) -> tuple_to_list(c)
-                          c when is_list(c)  -> c
-                          _ -> collection
-                        end
+        "elixir of life" |> contains %r/"of"/
 
-      if is_bitstring(collection) do
-        r = matches?(collection, element)
-      else
-        r = element in list_collection
-      end
+    """
+    def contains(collection,element) do
+      r = case collection do
+            c when is_tuple(c)           -> element in tuple_to_list(c)
+            c when is_list(c)            -> element in c
+            c when is_regex(element)     -> Regex.match?(element, c)
+            c when is_bitstring(element) -> string_match?(element, c)
+          end
 
       if (not r), do: Message.fail element, collection, "contains"
     end
 
     @doc false
-    defp matches?(string, element) do
+    defp string_match?(element, string) do
       case :binary.matches(string, element) do
         [_] -> true
         []  -> false

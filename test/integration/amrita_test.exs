@@ -68,6 +68,10 @@ defmodule AmritaFacts do
       {4, 5, 6} |> contains 5
 
       [a: 1, b: 2] |> contains({:a, 1})
+
+      "mad hatter tea party" |> contains "hatter"
+
+      "mad hatter tea party" |> contains %r"h(\w+)er"
     end
 
     fact "has_prefix" do

@@ -69,6 +69,8 @@ defmodule ExampleFacts do
 
     fact "contains works with strings" do
       "mad hatters tea party" |> contains "hatters"
+
+      "mad hatter tea party" |> contains %r"h(\w+)er"
     end
 
     fact "has a prefix" do
