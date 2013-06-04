@@ -31,17 +31,15 @@ Ensure you start Amrita in: test/test_helper.exs
 Amrita.start
 ```
 
-Create a new test file ensuring the filename ends in "_test.exs"
+Create a new test file ending with "_test.exs".
 
-Require your test helper at the top of every test (this will ensure Amrita is started):
+Require  test_helper.exs in every test (this will ensure Amrita is started):
+
+Mix in "Amrita.Sweet" which will bring in everything you need to use Amrita:
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
-```
 
-Define a new module and mix in "Amrita.Sweet" which will bring in everything you need to use Amrita:
-
-```elixir
 defmodule ExampleFacts do
   use Amrita.Sweet
 
@@ -50,7 +48,9 @@ end
 
 Now all thats left is to  write some tests!
 
-##A full example:
+## Matchers
+
+Amrita is all about matchers!
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
