@@ -12,6 +12,13 @@ defmodule Amrita do
     ExUnit.start formatter: Amrita.Formatter.Progress
   end
 
+  @doc """
+    Polite version of start.
+  """
+  def please_start do
+    start
+  end
+
   defmodule Sweet do
     @moduledoc """
     Responsible for loading Amrita within test.
@@ -253,7 +260,6 @@ defmodule Amrita do
         []  -> false
       end
     end
-
 
     @doc """
     Checks that the actual result starts with the expected result:
