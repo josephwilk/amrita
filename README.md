@@ -50,7 +50,7 @@ end
 
 Now all thats left is to  write some tests!
 
-A full example:
+##A full example:
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
