@@ -151,9 +151,9 @@ Use mix to run your tests:
 mix test
 ```
 
-##Custom matchers
+##Custom checkers
 
-Its simple to create your own matchers:
+Its simple to create your own checkers:
 
 ```elixir
   def a_thousand(actual) do
