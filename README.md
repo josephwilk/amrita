@@ -18,6 +18,12 @@ Add to your mix.exs
   end
 ```
 
+After adding Amrita as a dependency, to install please run:
+
+```console
+mix deps.get
+```
+
 ##Getting started
 
 Ensure you start Amrita in: test/test_helper.exs
