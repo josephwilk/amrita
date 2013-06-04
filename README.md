@@ -18,14 +18,34 @@ Add to your mix.exs
   end
 ```
 
-##Setup
+##Getting started
 
 Ensure you start Amrita in: test/test_helper.exs
 ```elixir
 Amrita.start
 ```
 
-##Usage
+Create a new test file ensuring the filename ends in "_test.exs"
+
+Require your test helper at the top of every test (this will ensure Amrita is started):
+
+```elixir
+Code.require_file "../test_helper.exs", __FILE__
+```
+
+Define a new module and mix in "Amrita.Sweet" which will bring in everything you need to use Amrita:
+
+test/example_facts_test.exs
+```elixir
+defmodule ExampleFacts do
+  use Amrita.Sweet
+
+end
+```
+
+Now all thats left is to  write some tests!
+
+A full example:
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
@@ -111,6 +131,14 @@ defmodule ExampleFacts do
 
 end
 ```
+
+## Running your tests
+
+Use mix to run your tests:
+
+```
+mix test
+``
 
 ##Custom matchers
 
