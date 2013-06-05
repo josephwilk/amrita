@@ -9,6 +9,12 @@ defmodule FactErrorFacts do
 
       error.message |> contains "2 => contains(1)"
     end
+
+    fact "actual gets inspected when its not a string" do
+      error = Amrita.FactError.new(expected: "1", actual: nil, predicate: "truthy")
+
+      error.message |> contains "nil => truthy"
+    end
   end
 
 end

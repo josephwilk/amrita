@@ -9,11 +9,19 @@ defexception Amrita.FactError,
 
   def message(exception) do
     "#{exception.prelude}:\n" <>
-    "     #{exception.actual} => #{exception.full_matcher}"
+    "     #{exception.actual_result} => #{exception.full_matcher}"
   end
 
   def full_matcher(exception) do
     "#{exception.predicate}#{exception.arguments}"
+  end
+
+  def actual_result(exception) do
+    if is_bitstring(exception.actual) do
+      exception.actual
+    else
+     inspect exception.actual
+    end
   end
 
   def arguments(exception) do
