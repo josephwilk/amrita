@@ -65,7 +65,11 @@ Amrita is all about Matchers!
     <span class="k">end</span>
 
     <span class="n">fact</span> <span class="s2">"! negates a checker"</span> <span class="k">do</span>
-<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="n">contains</span> <span class="m">9999</span>
+<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span><span class="n">contains</span> <span class="m">9999</span>
+
+     <span class="c1"># or you can add a space, like this. Whatever tickles your fancy.</span>
+
+      <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="n">contains</span> <span class="m">9999</span>
 
       <span class="m">10</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="n">equal</span> <span class="m">11</span>
     <span class="k">end</span>
