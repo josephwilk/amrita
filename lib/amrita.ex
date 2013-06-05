@@ -225,6 +225,13 @@ defmodule Amrita do
       roughly(actual, expected, 0.01)
     end
 
+    def roughly(expected) do
+      fn actual ->
+           actual |> roughly expected
+           "roughly(#{inspect(expected)})"
+      end
+    end
+
     @doc """
     Checks if actual == expected
 
@@ -240,13 +247,13 @@ defmodule Amrita do
 
     def equals(expected) do
       fn actual ->
-          actual |> equals expected
-          "equals(#{inspect(expected)})"
+           actual |> equals expected
+           "equals(#{inspect(expected)})"
       end
     end
 
     @doc """
-    Negates all following predicates.
+    Negates all following checkers.
 
     ## Examples
 
@@ -258,7 +265,7 @@ defmodule Amrita do
       r = try do
         checker.(actual)
       rescue
-        error in [Amrita.FactError] -> false
+        error in [Amrita.FactError, ExUnit.AssertionError] -> false
         error -> raise(error)
       end
 

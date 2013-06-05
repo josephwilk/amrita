@@ -120,6 +120,10 @@ defmodule AmritaFacts do
     fact "equals" do
       1999 |> ! equals 0
     end
+
+    fact "roughly" do
+      0.1001 |> ! roughly 0.2
+    end
   end
 
   test "Backwards compatible with ExUnit" do
