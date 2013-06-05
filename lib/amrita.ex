@@ -153,7 +153,7 @@ defmodule Amrita do
         fn -> raise Exception end |> raises Exception ; true
         fn -> true end            |> raises Exception ; false
     """
-    def raises(function, expected_exception) do
+    def raises(function, expected_exception) when is_function(function) do
       try do
         function.()
         Message.fail expected_exception, "No exception raised", __ENV__.function
