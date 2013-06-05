@@ -344,6 +344,13 @@ defmodule Amrita do
       if (not r), do: Message.fail prefix, collection, "has_prefix"
     end
 
+    def has_prefix(element) do
+      fn collection ->
+           collection |> has_prefix element
+           "has_prefix(#{inspect element})"
+      end
+    end
+
     @doc """
     Checks that the actual result ends with the expected result:
 

@@ -128,6 +128,11 @@ defmodule AmritaFacts do
     fact "has_suffix" do
       [1, 2, 3, 4] |> ! has_suffix [3,1]
     end
+
+    fact "has_prefix" do
+      [1, 2, 3, 4] |> ! has_prefix [1, 3]
+    end
+
   end
 
   test "Backwards compatible with ExUnit" do
