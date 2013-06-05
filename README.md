@@ -68,6 +68,10 @@ defmodule ExampleFacts do
     end
 
     fact "! negates a checker" do
+      [1, 2, 3, 4] |> !contains 9999
+
+     # or you can add a space, like this. Whatever tickles your fancy.
+
       [1, 2, 3, 4] |> ! contains 9999
 
       10 |> ! equal 11
