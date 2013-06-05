@@ -162,10 +162,10 @@ Amrita tries its best to be polite with its errors:
 
 ![Polite error message](http://s24.postimg.org/vlj6epnmt/Screen_Shot_2013_06_01_at_22_12_16.png)
 
-## Amrita I just want you for your matches
+## Amrita I just want you for your checkers
 
 If facts are not your thing nothing is stopping you from using ExUnits `test` function.
-You still get all of Amrita's helpful matchers.
+You still get all of Amrita's helpful checkers.
 
 ```elixir
 
