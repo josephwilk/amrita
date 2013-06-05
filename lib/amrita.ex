@@ -372,6 +372,13 @@ defmodule Amrita do
       if (not r), do: Message.fail suffix, collection, "has_suffix"
     end
 
+    def has_suffix(element) do
+      fn collection ->
+           collection |> has_suffix element
+           "has_suffix(#{inspect(element)})"
+      end
+    end
+
     @doc """
     Checks whether a predicate holds for all elements in a collection
 

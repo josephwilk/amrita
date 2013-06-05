@@ -124,6 +124,10 @@ defmodule AmritaFacts do
     fact "roughly" do
       0.1001 |> ! roughly 0.2
     end
+
+    fact "has_suffix" do
+      [1, 2, 3, 4] |> ! has_suffix [3,1]
+    end
   end
 
   test "Backwards compatible with ExUnit" do
