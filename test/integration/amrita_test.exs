@@ -133,6 +133,9 @@ defmodule AmritaFacts do
       [1, 2, 3, 4] |> ! has_prefix [1, 3]
     end
 
+    fact "raises" do
+      fn -> raise TestException end |> ! raises AmritaFacts.MadeUpException
+    end
   end
 
   test "Backwards compatible with ExUnit" do

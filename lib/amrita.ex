@@ -154,6 +154,13 @@ defmodule Amrita do
           end
       end
     end
+
+    def raises(expected_exception) do
+      fn function ->
+           function |> raises expected_exception
+           "raises(#{inspect expected_exception})"
+      end
+    end
   end
 
   defmodule Checkers.Simple do
