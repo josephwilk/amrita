@@ -112,6 +112,12 @@ defmodule AmritaFacts do
     end
   end
 
+  facts "! negates the predicate" do
+    fact "contains" do
+      [1, 2, 3, 4] |> ! contains 9999
+    end
+  end
+
   test "Backwards compatible with ExUnit" do
     assert 2 + 2 == 4
   end

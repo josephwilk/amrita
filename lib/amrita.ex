@@ -230,6 +230,26 @@ defmodule Amrita do
       if (not r), do: Message.fail actual, expected, "equals"
     end
 
+    @doc """
+    Negates all following predicates.
+
+    ## Examples
+
+        [1, 2, 3, 4] |> ! contains 999 ; true
+        [1, 2, 3, 4] |> ! contains 4   ; false
+
+    """
+    def :!.(actual, checker) do
+      r = try do
+        element = checker.(actual)
+      rescue
+        error in [Amrita.FactError] -> false
+        error -> raise(error)
+      end
+
+      if r, do: Message.fail r, actual, "! "
+    end
+
   end
 
   defmodule Checkers.Collection do
@@ -258,6 +278,13 @@ defmodule Amrita do
           end
 
       if (not r), do: Message.fail element, collection, "contains"
+    end
+
+    def contains(element) do
+      fn collection ->
+           collection |> contains element
+           "contains(#{inspect(element)})"
+      end
     end
 
     @doc false
