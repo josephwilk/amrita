@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/josephwilk/amrita.png?branch=master)](https://travis-ci.org/josephwilk/amrita)
 
-A polite, well mannered and throughly upstanding testing framework for [Elixir](http://elixir-lang.org/).
+A polite, well mannered and thoroughly upstanding testing framework for [Elixir](http://elixir-lang.org/).
 
 ![Elixir of life](http://s9.postimg.org/uv0ubzjm7/elixir.jpg)
 

@@ -1,6 +1,6 @@
 defmodule Amrita do
   @moduledoc """
-  A polite, well mannered and throughly upstanding testing framework for Elixir.
+  A polite, well mannered and thoroughly upstanding testing framework for Elixir.
   """
 
   @doc """
