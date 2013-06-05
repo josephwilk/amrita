@@ -216,6 +216,10 @@ defmodule Amrita do
 
     @doc """
     Checks if actual is a value within 1/1000th of the expected value.
+
+    ## Examples
+        0.10001 |> roughly 0.1  ; true
+        0.20001 |> roughly 0.1  ; false
     """
     def roughly(actual, expected) do
       roughly(actual, expected, 0.01)
@@ -223,6 +227,10 @@ defmodule Amrita do
 
     @doc """
     Checks if actual == expected
+
+    ## Example
+        1000 |> equals 1000 ; true
+        1000 |> equals 0    ; false
     """
     def equals(actual, expected) do
       r = (actual == expected)
