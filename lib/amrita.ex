@@ -180,7 +180,11 @@ defmodule Amrita do
     import ExUnit.Assertions, only: [assert_in_delta: 3]
 
     @doc """
-    Returns if actual is odd
+    Check if actual is odd
+
+    ## Example
+        2 |> even ; true
+
     """
     def odd(number) do
       r = rem(number, 2) == 1
@@ -189,7 +193,10 @@ defmodule Amrita do
     end
 
     @doc """
-    Returns if actual is even
+    Check if actual is even
+
+    ## Example
+        2 |> even ; true
     """
     def even(number) do
       r = rem(number, 2) == 0
@@ -198,7 +205,11 @@ defmodule Amrita do
     end
 
     @doc """
-    Returns precisely true if actual is not nil and not false.
+    Check if `actual` evaluates to precisely true
+
+    ## Example
+        "mercury" |> truthy ; true
+        nil       |> truthy ; false
     """
     def truthy(actual) do
       if actual do
@@ -211,7 +222,11 @@ defmodule Amrita do
     end
 
     @doc """
-    Returns precisely true if actual is nil or false.
+    Check if `actual` evaluates to precisely false.
+
+    ## Example
+        nil |> falsey ; true
+        ""  |> falsey ; false
     """
     def falsey(actual) do
       if actual do
@@ -225,6 +240,10 @@ defmodule Amrita do
 
     @doc """
     Checks if actual is within delta of the expected value.
+
+    ## Example
+        0.1 |> roughly 0.2, 0.2  ; true
+        0.1 |> roughly 0.01, 0.2 ; false
     """
     def roughly(actual, expected, delta) do
       assert_in_delta(expected, actual, delta)
@@ -233,7 +252,7 @@ defmodule Amrita do
     @doc """
     Checks if actual is a value within 1/1000th of the expected value.
 
-    ## Examples
+    ## Example
         0.10001 |> roughly 0.1  ; true
         0.20001 |> roughly 0.1  ; false
     """
