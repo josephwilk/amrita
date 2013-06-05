@@ -241,7 +241,7 @@ defmodule Amrita do
     """
     def :!.(actual, checker) do
       r = try do
-        element = checker.(actual)
+        checker.(actual)
       rescue
         error in [Amrita.FactError] -> false
         error -> raise(error)
