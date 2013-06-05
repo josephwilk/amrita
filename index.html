@@ -48,6 +48,8 @@
 
 <h2>Examples</h2>
 
+Amrita is all about Matchers!
+
 <div class="highlight"><pre><span class="no">Code</span><span class="o">.</span><span class="n">require_file</span> <span class="s2">"../test_helper.exs"</span><span class="p">,</span> <span class="bp">__FILE__</span>
 
 <span class="k">defmodule</span> <span class="no">ExampleFacts</span> <span class="k">do</span>
@@ -60,6 +62,12 @@
       <span class="p">{</span><span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">9</span>
 
       <span class="p">[</span><span class="ss">a:</span> <span class="m">1</span><span class="p">,</span> <span class="ss">:b</span> <span class="m">2</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="p">{</span><span class="ss">:a</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
+    <span class="k">end</span>
+
+    <span class="n">fact</span> <span class="s2">"! negates a checker"</span> <span class="k">do</span>
+<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="n">contains</span> <span class="m">9999</span>
+
+      <span class="m">10</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="n">equal</span> <span class="m">11</span>
     <span class="k">end</span>
 
     <span class="n">fact</span> <span class="s2">"contains works with strings"</span> <span class="k">do</span>
@@ -114,6 +122,12 @@
 
     <span class="n">fact</span> <span class="s2">"equals checks =="</span> <span class="k">do</span>
 <span class="k">      </span><span class="m">1</span> <span class="o">-</span> <span class="m">10</span> <span class="o">|&gt;</span> <span class="n">equals</span> <span class="o">-</span><span class="m">9</span>
+    <span class="k">end</span>
+
+    <span class="k">defexception</span> <span class="no">Boom</span><span class="p">,</span> <span class="ss">message:</span> <span class="s2">"Golly gosh"</span>
+
+    <span class="n">fact</span> <span class="s2">"raises checks if an exception was raised"</span> <span class="k">do</span>
+<span class="k">      fn</span> <span class="o">-&gt;</span> <span class="k">raise</span> <span class="no">Boom</span> <span class="k">end</span> <span class="o">|&gt;</span> <span class="n">raises</span> <span class="no">ExampleFacts</span><span class="o">.</span><span class="no">Boom</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
