@@ -168,6 +168,7 @@ defmodule Amrita do
       end
     end
 
+    @doc false
     def raises(expected_exception) do
       fn function ->
            function |> raises expected_exception
@@ -264,6 +265,7 @@ defmodule Amrita do
       roughly(actual, expected, 0.01)
     end
 
+    @doc false
     def roughly(expected) do
       fn actual ->
            actual |> roughly expected
@@ -284,6 +286,7 @@ defmodule Amrita do
       if (not r), do: Message.fail actual, expected, __ENV__.function
     end
 
+    @doc false
     def equals(expected) do
       fn actual ->
            actual |> equals expected
@@ -341,6 +344,7 @@ defmodule Amrita do
       if (not r), do: Message.fail element, collection, __ENV__.function
     end
 
+    @doc false
     def contains(element) do
       fn collection ->
            collection |> contains element
@@ -383,6 +387,7 @@ defmodule Amrita do
       if (not r), do: Message.fail prefix, collection, __ENV__.function
     end
 
+    @doc false
     def has_prefix(element) do
       fn collection ->
            collection |> has_prefix element
@@ -418,6 +423,7 @@ defmodule Amrita do
       if (not r), do: Message.fail suffix, collection, __ENV__.function
     end
 
+    @doc false
     def has_suffix(element) do
       fn collection ->
            collection |> has_suffix element
