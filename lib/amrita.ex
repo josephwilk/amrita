@@ -115,18 +115,27 @@ defmodule Amrita do
   @doc false
   defmodule Message do
     def fail(candidate, matcher) do
+    def fail(candidate, {checker, _}) do
       raise Amrita.FactError, actual: candidate,
-                              predicate: matcher
+                              predicate: checker
     end
 
-    def fail(expected, actual, matcher) do
+    def fail(expected, actual, {checker, _}) do
       raise Amrita.FactError, expected: inspect(expected),
                               actual: inspect(actual),
-                              predicate: matcher
+                              predicate: checker
     end
 
     def pending(message) do
       IO.puts IO.ANSI.escape("%{yellow}" <>  message)
+    end
+  end
+
+  defmodule Checker do
+    @moduledoc false
+
+    def to_s({function_name, arity}, args) do
+      "#{function_name}(#{inspect(args)})"
     end
   end
 
@@ -142,7 +151,7 @@ defmodule Amrita do
     def raises(function, expected_exception) do
       try do
         function.()
-        Message.fail expected_exception, "No exception raised", "raises"
+        Message.fail expected_exception, "No exception raised", __ENV__.function
       rescue
         error in [expected_exception] -> error
         error ->
@@ -150,7 +159,7 @@ defmodule Amrita do
           if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError] do
             raise(error)
           else
-            Message.fail name, expected_exception, "raises"
+            Message.fail name, expected_exception, __ENV__.function
           end
       end
     end
@@ -176,7 +185,7 @@ defmodule Amrita do
     def odd(number) do
       r = rem(number, 2) == 1
 
-      if (not r), do: Message.fail number, "odd"
+      if (not r), do: Message.fail number, __ENV__.function
     end
 
     @doc """
@@ -185,7 +194,7 @@ defmodule Amrita do
     def even(number) do
       r = rem(number, 2) == 0
 
-      if (not r), do: Message.fail number, "even"
+      if (not r), do: Message.fail number, __ENV__.function
     end
 
     @doc """
@@ -198,7 +207,7 @@ defmodule Amrita do
         r = false
       end
 
-      if (not r), do: Message.fail actual, "truthy"
+      if (not r), do: Message.fail actual, __ENV__.function
     end
 
     @doc """
@@ -211,7 +220,7 @@ defmodule Amrita do
         r = true
       end
 
-      if (not r), do: Message.fail actual, "falsey"
+      if (not r), do: Message.fail actual, __ENV__.function
     end
 
     @doc """
@@ -235,7 +244,7 @@ defmodule Amrita do
     def roughly(expected) do
       fn actual ->
            actual |> roughly expected
-           "roughly(#{inspect(expected)})"
+           Checker.to_s(__ENV__.function, expected)
       end
     end
 
@@ -249,13 +258,13 @@ defmodule Amrita do
     def equals(actual, expected) do
       r = (actual == expected)
 
-      if (not r), do: Message.fail actual, expected, "equals"
+      if (not r), do: Message.fail actual, expected, __ENV__.function
     end
 
     def equals(expected) do
       fn actual ->
            actual |> equals expected
-           "equals(#{inspect(expected)})"
+           Checker.to_s(__ENV__.function, expected)
       end
     end
 
@@ -276,7 +285,7 @@ defmodule Amrita do
         error -> raise(error)
       end
 
-      if r, do: Message.fail r, actual, "! "
+      if r, do: Message.fail r, actual, __ENV__.function
     end
 
   end
@@ -306,13 +315,13 @@ defmodule Amrita do
             c when is_bitstring(element) -> string_match?(element, c)
           end
 
-      if (not r), do: Message.fail element, collection, "contains"
+      if (not r), do: Message.fail element, collection, __ENV__.function
     end
 
     def contains(element) do
       fn collection ->
            collection |> contains element
-           "contains(#{inspect(element)})"
+           Checker.to_s(__ENV__.function, element)
       end
     end
 
@@ -348,13 +357,13 @@ defmodule Amrita do
               String.starts_with?(collection, prefix)
           end
 
-      if (not r), do: Message.fail prefix, collection, "has_prefix"
+      if (not r), do: Message.fail prefix, collection, __ENV__.function
     end
 
     def has_prefix(element) do
       fn collection ->
            collection |> has_prefix element
-           "has_prefix(#{inspect element})"
+           Checker.to_s(__ENV__.function, element)
       end
     end
 
@@ -383,13 +392,13 @@ defmodule Amrita do
               String.ends_with?(collection, suffix)
           end
 
-      if (not r), do: Message.fail suffix, collection, "has_suffix"
+      if (not r), do: Message.fail suffix, collection, __ENV__.function
     end
 
     def has_suffix(element) do
       fn collection ->
            collection |> has_suffix element
-           "has_suffix(#{inspect(element)})"
+           Checker.to_s(__ENV__.function, element)
       end
     end
 
