@@ -53,8 +53,8 @@
 <span class="k">defmodule</span> <span class="no">ExampleFacts</span> <span class="k">do</span>
 <span class="k">  </span><span class="kn">use</span> <span class="no">Amrita</span><span class="o">.</span><span class="no">Sweet</span>
 
-  <span class="n">facts</span> <span class="s2">"about collections of numbers"</span> <span class="k">do</span>
-<span class="k">    </span><span class="n">fact</span> <span class="s2">"contains an element"</span> <span class="k">do</span>
+  <span class="n">facts</span> <span class="s2">"about Amrita checkers"</span> <span class="k">do</span>
+<span class="k">    </span><span class="n">fact</span> <span class="s2">"contains checks if an element is in a collection"</span> <span class="k">do</span>
 <span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">4</span>
 
       <span class="p">{</span><span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">9</span>
@@ -62,19 +62,29 @@
       <span class="p">[</span><span class="ss">a:</span> <span class="m">1</span><span class="p">,</span> <span class="ss">:b</span> <span class="m">2</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="p">{</span><span class="ss">:a</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
     <span class="k">end</span>
 
-    <span class="n">fact</span> <span class="s2">"has a prefix"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"contains works with strings"</span> <span class="k">do</span>
+<span class="k">      </span><span class="s2">"mad hatters tea party"</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="s2">"hatters"</span>
+
+      <span class="s2">"mad hatter tea party"</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="err">%</span><span class="n">r</span><span class="s2">"h(\w+)er"</span>
+    <span class="k">end</span>
+
+    <span class="n">fact</span> <span class="s2">"has_prefix checks if the start of a collection matches"</span> <span class="k">do</span>
 <span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">has_prefix</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">]</span>
 
       <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">has_prefix</span> <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">}</span>
+
+      <span class="s2">"I cannot explain myself for I am not myself"</span> <span class="o">|&gt;</span> <span class="n">has_prefix</span> <span class="s2">"I"</span>
     <span class="k">end</span>
 
-    <span class="n">fact</span> <span class="s2">"has a suffix"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"has_suffix checks if the end of a collection matches"</span> <span class="k">do</span>
 <span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span> <span class="p">,</span><span class="m">5</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">has_suffix</span> <span class="p">[</span><span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">]</span>
 
       <span class="p">{</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">}</span> <span class="o">|&gt;</span> <span class="n">has_suffix</span> <span class="p">{</span><span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">}</span>
+
+      <span class="s2">"I cannot explain myself for I am not myself"</span> <span class="o">|&gt;</span> <span class="n">has_suffix</span> <span class="s2">"myself"</span>
     <span class="k">end</span>
 
-    <span class="n">fact</span> <span class="s2">"evens"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"for_all checks if a predicate holds for all elements"</span> <span class="k">do</span>
 <span class="k">      </span><span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">8</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">for_all</span> <span class="n">even</span><span class="p">(</span><span class="nv">&amp;1</span><span class="p">)</span>
 
       <span class="p">;</span> <span class="ow">or</span> <span class="n">alternatively</span> <span class="n">you</span> <span class="n">could</span> <span class="n">write</span>
@@ -82,38 +92,27 @@
       <span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">8</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="no">Enum</span><span class="o">.</span><span class="n">all?</span> <span class="n">even</span><span class="p">(</span><span class="nv">&amp;1</span><span class="p">)</span>
     <span class="k">end</span>
 
-    <span class="n">fact</span> <span class="s2">"odds"</span> <span class="k">do</span>
-<span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">for_all</span> <span class="n">odd</span><span class="p">(</span><span class="nv">&amp;1</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="n">facts</span> <span class="s2">"about numbers"</span> <span class="k">do</span>
-<span class="k">    </span><span class="n">fact</span> <span class="s2">"1 is odd"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"odd checks if a number is, well odd"</span> <span class="k">do</span>
 <span class="k">      </span><span class="m">1</span> <span class="o">|&gt;</span> <span class="n">odd</span>
     <span class="k">end</span>
 
-    <span class="n">fact</span> <span class="s2">"2 is even"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"even checks is a number if even"</span> <span class="k">do</span>
 <span class="k">      </span><span class="m">2</span> <span class="o">|&gt;</span> <span class="n">even</span>
     <span class="k">end</span>
-  <span class="k">end</span>
 
-  <span class="n">fact</span> <span class="s2">"about floats"</span> <span class="k">do</span>
-<span class="k">    </span><span class="m">0.1001</span> <span class="o">|&gt;</span> <span class="n">roughly</span> <span class="m">0.1</span>
-  <span class="k">end</span>
+    <span class="n">fact</span> <span class="s2">"roughly checks if a float within some +-delta matches"</span> <span class="k">do</span>
+<span class="k">      </span><span class="m">0.1001</span> <span class="o">|&gt;</span> <span class="n">roughly</span> <span class="m">0.1</span>
+    <span class="k">end</span>
 
-  <span class="n">facts</span> <span class="s2">"about true and false"</span> <span class="k">do</span>
-<span class="k">    </span><span class="n">fact</span> <span class="s2">"nil is false"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"falsey checks if expression evalulates to false"</span> <span class="k">do</span>
 <span class="k">      </span><span class="no">nil</span> <span class="o">|&gt;</span> <span class="n">falsey</span>
     <span class="k">end</span>
 
-    <span class="n">fact</span> <span class="s2">"empty list is true"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"truthy checks if expression evaulates to true"</span> <span class="k">do</span>
 <span class="k">      </span><span class="s2">""</span> <span class="o">|&gt;</span> <span class="n">truthy</span>
     <span class="k">end</span>
-  <span class="k">end</span>
 
-  <span class="n">facts</span> <span class="s2">"about substraction"</span> <span class="k">do</span>
-
-<span class="k">    </span><span class="n">fact</span> <span class="s2">"negative numbers"</span> <span class="k">do</span>
+    <span class="n">fact</span> <span class="s2">"equals checks =="</span> <span class="k">do</span>
 <span class="k">      </span><span class="m">1</span> <span class="o">-</span> <span class="m">10</span> <span class="o">|&gt;</span> <span class="n">equals</span> <span class="o">-</span><span class="m">9</span>
     <span class="k">end</span>
   <span class="k">end</span>
@@ -132,7 +131,6 @@
 
 <span class="k">end</span>
 </pre></div>
-
 <h2>Want to learn more?</h2>
 
 Checkout <a href="https://github.com/josephwilk/amrita">Amrita on Github</a>.
