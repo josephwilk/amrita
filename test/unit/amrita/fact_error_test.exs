@@ -7,7 +7,7 @@ defmodule FactErrorFacts do
     fact "message contains predicate with expected value" do
       error = Amrita.FactError.new(expected: "1", actual: "2", predicate: "contains")
 
-      error.message |> contains "2 => contains(1)"
+      error.message |> contains "2 => contains(\"1\")"
     end
 
     fact "actual gets inspected when its not a string" do

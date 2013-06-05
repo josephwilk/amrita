@@ -21,7 +21,7 @@ defmodule Amrita do
 
   defmodule Sweet do
     @moduledoc """
-    Responsible for loading Amrita within test.
+    Responsible for loading Amrita within a test module.
 
         defmodule TestsAboutSomething do
           use Amrita.Sweet
@@ -135,8 +135,13 @@ defmodule Amrita do
     @moduledoc false
 
     def to_s({function_name, arity}, args) do
+      to_s(function_name, args)
+    end
+
+    def to_s(function_name, args) do
       "#{function_name}(#{inspect(args)})"
     end
+
   end
 
   defmodule Checkers.Exceptions do

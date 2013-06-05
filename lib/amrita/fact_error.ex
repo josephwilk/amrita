@@ -9,11 +9,11 @@ defexception Amrita.FactError,
 
   def message(exception) do
     "#{exception.prelude}:\n" <>
-    "     #{exception.actual_result} => #{exception.full_matcher}"
+    "     #{exception.actual_result} => #{exception.full_checker}"
   end
 
-  def full_matcher(exception) do
-    "#{exception.predicate}#{exception.arguments}"
+  def full_checker(exception) do
+    Amrita.Checker.to_s exception.predicate, exception.expected
   end
 
   def actual_result(exception) do
@@ -21,14 +21,6 @@ defexception Amrita.FactError,
       exception.actual
     else
      inspect exception.actual
-    end
-  end
-
-  def arguments(exception) do
-    if exception.expected do
-      "(#{exception.expected})"
-    else
-      ""
     end
   end
 
