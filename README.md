@@ -67,8 +67,10 @@ defmodule ExampleFacts do
       [a: 1, :b 2] |> contains {:a, 1}
     end
 
-    fact "! negates a predicate" do
+    fact "! negates a checker" do
       [1, 2, 3, 4] |> ! contains 9999
+
+      10 |> ! equal 11
     end
 
     fact "contains works with strings" do
