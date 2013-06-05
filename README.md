@@ -120,6 +120,12 @@ defmodule ExampleFacts do
     fact "equals checks ==" do
       1 - 10 |> equals -9
     end
+
+    defexception Boom, message: "Golly gosh"
+
+    fact "raises checks if an exception was raised" do
+      fn -> raise Boom end |> raises ExampleFacts.Boom
+    end
   end
 
   future_fact "I'm not run yet, just printed as a reminder. Like a TODO" do

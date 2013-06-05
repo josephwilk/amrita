@@ -104,6 +104,14 @@ defmodule AmritaFacts do
 
   end
 
+  defexception TestException, message: "golly gosh, sorry"
+
+  facts "exceptions" do
+    fact "should allow checking of exceptions" do
+      fn ->  raise TestException end |> raises AmritaFacts.TestException
+    end
+  end
+
   test "Backwards compatible with ExUnit" do
     assert 2 + 2 == 4
   end

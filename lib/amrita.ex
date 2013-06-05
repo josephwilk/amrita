@@ -35,6 +35,7 @@ defmodule Amrita do
         import Amrita.Facts
         import Amrita.Checkers.Simple
         import Amrita.Checkers.Collection
+        import Amrita.Checkers.Exceptions
       end
     end
   end
@@ -126,6 +127,32 @@ defmodule Amrita do
 
     def pending(message) do
       IO.puts IO.ANSI.escape("%{yellow}" <>  message)
+    end
+  end
+
+  defmodule Checkers.Exceptions do
+
+    @doc """
+    Checks if an exception was raised and that it was of the expected type
+
+    ## Example
+        fn -> raise Exception end |> raises Exception ; true
+        fn -> true end            |> raises Exception ; false
+    """
+    def raises(function, expected_exception) do
+      try do
+        function.()
+        Message.fail expected_exception, "No exception raised", "raises"
+      rescue
+        error in [expected_exception] -> error
+        error ->
+          name = error.__record__(:name)
+          if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError] do
+            raise(error)
+          else
+            Message.fail name, expected_exception, "raises"
+          end
+      end
     end
   end
 
