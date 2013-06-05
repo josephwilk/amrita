@@ -33,8 +33,8 @@ defmodule Amrita do
       quote do
         use ExUnit.Case
         import Amrita.Facts
-        import Amrita.Matchers.Simple
-        import Amrita.Matchers.Collection
+        import Amrita.Checkers.Simple
+        import Amrita.Checkers.Collection
       end
     end
   end
@@ -129,9 +129,9 @@ defmodule Amrita do
     end
   end
 
-  defmodule Matchers.Simple do
+  defmodule Checkers.Simple do
     @moduledoc """
-    Matchers for operating on single forms like numbers, atoms, bools, floats, etc.
+    Checkers for operating on single forms like numbers, atoms, bools, floats, etc.
     """
 
     import ExUnit.Assertions, only: [assert_in_delta: 3]
@@ -205,9 +205,9 @@ defmodule Amrita do
 
   end
 
-  defmodule Matchers.Collection do
+  defmodule Checkers.Collection do
     @moduledoc """
-    Matchers which are designed to work with collections (lists, tuples, keyword lists, strings)
+    Checkers which are designed to work with collections (lists, tuples, keyword lists, strings)
     """
 
     @doc """
