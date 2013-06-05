@@ -73,19 +73,19 @@ defmodule ExampleFacts do
       "mad hatter tea party" |> contains %r"h(\w+)er"
     end
 
-    fact "has a prefix" do
+    fact "has_prefix checks if the start of a collection matches" do
       [1, 2, 3, 4] |> has_prefix [1, 2]
 
       {1, 2, 3, 4} |> has_prefix {1, 2}
     end
 
-    fact "has a suffix" do
+    fact "has_suffix checks if the end of a collection matches" do
       [1, 2, 3, 4 ,5] |> has_suffix [4, 5]
 
       {1, 2, 3, 4} |> has_suffix {3, 4}
     end
 
-    fact "evens" do
+    fact "for_all checks if a predicate holds for all elements" do
       [2, 4, 6, 8] |> for_all even(&1)
 
       ; or alternatively you could write
@@ -93,37 +93,27 @@ defmodule ExampleFacts do
       [2, 4, 6, 8] |> Enum.all? even(&1)
     end
 
-    fact "odds" do
-      [1, 3, 5, 7] |> for_all odd(&1)
-    end
-  end
-
-  facts "about numbers" do
-    fact "1 is odd" do
+    fact "odd checks if a number is, well odd" do
       1 |> odd
     end
 
-    fact "2 is even" do
+    fact "even checks is a number if even" do
       2 |> even
     end
-  end
 
-  fact "about floats" do
-    0.1001 |> roughly 0.1
-  end
+    fact "roughly checks if a float within some +-delta matches" do
+      0.1001 |> roughly 0.1
+    end
 
-  facts "about true and false" do
-    fact "nil is false" do
+    fact "falsey checks if expression evalulates to false" do
       nil |> falsey
     end
 
-    fact "empty list is true" do
+    fact "truthy checks if expression evaulates to true" do
       "" |> truthy
     end
-  end
 
-  facts "about substraction" do
-    fact "negative numbers" do
+    fact "equals checks ==" do
       1 - 10 |> equals -9
     end
   end
