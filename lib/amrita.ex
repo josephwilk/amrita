@@ -249,6 +249,9 @@ defmodule Amrita do
         [1 2 3] |> has_prefix  [2 1]   ; false
 
         {1, 2, 3} |> has_prefix {1, 2} ; true
+
+        "I cannot explain myself for I am not myself" |> has_prefix "I"
+
     """
     def has_prefix(collection, prefix) do
       r = case collection do
@@ -271,6 +274,11 @@ defmodule Amrita do
     ## Examples:
         [1 2 3] |> has_suffix [2 3]  ; true
         [1 2 3] |> has_suffix [3 2]  ; false
+
+        {1, 2, 3} |> has_suffix [3] ; true
+
+        "I cannot explain myself for I am not myself" |> has_suffix "myself"
+
     """
     def has_suffix(collection, suffix) do
       r = case collection do
