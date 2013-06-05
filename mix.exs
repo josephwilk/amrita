@@ -3,7 +3,7 @@ defmodule Amrita.Mixfile do
 
   def project do
     [app: :amrita,
-     version: "0.1.0",
+     version: "0.1.1",
      name: "Amrita",
      source_url: "https://github.com/josephwilk/amrita",
      deps: deps]
