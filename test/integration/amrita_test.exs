@@ -116,6 +116,10 @@ defmodule AmritaFacts do
     fact "contains" do
       [1, 2, 3, 4] |> ! contains 9999
     end
+
+    fact "equals" do
+      1999 |> ! equals 0
+    end
   end
 
   test "Backwards compatible with ExUnit" do

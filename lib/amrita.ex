@@ -230,6 +230,13 @@ defmodule Amrita do
       if (not r), do: Message.fail actual, expected, "equals"
     end
 
+    def equals(expected) do
+      fn actual ->
+          actual |> equals expected
+          "equals(#{inspect(expected)})"
+      end
+    end
+
     @doc """
     Negates all following predicates.
 
