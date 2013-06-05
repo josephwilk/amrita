@@ -141,7 +141,6 @@ defmodule Amrita do
     def to_s(function_name, args) do
       "#{function_name}(#{inspect(args)})"
     end
-
   end
 
   defmodule Checkers.Exceptions do
@@ -191,7 +190,7 @@ defmodule Amrita do
         2 |> even ; true
 
     """
-    def odd(number) do
+    def odd(number) when is_integer(number) do
       r = rem(number, 2) == 1
 
       if (not r), do: Message.fail number, __ENV__.function
@@ -203,7 +202,7 @@ defmodule Amrita do
     ## Example
         2 |> even ; true
     """
-    def even(number) do
+    def even(number) when is_integer(number) do
       r = rem(number, 2) == 0
 
       if (not r), do: Message.fail number, __ENV__.function
@@ -250,7 +249,7 @@ defmodule Amrita do
         0.1 |> roughly 0.2, 0.2  ; true
         0.1 |> roughly 0.01, 0.2 ; false
     """
-    def roughly(actual, expected, delta) do
+    def roughly(actual, expected, delta) when is_float(actual) and is_float(expected) do
       assert_in_delta(expected, actual, delta)
     end
 
@@ -261,7 +260,7 @@ defmodule Amrita do
         0.10001 |> roughly 0.1  ; true
         0.20001 |> roughly 0.1  ; false
     """
-    def roughly(actual, expected) do
+    def roughly(actual, expected) when is_float(actual) and is_float(expected) do
       roughly(actual, expected, 0.01)
     end
 
