@@ -251,16 +251,16 @@ defmodule Amrita do
         {1, 2, 3} |> has_prefix {1, 2} ; true
     """
     def has_prefix(collection, prefix) do
-      if is_tuple(collection) && is_tuple(prefix) do
-        list_collection = (tuple_to_list collection)
-        prefix_length = tuple_size(prefix)
-        collection_prefix = Enum.take(list_collection, prefix_length)
-        collection_prefix = list_to_tuple(collection_prefix)
-      else
-        collection_prefix = Enum.take(collection, Enum.count(prefix))
-      end
-
-      r = collection_prefix  == prefix
+      r = case collection do
+            c when is_tuple(c) ->
+              collection_prefix = Enum.take(tuple_to_list(collection), tuple_size(prefix))
+              collection_prefix = list_to_tuple(collection_prefix)
+              collection_prefix == prefix
+            c when is_list(c)  ->
+              Enum.take(collection, Enum.count(prefix)) == prefix
+            _ when is_bitstring(prefix) ->
+              String.starts_with?(collection, prefix)
+          end
 
       if (not r), do: Message.fail prefix, collection, "has_prefix"
     end
@@ -273,18 +273,17 @@ defmodule Amrita do
         [1 2 3] |> has_suffix [3 2]  ; false
     """
     def has_suffix(collection, suffix) do
-      if is_tuple(collection) && is_tuple(suffix) do
-        suffix_length = tuple_size(suffix)
-        collection_length = tuple_size(collection)
-        collection_suffix = Enum.drop(tuple_to_list(collection), collection_length - suffix_length)
-        collection_suffix = list_to_tuple(collection_suffix)
-      else
-        suffix_length = Enum.count(suffix)
-        collection_length = Enum.count(collection)
-        collection_suffix = Enum.drop(collection, collection_length - suffix_length)
-      end
-
-      r =  collection_suffix == suffix
+      r = case collection do
+            c when is_tuple(c) ->
+              collection_suffix = Enum.drop(tuple_to_list(collection), tuple_size(collection) - tuple_size(suffix))
+              collection_suffix = list_to_tuple(collection_suffix)
+              collection_suffix == suffix
+            c when is_list(c) ->
+              collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
+              collection_suffix == suffix
+            c when is_bitstring(suffix) ->
+              String.ends_with?(collection, suffix)
+          end
 
       if (not r), do: Message.fail suffix, collection, "has_suffix"
     end

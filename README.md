@@ -33,9 +33,9 @@ Amrita.start
 
 Create a new test file ending with "_test.exs".
 
-Require  test_helper.exs in every test (this will ensure Amrita is started):
+Require test_helper.exs in every test (this will ensure Amrita is started):
 
-Mix in "Amrita.Sweet" which will bring in everything you need to use Amrita:
+Mix in `Amrita.Sweet` which will bring in everything you need to use Amrita:
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
@@ -77,12 +77,16 @@ defmodule ExampleFacts do
       [1, 2, 3, 4] |> has_prefix [1, 2]
 
       {1, 2, 3, 4} |> has_prefix {1, 2}
+
+      "I cannot explain myself for I am not myself" |> has_prefix "I"
     end
 
     fact "has_suffix checks if the end of a collection matches" do
       [1, 2, 3, 4 ,5] |> has_suffix [4, 5]
 
       {1, 2, 3, 4} |> has_suffix {3, 4}
+
+      "I cannot explain myself for I am not myself" |> has_suffix "myself"
     end
 
     fact "for_all checks if a predicate holds for all elements" do

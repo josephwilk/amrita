@@ -78,12 +78,16 @@ defmodule AmritaFacts do
       [1, 2, 3] |> has_prefix [1, 2]
 
       {4, 5, 6} |> has_prefix {4, 5}
+
+      "mad hatter tea party" |> has_prefix "mad"
     end
 
     fact "has_suffix" do
       [1, 2, 3, 4, 5] |> has_suffix [3, 4, 5]
 
       {1, 2, 3, 4, 5} |> has_suffix {3, 4, 5}
+
+      "white rabbit"  |> has_suffix "rabbit"
     end
 
     fact "for_all" do
