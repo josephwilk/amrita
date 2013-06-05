@@ -110,7 +110,7 @@ defmodule AmritaFacts do
 
   facts "exceptions" do
     fact "should allow checking of exceptions" do
-      fn ->  raise TestException end |> raises AmritaFacts.TestException
+      fn -> raise TestException end |> raises AmritaFacts.TestException
     end
   end
 
