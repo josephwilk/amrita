@@ -112,9 +112,9 @@ defmodule Amrita do
     end
   end
 
-  @doc false
   defmodule Message do
-    def fail(candidate, matcher) do
+    @moduledoc false
+
     def fail(candidate, {checker, _}) do
       raise Amrita.FactError, actual: candidate,
                               predicate: checker
