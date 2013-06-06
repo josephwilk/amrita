@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Amrita by josephwilk</title>
+    <title>Amrita: Polite Testing Framework for Elixir</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -16,6 +16,8 @@
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+
   </head>
   <body>
     <div style="float: right; margin-right: 28px; color: #DDD;">
@@ -27,28 +29,15 @@
 
       <section>
         <div id="title">
-          <h1>Amrita</h1>
-          <p>A polite, well mannered and throughly upstanding testing framework for Elixir</p>
+          <h1 style="font-family: 'EB Garamond', serif;">Amrita</h1>
+          <p>A polite, well mannered and thoroughly upstanding testing framework for Elixir</p>
           <hr>
         </div>
 
         <p style="text-align: center;"><img width="100" src="http://s9.postimg.org/uv0ubzjm7/elixir.jpg" alt="Elixir of life"></p>
 
-<h2>
-<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
-
-<p>Add to your mix.exs</p>
-
-<div class="highlight"><pre>  <span class="k">defp</span> <span class="n">deps</span> <span class="k">do</span>
-<span class="k">    </span><span class="p">[</span>
-      <span class="p">{</span><span class="ss">:amrita</span><span class="p">,</span> <span class="s2">"0.1.0"</span><span class="p">,</span> <span class="ss">github:</span> <span class="s2">"josephwilk/amrita"</span><span class="p">}</span>
-    <span class="p">]</span>
-  <span class="k">end</span>
-</pre></div>
-
-<h2>Examples</h2>
-
-Amrita is all about Matchers!
+<h2>Beautiful tests</h2>
+<p>Amrita is all about Checkers, lets explore them by looking at Amritas own tests:</p>
 
 <div class="highlight"><pre><span class="no">Code</span><span class="o">.</span><span class="n">require_file</span> <span class="s2">"../test_helper.exs"</span><span class="p">,</span> <span class="bp">__FILE__</span>
 
@@ -149,6 +138,19 @@ Amrita is all about Matchers!
 
 <span class="k">end</span>
 </pre></div>
+
+<h2><a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Installing Amrita</h2>
+
+<p>Add to your mix.exs</p>
+
+<div class="highlight"><pre>  <span class="k">defp</span> <span class="n">deps</span> <span class="k">do</span>
+<span class="k">    </span><span class="p">[</span>
+      <span class="p">{</span><span class="ss">:amrita</span><span class="p">,</span> <span class="s2">"0.1.0"</span><span class="p">,</span> <span class="ss">github:</span> <span class="s2">"josephwilk/amrita"</span><span class="p">}</span>
+    <span class="p">]</span>
+  <span class="k">end</span>
+</pre></div>
+
+
 <h2>Want to learn more?</h2>
 
 Checkout <a href="https://github.com/josephwilk/amrita">Amrita on Github</a>.
