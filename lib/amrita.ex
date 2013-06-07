@@ -182,8 +182,6 @@ defmodule Amrita do
     Checkers for operating on single forms like numbers, atoms, bools, floats, etc.
     """
 
-    import ExUnit.Assertions, only: [assert_in_delta: 3]
-
     @doc """
     Check if actual is odd
 
