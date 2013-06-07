@@ -546,7 +546,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #title h1{
   color: rgb(54, 54, 54);
-  style="font-family: 'EB Garamond', serif;"
+  font-family: 'EB Garamond', serif;
 }
 
 p, ul, ol, table, pre, dl {
