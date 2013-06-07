@@ -56,6 +56,8 @@ defmodule AmritaFacts do
       0.1001 |> roughly 0.1
 
       0.1 |> roughly 0.2, 0.2
+
+      1 |> roughly 2, 2
     end
 
     fact "equals" do
