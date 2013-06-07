@@ -250,8 +250,10 @@ defmodule Amrita do
         0.1 |> roughly 0.2, 0.2  ; true
         0.1 |> roughly 0.01, 0.2 ; false
     """
-    def roughly(actual, expected, delta) when is_float(actual) and is_float(expected) do
-      assert_in_delta(expected, actual, delta)
+    def roughly(actual, expected, delta) do
+      r = (expected >= (actual - delta)) and (expected <= (actual + delta))
+
+      if (not r), do: Message.fail actual, expected, __ENV__.function
     end
 
     @doc """
@@ -261,7 +263,7 @@ defmodule Amrita do
         0.10001 |> roughly 0.1  ; true
         0.20001 |> roughly 0.1  ; false
     """
-    def roughly(actual, expected) when is_float(actual) and is_float(expected) do
+   def roughly(actual, expected) do
       roughly(actual, expected, 0.01)
     end
 
