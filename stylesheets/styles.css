@@ -546,6 +546,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #title h1{
   color: rgb(54, 54, 54);
+  style="font-family: 'EB Garamond', serif;"
 }
 
 p, ul, ol, table, pre, dl {
@@ -562,7 +563,7 @@ h1 {
 
 h2 {
   line-height: 2;
-  font-size: 2.0em;
+  font-size: 2.5em;
 }
 
 h4, h5, h6 {
@@ -578,7 +579,7 @@ h3 {
 }
 
 a {
-  color: rgb(173, 167, 5);
+  color: rgb(88, 88, 0);
   font-weight: 400;
   text-decoration: none;
 }
@@ -789,7 +790,7 @@ section #title h1 {
   text-align: center;
 }
 section #title p {
-  color: rgb(112, 112, 111);
+  color: rgb(56, 56, 55);
   font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
   font-size: 18px;
