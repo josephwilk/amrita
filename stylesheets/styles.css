@@ -561,7 +561,8 @@ h1 {
 }
 
 h2 {
-  font-size: 24px;
+  line-height: 2;
+  font-size: 2.0em;
 }
 
 h4, h5, h6 {
@@ -837,4 +838,53 @@ section #title .credits.right {
   nav {
     display: none;
   }
+}
+
+
+#menu-primary {
+font-size: 1em;
+width: 75%;
+margin: 0px 0 12px 0;
+float: right;
+position: relative;
+z-index: 99;
+padding-right :20px;
+}
+
+#menu-primary .menu {
+float: right;
+margin-left: 0;
+}
+
+#menu-primary .menu ul {
+float: right;
+margin: 0;
+}
+
+ul {
+list-style: disc;
+margin: 0 0 1.692307em 2.8em;
+padding: 0;
+}
+
+#menu-primary li {
+display: block;
+float: left;
+min-height: 30px;
+}
+
+ul li, ol li {
+line-height: 2.1em;
+}
+
+#menu-primary {
+font-size: 1em;
+}
+
+#menu-primary li a {
+line-height: 1em;
+font-size: 14px;
+margin-left: 20px;
+display: block;
+text-transform: uppercase;
 }
