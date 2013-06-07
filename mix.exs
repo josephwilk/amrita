@@ -6,6 +6,7 @@ defmodule Amrita.Mixfile do
      version: "0.1.1",
      name: "Amrita",
      source_url: "https://github.com/josephwilk/amrita",
+     homepage_url: "http://amrita.io",
      deps: deps]
   end
 
