@@ -42,7 +42,18 @@
         </div>
 
 <h2 >Beautiful tests</h2>
-<p>Amrita is all about Checkers, lets explore them by looking at Amritas own tests:</p>
+<p>A simple and beautiful Amrita test or fact:</p>
+
+<div class="highlight"><pre><span class="n">fact</span> <span class="s2">"about primes"</span> <span class="k">do</span>
+<span class="k">  </span><span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">13</span><span class="p">,</span> <span class="m">17</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="n">contains</span> <span class="m">2</span>
+
+  <span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">13</span><span class="p">,</span> <span class="m">17</span><span class="p">]</span> <span class="o">=&gt;</span> <span class="o">!</span><span class="n">contains</span> <span class="m">1</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>Checkers</h3>
+
+<p>Amrita is all about checkers. Lets explore them by looking at Amritas own tests:</p>
 
 <div class="highlight"><pre><span class="no">Code</span><span class="o">.</span><span class="n">require_file</span> <span class="s2">"../test_helper.exs"</span><span class="p">,</span> <span class="bp">__FILE__</span>
 
@@ -155,11 +166,14 @@
   <span class="k">end</span>
 </pre></div>
 
+<p>After adding Amrita as a dependency, to install please run:</p>
+
+<div class="highlight"><pre><span class="go">mix deps.get</span>
+</pre></div>
 
 <h2>Want to learn more?</h2>
 
 Checkout <a href="https://github.com/josephwilk/amrita">Amrita on Github</a>.
-
 
 </section>
 
