@@ -32,6 +32,9 @@ defmodule Amrita do
     defmacro __using__(_ // []) do
       quote do
         use ExUnit.Case
+        import Kernel, except: [|>: 2]
+        import Amrita.Pipeline
+
         import Amrita.Facts
         import Amrita.Checkers.Simple
         import Amrita.Checkers.Collection
@@ -317,7 +320,6 @@ defmodule Amrita do
 
       if r, do: Message.fail actual, r, __ENV__.function
     end
-
   end
 
   defmodule Checkers.Collection do

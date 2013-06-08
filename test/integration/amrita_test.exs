@@ -1,5 +1,6 @@
 Code.require_file "../../test_helper.exs", __FILE__
 
+
 defmodule AmritaFacts do
   use Amrita.Sweet
 
@@ -33,6 +34,11 @@ defmodule AmritaFacts do
 
   #Matchers
   facts "about simple matchers" do
+    fact "|> defaults to equality when given ints or strings" do
+      10 |> 10
+      "hello" |> "hello"
+    end
+
     fact "about odd" do
       1 |> odd
     end
