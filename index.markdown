@@ -57,6 +57,8 @@ All of Amrita is based on a simple syntax:
 
 ```
 ACTUAL |> CHECKER [EXPECTED]
+#or negative form
+ACTUAL |> !CHECKER [EXPECTED]
 ```
 
 <h3>Checkers</h3>

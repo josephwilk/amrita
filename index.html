@@ -44,13 +44,21 @@
 <h2 >Beautiful tests</h2>
 <p>A simple and beautiful Amrita test or fact:</p>
 
-<div class="highlight"><pre><span class="n">fact</span> <span class="s2">"about primes"</span> <span class="k">do</span>
-<span class="k">  </span><span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">13</span><span class="p">,</span> <span class="m">17</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">2</span>
+<div class="highlight"><pre><span class="n">fact</span> <span class="s2">"about factorial"</span> <span class="k">do</span>
+<span class="k">  </span><span class="n">factorial</span><span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="m">0</span>
+  <span class="n">factorial</span><span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="m">1</span>
 
-  <span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">13</span><span class="p">,</span> <span class="m">17</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span><span class="n">contains</span> <span class="m">1</span>
+  <span class="p">[</span><span class="n">factorial</span><span class="p">(</span><span class="m">1</span><span class="p">),</span> <span class="n">factorial</span><span class="p">(</span><span class="m">2</span><span class="p">)]</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">1</span>
+  <span class="p">[</span><span class="n">factorial</span><span class="p">(</span><span class="m">2</span><span class="p">),</span> <span class="n">factorial</span><span class="p">(</span><span class="m">3</span><span class="p">)]</span> <span class="o">|&gt;</span> <span class="o">!</span><span class="n">contains</span> <span class="m">2</span>
 <span class="k">end</span>
 </pre></div>
 
+<p>All of Amrita is based on a simple syntax:</p>
+
+<pre><code>ACTUAL |&gt; CHECKER [EXPECTED]
+#or negative form
+ACTUAL |&gt; !CHECKER [EXPECTED]
+</code></pre>
 <h3>Checkers</h3>
 
 <p>Amrita is all about checkers. Lets explore them by looking at Amritas own tests:</p>
