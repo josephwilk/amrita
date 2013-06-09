@@ -55,7 +55,7 @@ end
 
 All of Amrita is based on a simple syntax:
 
-```
+```elixir
 ACTUAL |> CHECKER [EXPECTED]
 #or negative form
 ACTUAL |> !CHECKER [EXPECTED]
