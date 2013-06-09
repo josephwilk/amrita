@@ -139,7 +139,11 @@ defmodule Amrita do
     end
 
     def to_s(function_name, args) do
-      "#{function_name}(#{inspect(args)})"
+      if args do
+        "#{function_name}(#{inspect(args)})"
+      else
+        "#{function_name})"
+      end
     end
   end
 
