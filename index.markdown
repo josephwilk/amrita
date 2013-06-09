@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Amrita: Polite Testing Framework for Elixir</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+
+<div id="menu-primary" class="menu-container">
+        <div class="menu">
+          <ul id="menu-primary-items">
+            <li class="menu-item home"><a class="spec" href="/">Home</a></li>
+            <li class="menu-item docs"><a class="spec" href="/docs/">Docs</a></li>
+            <li class="menu-item source"><a class="spec" href="https://github.com/josephwilk/amrita">Source</a></li>
+            <li class="menu-item packages"><a class="spec" href="http://expm.co/amrita" >Package</a></li>
+          </ul>
+        </div>
+      </div>
+      
+<div class="wrapper">
+
+  <section>
+    <div id="title">
+      <h1>Amrita</h1>
+      <p>A polite, well mannered and thoroughly upstanding testing framework for Elixir</p>
+      <hr>
+    </div>
+
+<h2>Beautiful tests</h2>
+
+<p>A simple and beautiful Amrita test or fact:</p>
+
+```elixir
+fact "about factorial" do
+  factorial(0) |> ! 0
+  factorial(0) |> 1
+  
+  [factorial(1), factorial(2)] |> contains 1
+  [factorial(2), factorial(3)] |> !contains 2
+end
+```
+
+All of Amrita is based on a simple syntax:
+
+```elixir
+ACTUAL |> FUNCTION [EXPECTED]
+```
+
+<h3>Checkers</h3>
+
+<p>Amrita is all about checkers. Lets explore them by looking at Amritas own tests:</p>
+
+```elixir
+Code.require_file "../test_helper.exs", __FILE__
+
+defmodule ExampleFacts do
+  use Amrita.Sweet
+
+  facts "about Amrita checkers" do
+    fact "contains checks if an element is in a collection" do
+      [1, 2, 4, 5] |> contains 4
+
+      {6, 7, 8, 9} |> contains 9
+
+      [a: 1, :b 2] |> contains {:a, 1}
+    end
+
+    fact "! negates a checker" do
+      [1, 2, 3, 4] |> !contains 9999
+
+     # or you can add a space, like this. Whatever tickles your fancy.
+
+      [1, 2, 3, 4] |> ! contains 9999
+
+      10 |> ! equal 11
+    end
+
+    fact "contains works with strings" do
+      "mad hatters tea party" |> contains "hatters"
+
+      "mad hatter tea party" |> contains %r"h(\w+)er"
+    end
+
+    fact "has_prefix checks if the start of a collection matches" do
+      [1, 2, 3, 4] |> has_prefix [1, 2]
+
+      {1, 2, 3, 4} |> has_prefix {1, 2}
+
+      "I cannot explain myself for I am not myself" |> has_prefix "I"
+    end
+
+    fact "has_suffix checks if the end of a collection matches" do
+      [1, 2, 3, 4 ,5] |> has_suffix [4, 5]
+
+      {1, 2, 3, 4} |> has_suffix {3, 4}
+
+      "I cannot explain myself for I am not myself" |> has_suffix "myself"
+    end
+
+    fact "for_all checks if a predicate holds for all elements" do
+      [2, 4, 6, 8] |> for_all even(&1)
+
+      ; or alternatively you could write
+
+      [2, 4, 6, 8] |> Enum.all? even(&1)
+    end
+
+    fact "odd checks if a number is, well odd" do
+      1 |> odd
+    end
+
+    fact "even checks is a number if even" do
+      2 |> even
+    end
+
+    fact "roughly checks if a float within some +-delta matches" do
+      0.1001 |> roughly 0.1
+    end
+
+    fact "falsey checks if expression evalulates to false" do
+      nil |> falsey
+    end
+
+    fact "truthy checks if expression evaulates to true" do
+      "" |> truthy
+    end
+
+    fact "equals checks ==" do
+      1 - 10 |> equals -9
+    end
+
+    defexception Boom, message: "Golly gosh"
+
+    fact "raises checks if an exception was raised" do
+      fn -> raise Boom end |> raises ExampleFacts.Boom
+    end
+  end
+
+  future_fact "I'm not run yet, just printed as a reminder. Like a TODO" do
+    #Never run
+    false |> truthy
+  end
+
+  fact "a fact without a body is much like a TODO"
+
+  #Backwards compatible with ExUnit
+  test "arithmetic" do
+    assert 1 + 1 == 2
+  end
+
+end
+```
+
+<h2><a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Installing Amrita</h2>
+
+<p>Add to your mix.exs</p>
+
+```elixir
+  defp deps do
+    [
+      {:amrita, "0.1.1", github: "josephwilk/amrita"}
+    ]
+  end
+```
+
+<p>After adding Amrita as a dependency, to install please run:</p>
+
+`mix deps.get`
+
+<h2>Want to learn more?</h2>
+
+Checkout <a href="https://github.com/josephwilk/amrita">Amrita on Github</a>.
+
+</section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
