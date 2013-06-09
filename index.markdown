@@ -55,8 +55,8 @@ end
 
 All of Amrita is based on a simple syntax:
 
-```elixir
-ACTUAL |> FUNCTION [EXPECTED]
+```
+ACTUAL |> CHECKER [EXPECTED]
 ```
 
 <h3>Checkers</h3>
