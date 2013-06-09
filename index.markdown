@@ -1,59 +1,62 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Amrita: Polite Testing Framework for Elixir</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Amrita: Polite Testing Framework for Elixir</title>
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="javascripts/respond.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <!--[if lt IE 8]>
+  <link rel="stylesheet" href="stylesheets/ie.css">
+  <![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+</head>
+<body>
 
 <div id="menu-primary" class="menu-container">
-        <div class="menu">
-          <ul id="menu-primary-items">
-            <li class="menu-item home"><a class="spec" href="/">Home</a></li>
-            <li class="menu-item docs"><a class="spec" href="/docs/">Docs</a></li>
-            <li class="menu-item source"><a class="spec" href="https://github.com/josephwilk/amrita">Source</a></li>
-            <li class="menu-item packages"><a class="spec" href="http://expm.co/amrita" >Package</a></li>
-          </ul>
-        </div>
-      </div>
-      
-<div class="wrapper">
+  <div class="menu">
+ *   [Home](/)
+ *   [Docs](/docs/)
+ *   [Source](https://github.com/josephwilk/amrita)
+ *   [Package](http://expm.co/amrita)
+  </div>
+</div>
 
+<div class="wrapper">
   <section>
     <div id="title">
-      <h1>Amrita</h1>
-      <p>A polite, well mannered and thoroughly upstanding testing framework for Elixir</p>
-      <hr>
-    </div>
 
-<h2>Beautiful tests</h2>
+# Amrita
 
-<p>A simple and beautiful Amrita test or fact:</p>
+A polite, well mannered and thoroughly upstanding testing framework for Elixir
+
+* * *
+
+</div>
+
+## Beautiful tests
+
+A simple and beautiful Amrita test or fact:
 
 ```elixir
 fact "about factorial" do
   factorial(0) |> ! 0
   factorial(0) |> 1
-  
-  [factorial(1), factorial(2)] |> contains 1
-  [factorial(2), factorial(3)] |> !contains 2
+
+  list_of_factorials = Enum.map 1..10, fn n -> factorial(n) end
+
+  list_of_factorials |> contains 1
+  list_of_factorials |> !contains 2
 end
 ```
 
-All of Amrita is based on a simple syntax:
+## Simple syntax
 
 ```elixir
 ACTUAL |> CHECKER [EXPECTED]
@@ -61,9 +64,11 @@ ACTUAL |> CHECKER [EXPECTED]
 ACTUAL |> !CHECKER [EXPECTED]
 ```
 
-<h3>Checkers</h3>
+## Checker based testing
 
-<p>Amrita is all about checkers. Lets explore them by looking at Amritas own tests:</p>
+Amrita is all about checkers. 
+
+Lets explore them by looking at Amritas own tests:
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
@@ -166,9 +171,9 @@ defmodule ExampleFacts do
 end
 ```
 
-<h2><a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Installing Amrita</h2>
+## [<span class="octicon octicon-link"></span>](#install)Installing Amrita
 
-<p>Add to your mix.exs</p>
+Add to your mix.exs
 
 ```elixir
   defp deps do
@@ -178,18 +183,18 @@ end
   end
 ```
 
-<p>After adding Amrita as a dependency, to install please run:</p>
+After adding Amrita as a dependency, to install please run:
 
 `mix deps.get`
 
-<h2>Want to learn more?</h2>
+## Want to learn more?
 
-Checkout <a href="https://github.com/josephwilk/amrita">Amrita on Github</a>.
+Checkout [Amrita on Github](https://github.com/josephwilk/amrita).
 
 </section>
 
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+
   </body>
 </html>
