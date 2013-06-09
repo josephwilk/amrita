@@ -37,6 +37,7 @@ defmodule AmritaFacts do
     fact "|> defaults to equality when given ints or strings" do
       10 |> 10
       "hello" |> "hello"
+      [1,2,3,4] |> [1,2,3,4]
     end
 
     fact "about odd" do

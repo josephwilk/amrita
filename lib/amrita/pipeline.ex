@@ -20,8 +20,8 @@ defmodule Amrita.Pipeline do
   end
 
   #Patching pipeline so it supports non-fn values
-  defp pipeline_op(left, n) when is_integer(n) or is_bitstring(n) do
-    {:equals, [], [left, n]}
+  defp pipeline_op(left, right) when is_integer(right) or is_bitstring(right) or is_list(right) do
+    {:equals, [], [left, right]}
   end
 
   defp pipeline_op(_, other) do
