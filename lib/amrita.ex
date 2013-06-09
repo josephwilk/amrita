@@ -120,7 +120,7 @@ defmodule Amrita do
                               predicate: checker
     end
 
-    def fail(expected, actual, {checker, _}) do
+    def fail(actual, expected, {checker, _}) do
       raise Amrita.FactError, expected: inspect(expected),
                               actual: inspect(actual),
                               predicate: checker
@@ -311,7 +311,7 @@ defmodule Amrita do
         error -> raise(error)
       end
 
-      if r, do: Message.fail r, actual, __ENV__.function
+      if r, do: Message.fail actual, r, __ENV__.function
     end
 
   end
@@ -341,7 +341,7 @@ defmodule Amrita do
             c when is_bitstring(element) -> string_match?(element, c)
           end
 
-      if (not r), do: Message.fail element, collection, __ENV__.function
+      if (not r), do: Message.fail collection, element, __ENV__.function
     end
 
     @doc false
