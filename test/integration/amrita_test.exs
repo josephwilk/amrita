@@ -3,6 +3,12 @@ Code.require_file "../../test_helper.exs", __FILE__
 defmodule AmritaFacts do
   use Amrita.Sweet
 
+  describe "something" do
+    it "does addition" do
+      1 + 1 |> equals 111
+    end
+  end
+
   #Testing a single fact
   fact "addition" do
     assert 1 + 1 == 2

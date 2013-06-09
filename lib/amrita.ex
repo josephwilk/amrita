@@ -33,9 +33,31 @@ defmodule Amrita do
       quote do
         use ExUnit.Case
         import Amrita.Facts
+        import Amrita.Describes
+
         import Amrita.Checkers.Simple
         import Amrita.Checkers.Collection
         import Amrita.Checkers.Exceptions
+      end
+    end
+  end
+
+  defmodule Describes do
+    defmacro describe(description, thing // quote(do: _), contents) do
+      quote do
+        Amrita.Facts.facts(unquote(description), unquote(thing), unquote(contents))
+      end
+    end
+
+    defmacro it(description, thing // quote(do: _), contents) do
+      quote do
+        Amrita.Facts.fact(unquote(description), unquote(thing), unquote(contents))
+      end
+    end
+
+    defmacro it(description) do
+      quote do
+        Amrita.Facts.fact(unquote(description))
       end
     end
   end
