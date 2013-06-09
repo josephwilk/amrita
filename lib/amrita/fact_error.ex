@@ -9,7 +9,7 @@ defexception Amrita.FactError,
 
   def message(exception) do
     "#{exception.prelude}:\n" <>
-    "     #{exception.actual_result} => #{exception.full_checker}"
+    "     #{exception.actual_result} |> #{exception.full_checker}"
   end
 
   def full_checker(exception) do
