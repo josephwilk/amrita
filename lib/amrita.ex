@@ -33,7 +33,7 @@ defmodule Amrita do
       quote do
         use ExUnit.Case
         import Kernel, except: [|>: 2]
-        import Amrita.Pipeline
+        import Amrita.Elixir.Pipeline
 
         import Amrita.Facts
         import Amrita.Checkers.Simple

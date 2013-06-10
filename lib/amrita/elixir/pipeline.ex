@@ -1,4 +1,4 @@
-defmodule Amrita.Pipeline do
+defmodule Amrita.Elixir.Pipeline do
   defmacro left |> right do
     pipeline_op(left, right)
   end
@@ -20,8 +20,12 @@ defmodule Amrita.Pipeline do
   end
 
   #Patching pipeline so it supports non-fn values
-  defp pipeline_op(left, right) when is_integer(right) or is_bitstring(right) or is_list(right) do
-    {:equals, [], [left, right]}
+  defp pipeline_op(left, right) when is_integer(right) or
+                                     is_bitstring(right) or
+                                     is_list(right) do
+    quote do
+      unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
+    end
   end
 
   defp pipeline_op(_, other) do
