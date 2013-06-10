@@ -147,6 +147,10 @@ defmodule AmritaFacts do
     fact "raises" do
       fn -> raise TestException end |> ! raises AmritaFacts.MadeUpException
     end
+
+    fact "|> defaulting to not(equality)" do
+      1 |> ! 2
+    end
   end
 
   test "Backwards compatible with ExUnit" do

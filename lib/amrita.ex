@@ -310,7 +310,7 @@ defmodule Amrita do
         [1, 2, 3, 4] |> ! contains 4   ; false
 
     """
-    def :!.(actual, checker) do
+    def :!.(actual, checker) when is_function(checker) do
       r = try do
         checker.(actual)
       rescue
@@ -319,6 +319,10 @@ defmodule Amrita do
       end
 
       if r, do: Message.fail actual, r, __ENV__.function
+    end
+
+    def :!.(actual, value) do
+      value |> ! equals actual
     end
   end
 
