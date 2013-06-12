@@ -64,9 +64,29 @@ ACTUAL |> CHECKER [EXPECTED]
 ACTUAL |> !CHECKER [EXPECTED]
 ```
 
+## Polite
+
+It's not polite for a testing framework to punching you in the face with words it thinks you should use.
+Be it `test` or `facts`/`fact` or `it`/`describes` Amrita supports you.
+
+```elixir
+facts "golly" do
+  fact "good" do
+  end
+end
+
+describe "golly" do
+  it "is good" do
+  end
+end
+
+test "golly good" do
+end
+```
+
 ## Checker based testing
 
-Amrita is all about checkers. 
+Amrita is all about checkers.
 
 Lets explore them by looking at Amritas own tests:
 
