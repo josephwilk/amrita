@@ -391,7 +391,7 @@ fieldset {
 
 /*
  * 1. Corrects color not being inherited in IE6/7/8/9
- * 2. Corrects text not wrapping in FF3 
+ * 2. Corrects text not wrapping in FF3
  * 3. Corrects alignment displayed oddly in IE6/7
  */
 legend {
@@ -585,7 +585,7 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: rgb(206, 199, 5);
+  color: rgb(121, 56, 238);
 }
 
 a small {
@@ -644,7 +644,7 @@ pre {
   overflow: auto;
   padding: 6px 10px;
   border-radius: 3px;
-  
+
 }
 pre code {
   color: #efefef;
@@ -795,7 +795,7 @@ section #title p {
   font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
   font-size: 18px;
-  
+
   text-align: center;
 }
 section #title .credits {
