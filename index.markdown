@@ -59,6 +59,13 @@ end
 ## Simple syntax
 
 ```elixir
+#Equality check
+ACTUAL |> [EXPECTED]
+
+#Not equal check
+ACTUAL |> ! [EXPECTED]
+
+#Using a checker function
 ACTUAL |> CHECKER [EXPECTED]
 #or negative form
 ACTUAL |> !CHECKER [EXPECTED]
@@ -70,17 +77,17 @@ It's not polite for a testing framework to punching you in the face with words i
 Be it `test` or `facts`/`fact` or `it`/`describes` Amrita supports you.
 
 ```elixir
-facts "golly" do
+facts "jolly" do
   fact "good" do
   end
 end
 
-describe "golly" do
+describe "jolly" do
   it "is good" do
   end
 end
 
-test "golly good" do
+test "jolly good" do
 end
 ```
 
