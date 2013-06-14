@@ -32,6 +32,9 @@ defmodule Amrita do
     defmacro __using__(_ // []) do
       quote do
         use ExUnit.Case
+        import Kernel, except: [|>: 2]
+        import Amrita.Elixir.Pipeline
+
         import Amrita.Facts
         import Amrita.Describes
 
@@ -329,7 +332,7 @@ defmodule Amrita do
         [1, 2, 3, 4] |> ! contains 4   ; false
 
     """
-    def :!.(actual, checker) do
+    def :!.(actual, checker) when is_function(checker) do
       r = try do
         checker.(actual)
       rescue
@@ -340,6 +343,9 @@ defmodule Amrita do
       if r, do: Message.fail actual, r, __ENV__.function
     end
 
+    def :!.(actual, value) do
+      value |> ! equals actual
+    end
   end
 
   defmodule Checkers.Collection do
