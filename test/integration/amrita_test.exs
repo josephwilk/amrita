@@ -6,7 +6,7 @@ defmodule AmritaFacts do
 
   describe "something" do
     it "does addition" do
-      1 + 1 |> equals 111
+      1 + 1 |> equals 2
     end
   end
 
