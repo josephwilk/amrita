@@ -306,7 +306,7 @@ defmodule Amrita do
     def roughly(actual, expected, delta) do
       r = (expected >= (actual - delta)) and (expected <= (actual + delta))
 
-      if (not r), do: Message.fail actual, expected, __ENV__.function
+      if (not r), do: Message.fail actual, "#{expected} +-#{delta}", __ENV__.function
     end
 
     @doc """
