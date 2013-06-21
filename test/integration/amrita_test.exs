@@ -107,6 +107,8 @@ defmodule AmritaFacts do
       {1, 2, 3, 4, 5} |> has_suffix {3, 4, 5}
 
       "white rabbit"  |> has_suffix "rabbit"
+
+      [1, 2, 3] |> has_suffix Set.new([3,2])
     end
 
     fact "for_all" do

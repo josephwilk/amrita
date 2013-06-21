@@ -91,12 +91,20 @@ defmodule ExampleFacts do
       "I cannot explain myself for I am not myself" |> has_prefix "I"
     end
 
+    fact "has_prefix with a Set ignores the order" do
+      {1, 2, 3, 4} |> has_prefix Set.new([{2, 1}])
+    end
+
     fact "has_suffix checks if the end of a collection matches" do
       [1, 2, 3, 4 ,5] |> has_suffix [4, 5]
 
       {1, 2, 3, 4} |> has_suffix {3, 4}
 
       "I cannot explain myself for I am not myself" |> has_suffix "myself"
+    end
+
+    fact "has_suffix with a Set ignores the order" do
+      {1, 2, 3, 4} |> has_suffix Set.new([{4, 3}])
     end
 
     fact "for_all checks if a predicate holds for all elements" do

@@ -429,16 +429,7 @@ defmodule Amrita do
     def has_prefix(collection, prefix) when is_list(collection) and is_record(prefix, Set) do
       collection_prefix = Enum.take(collection, Enum.count(prefix))
 
-      r = try do
-        Enum.reduce(collection_prefix, true, fn(value, acc) ->
-          case value in prefix do
-           true -> acc
-           _    -> throw(:error)
-          end
-        end)
-      catch
-        :error -> false
-      end
+      r = fail_fast_contains?(collection_prefix, prefix)
 
       if (not r), do: Message.fail prefix, collection, __ENV__.function
     end
@@ -478,6 +469,14 @@ defmodule Amrita do
         "I cannot explain myself for I am not myself" |> has_suffix "myself"
 
     """
+    def has_suffix(collection, suffix) when is_list(collection) and is_record(suffix, Set) do
+      collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
+
+      r = fail_fast_contains?(collection_suffix, suffix)
+
+      if (not r), do: Message.fail suffix, collection, __ENV__.function
+    end
+
     def has_suffix(collection, suffix) do
       r = case collection do
             c when is_tuple(c) ->
@@ -515,6 +514,19 @@ defmodule Amrita do
 
     @doc false
     def for_some(collection, fun) do
+    end
+
+    defp fail_fast_contains?(collection1, collection2) do
+      try do
+        Enum.reduce(collection1, true, fn(value, acc) ->
+          case value in collection2 do
+            true -> acc
+            _    -> throw(:error)
+          end
+        end)
+      catch
+        :error -> false
+      end
     end
 
   end
