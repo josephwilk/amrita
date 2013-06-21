@@ -175,10 +175,13 @@ defmodule Amrita do
   defmodule Checkers.Exceptions do
 
     @doc """
-    Checks if an exception was raised and that it was of the expected type
+    Checks if an exception was raised and that it was of the expected type or matches the
+    expected message.
 
     ## Example
         fn -> raise Exception end |> raises Exception ; true
+        fn -> raise "Jolly jolly gosh" end |> raises %r"j(\w)+y" ; true
+
         fn -> true end            |> raises Exception ; false
     """
     def raises(function, expected_exception) when is_function(function) do
@@ -189,12 +192,25 @@ defmodule Amrita do
         error in [expected_exception] -> error
         error ->
           name = error.__record__(:name)
+          message = error.message
+
           if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError] do
             raise(error)
           else
-            Message.fail name, expected_exception, __ENV__.function
+            failed_exception_match(error, expected_exception)
           end
       end
+    end
+
+    defp failed_exception_match(error, expected) when is_regex(expected) do
+      message = error.message
+      if not(Regex.match?(expected, message)) do
+        Message.fail message, expected, __ENV__.function
+      end
+    end
+
+    defp failed_exception_match(error, expected) do
+      Message.fail error.__record__(:name), expected, __ENV__.function
     end
 
     @doc false

@@ -127,6 +127,10 @@ defmodule AmritaFacts do
     fact "should allow checking of exceptions" do
       fn -> raise TestException end |> raises AmritaFacts.TestException
     end
+
+    fact "should allow checking of exceptions by message" do
+      fn -> raise TestException end |> raises %r".*gosh.*"
+    end
   end
 
   facts "! negates the predicate" do
