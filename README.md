@@ -43,14 +43,35 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule ExampleFacts do
   use Amrita.Sweet
 
+  ;If you want to use Amritas Mocks add:
+
+  use Amrita.Mocks
 end
 ```
 
 Now all thats left is to  write some tests!
 
+## Mocks
+
+Amrita supports BDD style mocks:
+
+```elixir
+defmodule Polite do
+  def swear? do
+    false
+  end
+end
+
+fact "mocks must always be called for a pass" do
+  provided [MocksTest.Polite.swear? |> true] do
+    Polite.swear? |> truthy
+  end
+end
+```
+
 ## Checkers
 
-Amrita is all about checkers!
+Amrita is all about checker based testing!
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
