@@ -91,6 +91,24 @@ test "jolly good" do
 end
 ```
 
+## Test Behaviour with Mocks
+
+Supports testing behaviour with mocks:
+
+```elixir
+defmodule Polite do
+  def swear? do
+    false
+  end
+end
+
+fact "mocking the swear function to be true" do
+  provided [MocksTest.Polite.swear? |> true] do
+    Polite.swear? |> truthy
+  end
+end
+```
+
 ## Checker based testing
 
 Amrita is all about checkers.
