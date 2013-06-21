@@ -15,6 +15,7 @@ defmodule Amrita.Mixfile do
   end
 
   defp deps do
-    [{ :ex_doc, github: "elixir-lang/ex_doc" }]
+    [{:ex_doc, github: "elixir-lang/ex_doc"},
+     {:meck, "0.7.2", [github: "eproxus/meck"]}]
   end
 end
