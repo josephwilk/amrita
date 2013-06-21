@@ -63,7 +63,7 @@ defmodule Polite do
 end
 
 fact "mocks must always be called for a pass" do
-  provided [MocksTest.Polite.swear? |> true] do
+  provided [Polite.swear? |> true] do
     Polite.swear? |> truthy
   end
 end
