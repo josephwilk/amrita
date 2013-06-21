@@ -7,12 +7,13 @@ defmodule Amrita.Mocks do
   end
 
   defmodule Provided do
-    defmacro provided(form, test) do
-      { mock_module, fn_name, value } =  module_fn(Enum.at(form, 0))
+    defmacro provided(forms, test) do
+      { mock_module, fn_name, value } =  Amrita.Mocks.ParsePrerequisites.module_fn(Enum.at(forms, 0))
 
       quote do
         :meck.new(unquote(mock_module), [:passthrough])
         unquote(__MODULE__).__add_expect__(unquote(mock_module), unquote(fn_name), unquote(value))
+
         try do
           unquote(test)
           :meck.validate(unquote(mock_module)) |> truthy
@@ -26,22 +27,25 @@ defmodule Amrita.Mocks do
       end
     end
 
-    defp module_fn({:|>, _, [{l, _, _}, v]}) do
-      { module_name, function_name } = module_fn(l)
-      { module_name, function_name,  v }
-    end
-
-    defp module_fn({:., _, [ns, method_name]}) do
-      { module_fn(ns), method_name }
-    end
-
-    defp module_fn({:__aliases__, _, ns}) do
-      Module.concat(ns)
-    end
-
     def __add_expect__(mock_module, fn_name, value) do
       :meck.expect(mock_module, fn_name, fn -> value end)
     end
 
   end
+
+  defmodule ParsePrerequisites do
+    def module_fn({:|>, _, [{l, _, _}, v]}) do
+      { module_name, function_name } = module_fn(l)
+      { module_name, function_name,  v }
+    end
+
+    def module_fn({:., _, [ns, method_name]}) do
+      { module_fn(ns), method_name }
+    end
+
+    def module_fn({:__aliases__, _, ns}) do
+      Module.concat(ns)
+    end
+  end
+
 end
