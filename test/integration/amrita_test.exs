@@ -97,6 +97,8 @@ defmodule AmritaFacts do
       {4, 5, 6} |> has_prefix {4, 5}
 
       "mad hatter tea party" |> has_prefix "mad"
+
+      [1, 2, 3] |> has_prefix Set.new([2,1])
     end
 
     fact "has_suffix" do

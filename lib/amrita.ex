@@ -426,6 +426,23 @@ defmodule Amrita do
         "I cannot explain myself for I am not myself" |> has_prefix "I"
 
     """
+    def has_prefix(collection, prefix) when is_list(collection) and is_record(prefix, Set) do
+      collection_prefix = Enum.take(collection, Enum.count(prefix))
+
+      r = try do
+        Enum.reduce(collection_prefix, true, fn(value, acc) ->
+          case value in prefix do
+           true -> acc
+           _    -> throw(:error)
+          end
+        end)
+      catch
+        :error -> false
+      end
+
+      if (not r), do: Message.fail prefix, collection, __ENV__.function
+    end
+
     def has_prefix(collection, prefix) do
       r = case collection do
             c when is_tuple(c) ->
