@@ -130,6 +130,8 @@ defmodule AmritaFacts do
 
     fact "should allow checking of exceptions by message" do
       fn -> raise TestException end |> raises %r".*gosh.*"
+
+      fn -> raise TestException end |> raises "golly gosh, sorry"
     end
   end
 

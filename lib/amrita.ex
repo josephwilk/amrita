@@ -173,6 +173,7 @@ defmodule Amrita do
   end
 
   defmodule Checkers.Exceptions do
+    import Amrita.Elixir.String
 
     @doc """
     Checks if an exception was raised and that it was of the expected type or matches the
@@ -202,6 +203,13 @@ defmodule Amrita do
       end
     end
 
+    defp failed_exception_match(error, expected) when is_bitstring(expected) do
+      message = error.message
+      if not(Amrita.Elixir.String.contains?(expected, message)) do
+        Message.fail message, expected, __ENV__.function
+      end
+    end
+
     defp failed_exception_match(error, expected) when is_regex(expected) do
       message = error.message
       if not(Regex.match?(expected, message)) do
@@ -226,6 +234,8 @@ defmodule Amrita do
     @moduledoc """
     Checkers for operating on single forms like numbers, atoms, bools, floats, etc.
     """
+
+    import Amrita.Elixir.String
 
     @doc """
     Check if actual is odd
@@ -386,7 +396,7 @@ defmodule Amrita do
             c when is_tuple(c)           -> element in tuple_to_list(c)
             c when is_list(c)            -> element in c
             c when is_regex(element)     -> Regex.match?(element, c)
-            c when is_bitstring(element) -> string_match?(element, c)
+            c when is_bitstring(element) -> Amrita.Elixir.String.contains?(element, c)
           end
 
       if (not r), do: Message.fail collection, element, __ENV__.function
@@ -397,14 +407,6 @@ defmodule Amrita do
       fn collection ->
            collection |> contains element
            Checker.to_s(__ENV__.function, element)
-      end
-    end
-
-    @doc false
-    defp string_match?(element, string) do
-      case :binary.matches(string, element) do
-        [_] -> true
-        []  -> false
       end
     end
 
