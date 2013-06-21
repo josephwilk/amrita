@@ -1,8 +1,8 @@
-defmodule Amrita.Mock do
+defmodule Amrita.Mocks do
 
   defmacro __using__(opts // []) do
     quote do
-      import Amrita.Mock.Provided
+      import Amrita.Mocks.Provided
     end
   end
 
