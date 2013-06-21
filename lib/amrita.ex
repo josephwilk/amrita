@@ -163,12 +163,16 @@ defmodule Amrita do
       to_s(function_name, args)
     end
 
-    def to_s(function_name, args) do
-      if args do
-        "#{function_name}(#{inspect(args)})"
-      else
-        "#{function_name})"
-      end
+    def to_s(function_name, args) when is_bitstring(args) do
+      "#{function_name}(#{args})"
+    end
+
+    def to_s(function_name, args) when args do
+      "#{function_name}(#{inspect(args)})"
+    end
+
+    def to_s(function_name, _) do
+      "#{function_name})"
     end
   end
 
