@@ -17,7 +17,11 @@ defmodule Amrita.Mock do
           unquote(test)
           :meck.validate(unquote(mock_module)) |> truthy
         after
+          r = :meck.called(unquote(mock_module), unquote(fn_name), :_)
           :meck.unload(unquote(mock_module))
+
+          if not(r), do: Amrita.Message.fail "#{unquote(fn_name)} called 0 times",
+                                             "expected at least once", {"called", ""}
         end
       end
     end
