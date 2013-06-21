@@ -51,9 +51,9 @@ end
 
 Now all thats left is to  write some tests!
 
-## Mocks
+## Prerequisites / Mocks
 
-Amrita supports BDD style mocks:
+Amrita supports BDD style mocks.
 
 ```elixir
 defmodule Polite do
@@ -67,6 +67,7 @@ fact "mocks must always be called for a pass" do
     Polite.swear? |> truthy
   end
 end
+
 ```
 
 ## Checkers
