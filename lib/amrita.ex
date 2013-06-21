@@ -159,7 +159,7 @@ defmodule Amrita do
   defmodule Checker do
     @moduledoc false
 
-    def to_s({function_name, arity}, args) do
+    def to_s({function_name, _arity}, args) do
       to_s(function_name, args)
     end
 
@@ -177,7 +177,6 @@ defmodule Amrita do
   end
 
   defmodule Checkers.Exceptions do
-    import Amrita.Elixir.String
 
     @doc """
     Checks if an exception was raised and that it was of the expected type or matches the
@@ -197,7 +196,6 @@ defmodule Amrita do
         error in [expected_exception] -> error
         error ->
           name = error.__record__(:name)
-          message = error.message
 
           if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError] do
             raise(error)
@@ -238,8 +236,6 @@ defmodule Amrita do
     @moduledoc """
     Checkers for operating on single forms like numbers, atoms, bools, floats, etc.
     """
-
-    import Amrita.Elixir.String
 
     @doc """
     Check if actual is odd
@@ -486,7 +482,7 @@ defmodule Amrita do
             c when is_list(c) ->
               collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
               collection_suffix == suffix
-            c when is_bitstring(suffix) ->
+            _ when is_bitstring(suffix) ->
               String.ends_with?(collection, suffix)
           end
 
@@ -513,7 +509,7 @@ defmodule Amrita do
     end
 
     @doc false
-    def for_some(collection, fun) do
+    def for_some(_collection, _fun) do
     end
 
     defp fail_fast_contains?(collection1, collection2) do
