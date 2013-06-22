@@ -1,7 +1,11 @@
 defmodule Set do
-  #Until Sets are added to Elixir (pending this pullrequest:
-  #https://github.com/elixir-lang/elixir/pull/1241/files)
-  #Our own Set implementation
+  @moduledoc """
+  Until Sets are added to Elixir (pending this pullrequest: https://github.com/elixir-lang/elixir/pull/1241/files)
+  Our own Set implementation.
+
+  Use to indicate we don't care about order when using checkers.
+
+  """
 
   defrecordp :ordered,
     size: 0,
