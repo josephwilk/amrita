@@ -10,14 +10,20 @@ defmodule Amrita.Mocks do
     defmacro provided(forms, test) do
       prerequisites = Amrita.Mocks.ParsePrerequisites.prerequisites(forms)
       mock_modules = Dict.keys(prerequisites)
-
-      { :ok, [{ mock_module, fn_name, value } | _] } = Dict.fetch(prerequisites, Enum.at(mock_modules,0))
+      prerequisite_list = Macro.escape Dict.to_list(prerequisites)
 
       quote do
+        prerequisites = unquote(prerequisite_list)
+
         Enum.map unquote(mock_modules), fn mock_module ->
           :meck.new(mock_module, [:passthrough])
         end
-        unquote(__MODULE__).__add_expect__(unquote(mock_module), unquote(fn_name), unquote(value))
+
+        Enum.map prerequisites, fn {m, mocks} ->
+          Enum.map mocks, fn {m, f, v} ->
+           unquote(__MODULE__).__add_expect__(m, f, v)
+          end
+        end
 
         try do
           unquote(test)
@@ -26,13 +32,23 @@ defmodule Amrita.Mocks do
             :meck.validate(mock_module) |> truthy
           end
         after
-          Enum.map unquote(mock_modules), fn mock_module ->
-            r = :meck.called(mock_module, unquote(fn_name), :_)
-            :meck.unload(mock_module)
-
-            if not(r), do: Amrita.Message.fail "#{unquote(fn_name)} called 0 times",
-                                               "expected at least once", {"called", ""}
+          errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
+            messages = Enum.reduce mocks, [], fn {m, f, v}, message_list ->
+              message = case :meck.called(m, f, :_) do
+                false -> ["#{m}.#{f} called 0 times."]
+                _     -> []
+              end
+              List.concat(message_list, message)
+            end
+            List.concat(all_errors, messages)
           end
+
+          Enum.map unquote(mock_modules), fn mock_module ->
+            :meck.unload(mock_module)
+          end
+
+          if not(Enum.empty? errors), do: Amrita.Message.fail "#{errors}",
+                                                              "Expected atleast once", {"called", ""}
         end
       end
     end

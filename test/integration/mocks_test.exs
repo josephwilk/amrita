@@ -29,4 +29,27 @@ defmodule MocksTest do
     Polite.swear? |> falsey
     Polite.message |> "oh swizzlesticks"
   end
+
+  fact "multi mocks on same module" do
+    provided [MocksTest.Polite.swear? |> true,
+              MocksTest.Polite.message |> "funk"] do
+      Polite.swear? |> truthy
+      Polite.message |> "funk"
+    end
+  end
+
+  defmodule Rude do
+    def swear? do
+      true
+    end
+  end
+
+  fact "multi mocks on different modules" do
+    provided [MocksTest.Polite.swear? |> true,
+              MocksTest.Rude.swear? |> false] do
+      Polite.swear? |> truthy
+      Rude.swear? |> falsey
+    end
+  end
+
 end
