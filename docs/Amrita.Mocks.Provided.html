@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Amrita.Mocks.Provided</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <div id="content">
+      <h1>
+        Amrita.Mocks.Provided
+        
+      </h1>
+
+      
+
+      <a href="https://github.com/josephwilk/amrita/blob/master/lib/amrita/mocks.ex#L12" target="_blank" class="view_source">Source</a>
+
+      
+
+      
+
+      
+
+      
+        <h2 id="macros_summary">Macros summary</h2>
+        <ul class="summary">
+          <li>
+  <span class="summary_signature">
+    <a href="#provided/2">provided/2</a>
+  </span>
+</li>
+
+        </ul>
+      
+
+      
+
+      
+
+      
+        <div id="macros_details" class="details_list">
+          <h2>Macros</h2>
+          <div class="detail">
+  <p class="signature" id="provided/2">
+    <strong>provided(forms, test)</strong>
+  </p>
+  <div class="docstring"><p>Adds prerequisites to a test.</p>
+
+<h2>Example</h2>
+
+<pre><code>defmodule Polite do
+  def swear? do
+    true
+  end
+end
+
+provided [Polite.swear? |&gt; false] do
+  Polite.swear? |&gt; falsey
+end
+</code></pre>
+</div>
+  
+    <a href="https://github.com/josephwilk/amrita/blob/master/lib/amrita/mocks.ex#L29" target="_blank" class="view_source">Source</a>
+  
+</div>
+        </div>
+      
+
+      
+    </div>
+  </body>
+</html>
