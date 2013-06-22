@@ -15,13 +15,15 @@ defmodule Amrita.Elixir.Pipeline do
     { call, line, [left|args] }
   end
 
-  defp pipeline_op(left, atom) when is_atom(atom) do
+  #Patching to ensure boolean is passed on to Amrita equality case
+  defp pipeline_op(left, atom) when is_atom(atom) and !is_boolean(atom) do
     { { :., [], [left, atom] }, [], [] }
   end
 
   #Patching pipeline so it supports non-fn values
   defp pipeline_op(left, right) when is_integer(right) or
                                      is_bitstring(right) or
+                                     is_boolean(right) or
                                      is_list(right) do
     quote do
       unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)

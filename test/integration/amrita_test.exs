@@ -44,6 +44,8 @@ defmodule AmritaFacts do
       10 |> 10
       "hello" |> "hello"
       [1,2,3,4] |> [1,2,3,4]
+      true |> true
+      false |> false
     end
 
     fact "about odd" do
