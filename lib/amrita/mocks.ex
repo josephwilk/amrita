@@ -11,13 +11,13 @@ defmodule Amrita.Mocks do
       prerequisites = Amrita.Mocks.ParsePrerequisites.prerequisites(forms)
       mock_modules = Dict.keys(prerequisites)
 
-      { :ok, [{ _, fn_name, value } | _] } = Dict.fetch(prerequisites, Enum.at(mock_modules,0))
+      { :ok, [{ mock_module, fn_name, value } | _] } = Dict.fetch(prerequisites, Enum.at(mock_modules,0))
 
       quote do
         Enum.map unquote(mock_modules), fn mock_module ->
           :meck.new(mock_module, [:passthrough])
-          unquote(__MODULE__).__add_expect__(mock_module, unquote(fn_name), unquote(value))
         end
+        unquote(__MODULE__).__add_expect__(unquote(mock_module), unquote(fn_name), unquote(value))
 
         try do
           unquote(test)
