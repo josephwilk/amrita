@@ -52,4 +52,16 @@ defmodule MocksTest do
     end
   end
 
+  defmodule Funk do
+    def hip?(arg) do
+      true
+    end
+  end
+
+  fact "mock with an argument" do
+    provided [MocksTest.Funk.hip?(:yes) |> false] do
+      Funk.hip?(:yes) |> falsey
+    end
+  end
+
 end

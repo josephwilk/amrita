@@ -54,7 +54,11 @@ defmodule Amrita.Mocks do
     end
 
     def __add_expect__(mock_module, fn_name, args, value) do
-      :meck.expect(mock_module, fn_name, fn -> value end)
+      if Enum.empty? args do
+        :meck.expect(mock_module, fn_name, fn -> value end)
+      else
+        :meck.expect(mock_module, fn_name, fn args -> value end)
+      end
     end
 
   end
