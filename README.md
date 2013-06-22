@@ -43,7 +43,7 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule ExampleFacts do
   use Amrita.Sweet
 
-  ;If you want to use Amritas Mocks add:
+  #If you want to use Amritas Mocks add:
 
   use Amrita.Mocks
 end
@@ -62,9 +62,17 @@ defmodule Polite do
   end
 end
 
+defmodule Rude do
+  def swear? do
+    true
+  end
+end
+
 fact "mocks must always be called for a pass" do
-  provided [Polite.swear? |> true] do
+  provided [Polite.swear? |> true,
+            Rude.swear?   |> false] do
     Polite.swear? |> truthy
+    Rude.swear?   |> falsey
   end
 end
 
