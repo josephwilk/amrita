@@ -20,8 +20,8 @@ defmodule Amrita.Mocks do
         end
 
         Enum.map prerequisites, fn {m, mocks} ->
-          Enum.map mocks, fn {m, f, v} ->
-           unquote(__MODULE__).__add_expect__(m, f, v)
+          Enum.map mocks, fn {m, f, a, v} ->
+            unquote(__MODULE__).__add_expect__(m, f, a, v)
           end
         end
 
@@ -33,7 +33,7 @@ defmodule Amrita.Mocks do
           end
         after
           errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
-            messages = Enum.reduce mocks, [], fn {m, f, v}, message_list ->
+            messages = Enum.reduce mocks, [], fn {m, f, a, v}, message_list ->
               message = case :meck.called(m, f, :_) do
                 false -> ["#{m}.#{f} called 0 times."]
                 _     -> []
@@ -53,7 +53,7 @@ defmodule Amrita.Mocks do
       end
     end
 
-    def __add_expect__(mock_module, fn_name, value) do
+    def __add_expect__(mock_module, fn_name, args, value) do
       :meck.expect(mock_module, fn_name, fn -> value end)
     end
 
@@ -61,26 +61,31 @@ defmodule Amrita.Mocks do
 
   defmodule ParsePrerequisites do
     def prerequisites(forms) do
-      prerequisites = Enum.map(forms, fn form -> module_fn(form) end)
-      prerequisites = Enum.reduce prerequisites, HashDict.new, fn {m,f,v}, acc ->
+      prerequisites = Enum.map(forms, fn form -> extract(form) end)
+      prerequisites = Enum.reduce prerequisites, HashDict.new, fn {m,f,a,v}, acc ->
         mocks = HashDict.get(acc, m, [])
-        mocks = List.concat(mocks, [{m,f,v}])
+        mocks = List.concat(mocks, [{m,f,a,v}])
         HashDict.put(acc,m,mocks)
       end
     end
 
-    defp module_fn({:|>, _, [{l, _, _}, v]}) do
-      { module_name, function_name } = module_fn(l)
-      { module_name, function_name,  v }
+    defp extract({:|>, _, [{fun, _, args}, value]}) do
+      { module_name, function_name } = extract(fun)
+      { module_name, function_name,  args, value }
     end
 
-    defp module_fn({:., _, [ns, method_name]}) do
-      { module_fn(ns), method_name }
+    defp extract({:., _, [ns, method_name]}) do
+      { extract(ns), method_name }
     end
 
-    defp module_fn({:__aliases__, _, ns}) do
+    defp extract({:__aliases__, _, ns}) do
       Module.concat ns
     end
+
+    defp extract(_) do
+      throw "Amrita could not understand your provided"
+    end
+
   end
 
 end
