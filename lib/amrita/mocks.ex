@@ -7,6 +7,22 @@ defmodule Amrita.Mocks do
   end
 
   defmodule Provided do
+
+    @doc """
+    Adds prerequisites to a test.
+
+    ## Example
+        defmodule Polite do
+          def swear? do
+            true
+          end
+        end
+
+        provided [Polite.swear? |> false] do
+          Polite.swear? |> falsey
+        end
+
+    """
     defmacro provided(forms, test) do
       prerequisites = Amrita.Mocks.ParsePrerequisites.prerequisites(forms)
       mock_modules = Dict.keys(prerequisites)
@@ -64,6 +80,8 @@ defmodule Amrita.Mocks do
   end
 
   defmodule ParsePrerequisites do
+    @moduledoc false
+
     def prerequisites(forms) do
       prerequisites = Enum.map(forms, fn form -> extract(form) end)
       prerequisites = Enum.reduce prerequisites, HashDict.new, fn {m,f,a,v}, acc ->
