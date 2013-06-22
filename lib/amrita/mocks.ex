@@ -1,4 +1,7 @@
 defmodule Amrita.Mocks do
+  @moduledoc """
+  Add support for prerequisites or mocks to tests.
+  """
 
   defmacro __using__(_ // []) do
     quote do
