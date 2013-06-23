@@ -4,6 +4,21 @@ Code.require_file "../../test_helper.exs", __FILE__
 defmodule AmritaFacts do
   use Amrita.Sweet
 
+  defexception TestDidNotFailError, name: nil do
+    def message(exception) do
+      "Expected #{exception.name} to fail"
+    end
+  end
+
+  def fails(which, test) do
+    try do
+      test.()
+      raise TestDidNotFailError, name: which
+    rescue
+      Amrita.FactError ->
+    end
+  end
+
   describe "something" do
     it "does addition" do
       1 + 1 |> equals 2
@@ -117,6 +132,10 @@ defmodule AmritaFacts do
       [2, 4, 6, 8] |> for_all even(&1)
 
       [2, 4, 6, 8] |> Enum.all? even(&1)
+
+      fails("for_all", fn ->
+        [2, 4, 7, 8] |> for_all even(&1)
+      end)
     end
 
     fact "for_some" do
