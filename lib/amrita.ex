@@ -517,8 +517,24 @@ defmodule Amrita do
       Enum.all?(collection, fun)
     end
 
-    @doc false
-    def for_some(_collection, _fun) do
+    @doc """
+    Checks whether a predicate holds for at least one element in a collection
+
+    ## Examples:
+        [2, 4, 7, 8] |> for_some odd(&1) ; true
+        [2, 4, 6, 8] |> for_some odd(&1) ; false
+    """
+    def for_some(collection, fun) do
+     r = Enum.any?(Enum.map(collection, (fn value ->
+        try do
+          fun.(value)
+          true
+        rescue
+          [Amrita.FactError, ExUnit.AssertionError] -> false
+        end
+      end)))
+
+      if (not r), do: Message.fail fun, collection, __ENV__.function
     end
 
     defp fail_fast_contains?(collection1, collection2) do
