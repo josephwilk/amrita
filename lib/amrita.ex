@@ -172,7 +172,7 @@ defmodule Amrita do
     end
 
     def to_s(function_name, _) do
-      "#{function_name})"
+      "#{function_name}"
     end
   end
 
