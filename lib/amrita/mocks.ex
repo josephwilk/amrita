@@ -38,9 +38,7 @@ defmodule Amrita.Mocks do
       quote do
         prerequisites = unquote(prerequisite_list)
 
-        Enum.map unquote(mock_modules), fn mock_module ->
-          :meck.new(mock_module, [:passthrough])
-        end
+        :meck.new(unquote(mock_modules), [:passthrough])
 
         Enum.map prerequisites, fn {m, mocks} ->
           Enum.map mocks, fn {m, f, a, v} ->
@@ -70,9 +68,7 @@ defmodule Amrita.Mocks do
             List.concat(all_errors, messages)
           end
 
-          Enum.map unquote(mock_modules), fn mock_module ->
-            :meck.unload(mock_module)
-          end
+          :meck.unload(unquote(mock_modules))
 
           if not(Enum.empty? errors), do: Amrita.Message.fail "#{errors}",
                                                               "Expected atleast once", {"called", ""}
