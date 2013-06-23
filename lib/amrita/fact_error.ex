@@ -1,11 +1,13 @@
-defexception Amrita.FactError, message: "fact failed"
-
 defexception Amrita.FactError,
                     expected: nil,
                     actual: nil,
                     predicate: "",
                     negation: false,
                     prelude: "Expected" do
+
+  def message do
+    "fact failed"
+  end
 
   def message(exception) do
     "#{exception.prelude}:\n" <>

@@ -53,7 +53,7 @@ defmodule MocksTest do
   end
 
   defmodule Funk do
-    def hip?(arg) do
+    def hip?(_arg) do
       true
     end
   end
