@@ -112,7 +112,7 @@ defmodule Amrita.Mocks do
     end
 
     defp extract(_) do
-      throw "Amrita could not understand your provided"
+      throw "Amrita could not understand your `provided`. Make sure it uses this format: [Module.fun |> :return_value]"
     end
 
   end
