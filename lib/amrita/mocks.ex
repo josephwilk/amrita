@@ -66,7 +66,6 @@ defmodule Amrita.Mocks do
           errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
             messages = Enum.reduce mocks, [], fn {m, f, a, v}, message_list ->
               message = case :meck.called(m, f, a) do
-                false -> ["#{m}.#{f}(#{Enum.join(a, ",")}) called 0 times."]
                 false -> ["#{inspect(m)}.#{f}(#{Enum.join(a, ",")}) called 0 times."]
                 _     -> []
               end
