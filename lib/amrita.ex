@@ -514,7 +514,7 @@ defmodule Amrita do
         [2, 3, 5, 7] |> for_all odd(&1)  ; false
     """
     def for_all(collection, fun) do
-      Enum.all?(collection, fun)
+      Enum.each(collection, fun)
     end
 
     @doc """
