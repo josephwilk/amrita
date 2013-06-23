@@ -63,16 +63,16 @@ defmodule Polite do
 end
 
 defmodule Rude do
-  def swear? do
-    true
+  def swear?(word) do
+    word == "bugger"
   end
 end
 
 fact "mocks must always be called for a pass" do
   provided [Polite.swear? |> true,
-            Rude.swear?   |> false] do
-    Polite.swear? |> truthy
-    Rude.swear?   |> falsey
+            Rude.swear?("bugger") |> false] do
+    Polite.swear?           |> truthy
+    Rude.swear?("bugger")   |> falsey
   end
 end
 

@@ -20,13 +20,19 @@ defmodule Amrita.Mocks do
 
     ## Example
         defmodule Polite do
-          def swear? do
-            true
+          def swear?(word) do
+            word == "bugger"
           end
         end
 
-        provided [Polite.swear? |> false] do
-          Polite.swear? |> falsey
+        provided [Polite.swear?("bugger") |> false] do
+          Polite.swear?("bugger") |> falsey
+        end
+
+        #With a wildcard argument matcher
+        provided [Polite.swear?(:_) |> false] do
+          Polite.swear?("bugger") |> falsey
+          Polite.swear?("pants")  |> falsey
         end
 
     """
