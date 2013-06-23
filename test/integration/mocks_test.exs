@@ -67,6 +67,7 @@ defmodule MocksTest do
   fact "mock with a wildcard" do
     provided [MocksTest.Funk.hip?(:_) |> false] do
       Funk.hip?(:yes) |> falsey
+      Funk.hip?(:whatever) |> falsey
     end
   end
 
