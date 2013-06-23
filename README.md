@@ -51,7 +51,7 @@ end
 
 Now all thats left is to  write some tests!
 
-## Prerequisites / Mocks (Still experimental)
+## Prerequisites / Mocks (Alpha)
 
 Amrita supports BDD style mocks.
 
