@@ -80,7 +80,7 @@ defmodule Amrita.Mocks do
       if Enum.empty? args do
         :meck.expect(mock_module, fn_name, fn -> value end)
       else
-        :meck.expect(mock_module, fn_name, fn args -> value end)
+        :meck.expect(mock_module, fn_name, fn _args -> value end)
       end
     end
 
@@ -91,7 +91,7 @@ defmodule Amrita.Mocks do
 
     def prerequisites(forms) do
       prerequisites = Enum.map(forms, fn form -> extract(form) end)
-      prerequisites = Enum.reduce prerequisites, HashDict.new, fn {m,f,a,v}, acc ->
+      Enum.reduce prerequisites, HashDict.new, fn {m,f,a,v}, acc ->
         mocks = HashDict.get(acc, m, [])
         mocks = List.concat(mocks, [{m,f,a,v}])
         HashDict.put(acc,m,mocks)

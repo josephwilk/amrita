@@ -48,8 +48,8 @@ defmodule Amrita.Formatter.Progress do
     { :stop, :normal, length(config.test_failures), config }
   end
 
-  def handle_call(_, _, _) do
-    super
+  def handle_call(state, from, config) do
+    super(state, from, config)
   end
 
   def handle_cast({ :test_finished, test = ExUnit.Test[invalid: true] }, config) do
@@ -77,8 +77,8 @@ defmodule Amrita.Formatter.Progress do
     end
   end
 
-  def handle_cast(_, _) do
-    super
+  def handle_cast(state, config) do
+    super(state, config)
   end
 
   defp print_suite(counter, [], [], run_us, load_us) do
