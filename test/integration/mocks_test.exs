@@ -71,4 +71,9 @@ defmodule MocksTest do
     end
   end
 
+  fact "mock with many arguments" do
+    provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
+      Funk.flop?(:yes, :no, :yes) |> falsey
+    end
+  end
 end

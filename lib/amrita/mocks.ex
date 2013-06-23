@@ -83,10 +83,16 @@ defmodule Amrita.Mocks do
     end
 
     def __add_expect__(mock_module, fn_name, args, value) do
-      if Enum.empty? args do
-        :meck.expect(mock_module, fn_name, fn -> value end)
-      else
-        :meck.expect(mock_module, fn_name, fn _args -> value end)
+      #FIXME: Dynamically create fn with right arrity
+      case Enum.count args do
+        0 -> :meck.expect(mock_module, fn_name, fn -> value end)
+        1 -> :meck.expect(mock_module, fn_name, fn(_) -> value end)
+        2 -> :meck.expect(mock_module, fn_name, fn(_,_) -> value end)
+        3 -> :meck.expect(mock_module, fn_name, fn(_,_,_) -> value end)
+        4 -> :meck.expect(mock_module, fn_name, fn(_,_,_,_) -> value end)
+        5 -> :meck.expect(mock_module, fn_name, fn(_,_,_,_,_) -> value end)
+        6 -> :meck.expect(mock_module, fn_name, fn(_,_,_,_,_,_) -> value end)
+        _ -> raise "Error, too many args. Help fix me @: https://github.com/josephwilk/amrita/issues/21"
       end
     end
 
