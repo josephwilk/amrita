@@ -1,23 +1,9 @@
 Code.require_file "../../test_helper.exs", __FILE__
 
-
 defmodule AmritaFacts do
   use Amrita.Sweet
 
-  defexception TestDidNotFailError, name: nil do
-    def message(exception) do
-      "Expected #{exception.name} to fail"
-    end
-  end
-
-  def fails(which, test) do
-    try do
-      test.()
-      raise TestDidNotFailError, name: which
-    rescue
-      Amrita.FactError ->
-    end
-  end
+  import Support
 
   describe "something" do
     it "does addition" do
