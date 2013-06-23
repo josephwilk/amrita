@@ -64,15 +64,24 @@ end
 
 defmodule Rude do
   def swear?(word) do
-    word == "bugger"
+    true
   end
 end
 
 fact "mocks must always be called for a pass" do
-  provided [Polite.swear? |> true,
+  provided [Polite.swear?         |> true,
             Rude.swear?("bugger") |> false] do
     Polite.swear?           |> truthy
     Rude.swear?("bugger")   |> falsey
+  end
+end
+
+#We can use a wildcard when we don't care about the exact value of a argument:
+
+fact "mock with a wildcard" do
+  provided [Rude.swear?(:_) |> false] do
+    Funk.swear?(:yes) |> falsey
+    Funk.swear?(:whatever) |> falsey
   end
 end
 
