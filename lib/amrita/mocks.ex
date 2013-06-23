@@ -54,6 +54,10 @@ defmodule Amrita.Mocks do
           Enum.map unquote(mock_modules), fn mock_module ->
             :meck.validate(mock_module) |> truthy
           end
+
+        rescue
+          error ->
+            IO.puts "\n Error:" <> error.message <> "\n"
         after
           errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
             messages = Enum.reduce mocks, [], fn {m, f, a, v}, message_list ->
