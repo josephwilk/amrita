@@ -181,12 +181,20 @@ defmodule AmritaFacts do
   facts "exceptions" do
     fact "should allow checking of exceptions" do
       fn -> raise TestException end |> raises AmritaFacts.TestException
+
+      fail :raises, fn ->
+        fn -> true end |> raises AmritaFacts.TestException
+      end
     end
 
     fact "should allow checking of exceptions by message" do
       fn -> raise TestException end |> raises %r".*gosh.*"
 
       fn -> raise TestException end |> raises "golly gosh, sorry"
+
+      fail :raises, fn ->
+        fn -> raise TestException end |> raises %r"pants"
+      end
     end
   end
 
@@ -237,6 +245,12 @@ defmodule AmritaFacts do
 
     fact "|> defaulting to not(equality)" do
       1 |> ! 2
+    end
+
+    future_fact "1 |> ! 1" do
+      fail do
+        1 |> !1
+      end
     end
   end
 
