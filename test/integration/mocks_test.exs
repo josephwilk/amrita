@@ -76,4 +76,11 @@ defmodule MocksTest do
       Funk.flop?(:yes, :no, :yes) |> falsey
     end
   end
+
+  fact "mock with > 6 arguments" do
+    provided [MocksTest.Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> false] do
+      Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> falsey
+    end
+  end
+
 end

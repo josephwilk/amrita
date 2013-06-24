@@ -80,19 +80,11 @@ defmodule Amrita.Mocks do
     end
 
     def __add_expect__(mock_module, fn_name, args, value) do
-      #FIXME: Dynamically create fn with right arrity
-      case Enum.count args do
-        0 -> :meck.expect(mock_module, fn_name, fn -> value end)
-        1 -> :meck.expect(mock_module, fn_name, fn(_) -> value end)
-        2 -> :meck.expect(mock_module, fn_name, fn(_,_) -> value end)
-        3 -> :meck.expect(mock_module, fn_name, fn(_,_,_) -> value end)
-        4 -> :meck.expect(mock_module, fn_name, fn(_,_,_,_) -> value end)
-        5 -> :meck.expect(mock_module, fn_name, fn(_,_,_,_,_) -> value end)
-        6 -> :meck.expect(mock_module, fn_name, fn(_,_,_,_,_,_) -> value end)
-        _ -> raise "Error, too many args. Help fix me @: https://github.com/josephwilk/amrita/issues/21"
-      end
+      args  = Enum.map args, fn arg -> { arg, [], nil } end
+      Code.eval_quoted(quote do
+        :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)
+      end)
     end
-
   end
 
   defmodule ParsePrerequisites do
