@@ -47,25 +47,45 @@ defmodule AmritaFacts do
       [1,2,3,4] |> [1,2,3,4]
       true |> true
       false |> false
+
+      fail "|>", fn ->
+        false |> true
+      end
     end
 
     fact "about odd" do
       1 |> odd
+
+      fail :odd, fn ->
+        2 |> odd
+      end
     end
 
     fact "about even" do
       2 |> even
+
+      fail :truthy, fn ->
+        false |> truthy
+      end
     end
 
     fact "truthy" do
       true |> truthy
       []   |> truthy
       ""   |> truthy
+
+      fail :truthy, fn ->
+        false |> truthy
+      end
     end
 
     fact "falsey" do
       false |> falsey
       nil   |> falsey
+
+      fail :falsey, fn ->
+        true |> falsey
+      end
     end
 
     fact "roughly" do
@@ -74,10 +94,18 @@ defmodule AmritaFacts do
       0.1 |> roughly 0.2, 0.2
 
       1 |> roughly 2, 2
+
+      fail :roughly, fn ->
+        0.1 |> equals 0.2
+      end
     end
 
     fact "equals" do
       999 |> equals 999
+
+      fail :equals, fn ->
+        999 |> equals 998
+      end
     end
   end
 
@@ -92,6 +120,10 @@ defmodule AmritaFacts do
       "mad hatter tea party" |> contains "hatter"
 
       "mad hatter tea party" |> contains %r"h(\w+)er"
+
+      fail :contains, fn ->
+        [1, 2, 3] |> contains 4
+      end
     end
 
     fact "has_prefix" do
@@ -102,6 +134,10 @@ defmodule AmritaFacts do
       "mad hatter tea party" |> has_prefix "mad"
 
       [1, 2, 3] |> has_prefix Set.new([2,1])
+
+      fail :has_prefix, fn ->
+        [1, 2, 3] |> has_prefix [2, 1]
+      end
     end
 
     fact "has_suffix" do
@@ -112,6 +148,10 @@ defmodule AmritaFacts do
       "white rabbit"  |> has_suffix "rabbit"
 
       [1, 2, 3] |> has_suffix Set.new([3,2])
+
+      fail :has_suffix, fn ->
+        [1, 2, 3, 4, 5] |> has_suffix [4, 3, 5]
+      end
     end
 
     fact "for_all" do
@@ -119,13 +159,17 @@ defmodule AmritaFacts do
 
       [2, 4, 6, 8] |> Enum.all? even(&1)
 
-      fails("for_all", fn ->
+      fail :for_all, fn ->
         [2, 4, 7, 8] |> for_all even(&1)
-      end)
+      end
     end
 
     fact "for_some" do
       [2, 4, 7, 8] |> for_some odd(&1)
+
+      fail :for_some, fn ->
+        [1, 3, 5, 7] |> for_some even(&1)
+      end
     end
 
     fact "without a body is considered pending"
@@ -149,22 +193,42 @@ defmodule AmritaFacts do
   facts "! negates the predicate" do
     fact "contains" do
       [1, 2, 3, 4] |> ! contains 9999
+
+      fail "! contains", fn ->
+        [1, 2, 3, 4] |> ! contains 1
+      end
     end
 
     fact "equals" do
       1999 |> ! equals 0
+
+      fail "! equals", fn ->
+        199 |> ! 199
+      end
     end
 
     fact "roughly" do
       0.1001 |> ! roughly 0.2
+
+      fail "! roughly", fn ->
+        0.1001 |> ! roughly 0.1
+      end
     end
 
     fact "has_suffix" do
       [1, 2, 3, 4] |> ! has_suffix [3,1]
+
+      fail "! has_suffix", fn ->
+        [1, 2, 3, 4] |> ! has_suffix [3,4]
+      end
     end
 
     fact "has_prefix" do
       [1, 2, 3, 4] |> ! has_prefix [1, 3]
+
+      fail "! has_prefix", fn ->
+        [1, 2, 3, 4] |> ! has_prefix [1, 2]
+      end
     end
 
     fact "raises" do

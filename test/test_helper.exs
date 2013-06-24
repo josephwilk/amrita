@@ -1,14 +1,14 @@
 defmodule Support do
-  defexception TestDidNotFailError, name: nil do
+  defexception FactDidNotFail, name: nil do
     def message(exception) do
       "Expected #{exception.name} to fail"
     end
   end
 
-  def fails(which, test) do
+  def fail(which, test) do
     try do
       test.()
-      raise TestDidNotFailError, name: which
+      raise FactDidNotFail, name: which
       rescue
         Amrita.FactError ->
     end
