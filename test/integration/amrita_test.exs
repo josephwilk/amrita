@@ -64,8 +64,8 @@ defmodule AmritaFacts do
     fact "about even" do
       2 |> even
 
-      fail :truthy do
-        false |> truthy
+      fail :event do
+        1 |> even
       end
     end
 
