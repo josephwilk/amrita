@@ -245,11 +245,9 @@ defmodule AmritaFacts do
 
     fact "|> defaulting to not(equality)" do
       1 |> ! 2
-    end
 
-    future_fact "1 |> ! 1" do
-      fail do
-        1 |> !1
+      fail "! |>" do
+        1 |> ! 1
       end
     end
   end
