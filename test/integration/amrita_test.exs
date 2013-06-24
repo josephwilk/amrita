@@ -48,7 +48,7 @@ defmodule AmritaFacts do
       true |> true
       false |> false
 
-      fail "|>", fn ->
+      fail "|>" do
         false |> true
       end
     end
@@ -56,7 +56,7 @@ defmodule AmritaFacts do
     fact "about odd" do
       1 |> odd
 
-      fail :odd, fn ->
+      fail :odd do
         2 |> odd
       end
     end
@@ -64,7 +64,7 @@ defmodule AmritaFacts do
     fact "about even" do
       2 |> even
 
-      fail :truthy, fn ->
+      fail :truthy do
         false |> truthy
       end
     end
@@ -74,7 +74,7 @@ defmodule AmritaFacts do
       []   |> truthy
       ""   |> truthy
 
-      fail :truthy, fn ->
+      fail :truthy do
         false |> truthy
       end
     end
@@ -83,7 +83,7 @@ defmodule AmritaFacts do
       false |> falsey
       nil   |> falsey
 
-      fail :falsey, fn ->
+      fail :falsey do
         true |> falsey
       end
     end
@@ -95,7 +95,7 @@ defmodule AmritaFacts do
 
       1 |> roughly 2, 2
 
-      fail :roughly, fn ->
+      fail :roughly do
         0.1 |> equals 0.2
       end
     end
@@ -103,7 +103,7 @@ defmodule AmritaFacts do
     fact "equals" do
       999 |> equals 999
 
-      fail :equals, fn ->
+      fail :equals do
         999 |> equals 998
       end
     end
@@ -121,7 +121,7 @@ defmodule AmritaFacts do
 
       "mad hatter tea party" |> contains %r"h(\w+)er"
 
-      fail :contains, fn ->
+      fail :contains do
         [1, 2, 3] |> contains 4
       end
     end
@@ -135,7 +135,7 @@ defmodule AmritaFacts do
 
       [1, 2, 3] |> has_prefix Set.new([2,1])
 
-      fail :has_prefix, fn ->
+      fail :has_prefix do
         [1, 2, 3] |> has_prefix [2, 1]
       end
     end
@@ -149,7 +149,7 @@ defmodule AmritaFacts do
 
       [1, 2, 3] |> has_suffix Set.new([3,2])
 
-      fail :has_suffix, fn ->
+      fail :has_suffix do
         [1, 2, 3, 4, 5] |> has_suffix [4, 3, 5]
       end
     end
@@ -159,7 +159,7 @@ defmodule AmritaFacts do
 
       [2, 4, 6, 8] |> Enum.all? even(&1)
 
-      fail :for_all, fn ->
+      fail :for_all do
         [2, 4, 7, 8] |> for_all even(&1)
       end
     end
@@ -167,7 +167,7 @@ defmodule AmritaFacts do
     fact "for_some" do
       [2, 4, 7, 8] |> for_some odd(&1)
 
-      fail :for_some, fn ->
+      fail :for_some do
         [1, 3, 5, 7] |> for_some even(&1)
       end
     end
@@ -182,7 +182,7 @@ defmodule AmritaFacts do
     fact "should allow checking of exceptions" do
       fn -> raise TestException end |> raises AmritaFacts.TestException
 
-      fail :raises, fn ->
+      fail :raises do
         fn -> true end |> raises AmritaFacts.TestException
       end
     end
@@ -192,7 +192,7 @@ defmodule AmritaFacts do
 
       fn -> raise TestException end |> raises "golly gosh, sorry"
 
-      fail :raises, fn ->
+      fail :raises do
         fn -> raise TestException end |> raises %r"pants"
       end
     end
@@ -202,7 +202,7 @@ defmodule AmritaFacts do
     fact "contains" do
       [1, 2, 3, 4] |> ! contains 9999
 
-      fail "! contains", fn ->
+      fail "! contains" do
         [1, 2, 3, 4] |> ! contains 1
       end
     end
@@ -210,7 +210,7 @@ defmodule AmritaFacts do
     fact "equals" do
       1999 |> ! equals 0
 
-      fail "! equals", fn ->
+      fail "! equals" do
         199 |> ! 199
       end
     end
@@ -218,7 +218,7 @@ defmodule AmritaFacts do
     fact "roughly" do
       0.1001 |> ! roughly 0.2
 
-      fail "! roughly", fn ->
+      fail "! roughly" do
         0.1001 |> ! roughly 0.1
       end
     end
@@ -226,7 +226,7 @@ defmodule AmritaFacts do
     fact "has_suffix" do
       [1, 2, 3, 4] |> ! has_suffix [3,1]
 
-      fail "! has_suffix", fn ->
+      fail "! has_suffix" do
         [1, 2, 3, 4] |> ! has_suffix [3,4]
       end
     end
@@ -234,7 +234,7 @@ defmodule AmritaFacts do
     fact "has_prefix" do
       [1, 2, 3, 4] |> ! has_prefix [1, 3]
 
-      fail "! has_prefix", fn ->
+      fail "! has_prefix" do
         [1, 2, 3, 4] |> ! has_prefix [1, 2]
       end
     end

@@ -5,14 +5,17 @@ defmodule Support do
     end
   end
 
-  def fail(which, test) do
-    try do
-      test.()
-      raise FactDidNotFail, name: which
-      rescue
-        Amrita.FactError ->
+  defmacro fail(name, _ // quote(do: _), contents) do
+    quote do
+      try do
+        unquote(contents)
+        raise FactDidNotFail, name: unquote(name)
+        rescue
+          Amrita.FactError ->
+      end
     end
   end
+
 end
 
 Amrita.start
