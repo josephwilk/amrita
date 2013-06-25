@@ -124,6 +124,10 @@ defmodule AmritaFacts do
       fail :contains do
         [1, 2, 3] |> contains 4
       end
+
+      fail :contains_with_string do
+        "mad" |> contains "hatter"
+      end
     end
 
     fact "has_prefix" do
@@ -138,6 +142,10 @@ defmodule AmritaFacts do
       fail :has_prefix do
         [1, 2, 3] |> has_prefix [2, 1]
       end
+
+      fail :has_prefix_with_string do
+        "mad" |> has_prefix "hatter"
+      end
     end
 
     fact "has_suffix" do
@@ -151,6 +159,10 @@ defmodule AmritaFacts do
 
       fail :has_suffix do
         [1, 2, 3, 4, 5] |> has_suffix [4, 3, 5]
+      end
+
+      fail :has_suffix_with_string do
+        "mad" |> has_suffix "hatter"
       end
     end
 
