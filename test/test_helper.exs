@@ -5,6 +5,16 @@ defmodule Support do
     end
   end
 
+  defmacro failing_fact(name, _ // quote(do: _), contents) do
+    quote do
+      fact unquote(name) do
+        fail unquote(name) do
+          unquote(contents)
+        end
+      end
+    end
+  end
+
   defmacro fail(name, _ // quote(do: _), contents) do
     quote do
       try do
