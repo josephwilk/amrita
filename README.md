@@ -79,7 +79,7 @@ end
 #We can use a wildcard when we don't care about the exact value of a argument:
 
 fact "mock with a wildcard" do
-  provided [Rude.swear?(:_) |> false] do
+  provided [Rude.swear?(anything) |> false] do
     Funk.swear?(:yes) |> falsey
     Funk.swear?(:whatever) |> falsey
   end

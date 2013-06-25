@@ -85,6 +85,18 @@ defmodule MocksTest do
     end
   end
 
+  fact "mock anything wildcard" do
+    provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
+      Funk.hip?(:yes, :no, :maybe) |> falsey
+    end
+  end
+
+  failing_fact "failing anything wildcard" do
+    provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
+      Funk.hip?(:yes, :no, :maybe, :funk) |> falsey
+    end
+  end
+
   fact "mock with many arguments" do
     provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
       Funk.flop?(:yes, :no, :yes) |> falsey

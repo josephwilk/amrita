@@ -62,6 +62,12 @@ defmodule Amrita.Mocks do
         after
           errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
             messages = Enum.reduce mocks, [], fn {m, f, a, v}, message_list ->
+              a = Enum.map a, fn arg -> case arg do
+                                          {:anything, _, _} -> anything
+                                          _                 -> arg
+                                        end
+
+                              end
               message = case :meck.called(m, f, a) do
                 false -> [Amrita.Checker.to_s(m, f, a) <> " called 0 times."]
                 _     -> []
@@ -80,10 +86,22 @@ defmodule Amrita.Mocks do
     end
 
     def __add_expect__(mock_module, fn_name, args, value) do
-      args  = Enum.map args, fn arg -> { arg, [], nil } end
+      args  = Enum.map args, fn arg -> case arg do
+                                         {:anything, _, _} -> {anything, [], nil}
+                                         _                 -> {arg, [], nil}
+                                       end
+                             end
+      #TODO: replace this with a macro
       Code.eval_quoted(quote do
         :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)
       end)
+    end
+
+    @doc """
+    alias for :_ the wild card checker for arguments
+    """
+    def anything do
+      :_
     end
   end
 
