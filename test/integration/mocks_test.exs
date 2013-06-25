@@ -4,6 +4,8 @@ defmodule MocksTest do
   use Amrita.Sweet
   use Amrita.Mocks
 
+  import Support
+
   defmodule Polite do
     def swear? do
       false
@@ -22,6 +24,12 @@ defmodule MocksTest do
   fact "simple mock on existing module" do
     provided [MocksTest.Polite.swear? |> true] do
       Polite.swear? |> truthy
+    end
+  end
+
+  failing_fact "provided when not called raises a fail" do
+    provided [MocksTest.Polite.swear? |> true] do
+      Polite.message |> "oh swizzlesticks"
     end
   end
 
@@ -64,6 +72,12 @@ defmodule MocksTest do
     end
   end
 
+  failing_fact "mock with an argument that does not match fails" do
+    provided [MocksTest.Funk.hip?(:yes) |> false] do
+      Funk.hip?(:no) |> falsey
+    end
+  end
+
   fact "mock with a wildcard" do
     provided [MocksTest.Funk.hip?(:_) |> false] do
       Funk.hip?(:yes) |> falsey
@@ -74,6 +88,12 @@ defmodule MocksTest do
   fact "mock with many arguments" do
     provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
       Funk.flop?(:yes, :no, :yes) |> falsey
+    end
+  end
+
+  failing_fact "mock with a mismatch in arity of arguments fails" do
+    provided [MocksTest.Funk.hip?(:yes) |> false] do
+      Funk.hip?(:yes, :no) |> falsey
     end
   end
 
