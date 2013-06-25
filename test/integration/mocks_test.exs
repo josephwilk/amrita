@@ -115,4 +115,10 @@ defmodule MocksTest do
     end
   end
 
+  future_fact "regex are matched against argument parameters" do
+    provided [Flip.flop(%r/mooo/) |> true] do
+      Flip.flop("this is a mooo thing") |> true
+    end
+  end
+
 end
