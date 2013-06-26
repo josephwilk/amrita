@@ -88,7 +88,8 @@ defmodule Amrita.Mocks do
     def __add_expect__(mock_module, fn_name, args, value) do
       args  = Enum.map args, fn arg -> case arg do
                                          {:anything, _, _} -> {anything, [], nil}
-                                         _                 -> {arg, [], nil}
+                                         _ when !is_tuple(arg) -> {arg, [], nil}
+                                         _ -> arg
                                        end
                              end
       #TODO: replace this with a macro
