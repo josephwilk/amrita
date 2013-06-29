@@ -35,7 +35,7 @@ defmodule Amrita do
         import Kernel, except: [|>: 2]
         import Amrita.Elixir.Pipeline
 
-        import Amrita.Facts
+        use Amrita.Facts
         import Amrita.Describes
 
         import Amrita.Checkers.Simple
@@ -70,6 +70,14 @@ defmodule Amrita do
     Express facts about your code.
     """
 
+    @doc false
+    defmacro __using__(_) do
+      quote do
+        @name_stack []
+        import Amrita.Facts
+      end
+    end
+
     @doc """
     A fact is the container of your test logic.
 
@@ -80,7 +88,7 @@ defmodule Amrita do
     """
     defmacro fact(description, _ // quote(do: _), contents) do
       quote do
-        test Enum.join((@name_stack || []), "") <> unquote(description) do
+        test Enum.join(@name_stack, "") <> unquote(description) do
           unquote(contents)
         end
       end
@@ -96,7 +104,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <> unquote(description)
+        Amrita.Message.pending "Future fact: " <> Enum.join(@name_stack, "") <> unquote(description)
       end
     end
 
@@ -111,7 +119,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
-        Amrita.Message.pending "Future fact: " <> Enum.join((@name_stack || []), "") <>  unquote(description)
+        Amrita.Message.pending "Future fact: " <> Enum.join(@name_stack, "") <>  unquote(description)
       end
     end
 
@@ -128,7 +136,7 @@ defmodule Amrita do
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
-        @name_stack List.concat((@name_stack || []), [unquote(description) <> ": "])
+        @name_stack List.concat(@name_stack, [unquote(description) <> ": "])
         unquote(contents)
         if Enum.count(@name_stack) > 0 do
           @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
