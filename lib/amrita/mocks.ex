@@ -89,7 +89,7 @@ defmodule Amrita.Mocks do
     end
 
     def __add_expect__(mock_module, fn_name, args, value) do
-      args  = Enum.map args, fn arg -> {anything, [], nil} end
+      args  = Enum.map args, fn _arg -> {anything, [], nil} end
       #TODO: replace this with a macro
       Code.eval_quoted(quote do
         :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)

@@ -3,7 +3,7 @@ defmodule History do
   def match?(module, fun, args) do
     fn_invocations = history(module)
 
-    matching_fns = Enum.filter(fn_invocations, fn {_, {m, f, a}, _} ->
+    matching_fns = Enum.filter(fn_invocations, fn {_, {m, f, _a}, _} ->
                      m == module && f == fun
                    end)
 
