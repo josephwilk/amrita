@@ -124,7 +124,7 @@ Be it "test" or "facts"/"fact" or "it"/"describes" Amrita supports you.</p>
     <span class="n">fact</span> <span class="s2">"! negates a checker"</span> <span class="k">do</span>
 <span class="k">      </span><span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span><span class="n">contains</span> <span class="m">9999</span>
 
-     <span class="c1"># or you can add a space, like this. Whatever tickles your fancy.</span>
+      <span class="c1"># or you can add a space, like this. Whatever tickles your fancy.</span>
 
       <span class="p">[</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="n">contains</span> <span class="m">9999</span>
 
@@ -156,7 +156,7 @@ Be it "test" or "facts"/"fact" or "it"/"describes" Amrita supports you.</p>
     <span class="n">fact</span> <span class="s2">"for_all checks if a predicate holds for all elements"</span> <span class="k">do</span>
 <span class="k">      </span><span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">8</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="n">for_all</span> <span class="n">even</span><span class="p">(</span><span class="nv">&amp;1</span><span class="p">)</span>
 
-      <span class="p">;</span> <span class="ow">or</span> <span class="n">alternatively</span> <span class="n">you</span> <span class="n">could</span> <span class="n">write</span>
+      <span class="c1"># or alternatively you could write</span>
 
       <span class="p">[</span><span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">8</span><span class="p">]</span> <span class="o">|&gt;</span> <span class="no">Enum</span><span class="o">.</span><span class="n">all?</span> <span class="n">even</span><span class="p">(</span><span class="nv">&amp;1</span><span class="p">)</span>
     <span class="k">end</span>
@@ -207,17 +207,6 @@ Be it "test" or "facts"/"fact" or "it"/"describes" Amrita supports you.</p>
 <span class="k">end</span>
 </pre></div>
 
-<h2><a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Installing Amrita</h2>
-
-<p>Add to your mix.exs</p>
-
-<div class="highlight"><pre>  <span class="k">defp</span> <span class="n">deps</span> <span class="k">do</span>
-<span class="k">    </span><span class="p">[</span>
-      <span class="p">{</span><span class="ss">:amrita</span><span class="p">,</span> <span class="s2">"0.1.2"</span><span class="p">,</span> <span class="ss">github:</span> <span class="s2">"josephwilk/amrita"</span><span class="p">}</span>
-    <span class="p">]</span>
-  <span class="k">end</span>
-</pre></div>
-
 <p>After adding Amrita as a dependency, to install please run:</p>
 
 <div class="highlight"><pre><span class="go">mix deps.get</span>
@@ -228,9 +217,17 @@ Be it "test" or "facts"/"fact" or "it"/"describes" Amrita supports you.</p>
 Checkout <a href="https://github.com/josephwilk/amrita">Amrita on Github</a>.
 
 </section>
-
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42124289-1', 'amrita.io');
+  ga('send', 'pageview');
+</script>
   </body>
 </html>

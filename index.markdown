@@ -133,7 +133,7 @@ defmodule ExampleFacts do
     fact "! negates a checker" do
       [1, 2, 3, 4] |> !contains 9999
 
-     # or you can add a space, like this. Whatever tickles your fancy.
+      # or you can add a space, like this. Whatever tickles your fancy.
 
       [1, 2, 3, 4] |> ! contains 9999
 
@@ -165,7 +165,7 @@ defmodule ExampleFacts do
     fact "for_all checks if a predicate holds for all elements" do
       [2, 4, 6, 8] |> for_all even(&1)
 
-      ; or alternatively you could write
+      # or alternatively you could write
 
       [2, 4, 6, 8] |> Enum.all? even(&1)
     end
