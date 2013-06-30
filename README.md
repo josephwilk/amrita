@@ -69,7 +69,8 @@ defmodule Rude do
 end
 
 fact "mocks must always be called for a pass", 
-  provided: [Polite.swear? |> true, Rude.swear?("bugger") |> false] do
+  provided: [Polite.swear?         |> true, 
+             Rude.swear?("bugger") |> false] do
 
   Polite.swear?           |> truthy
   Rude.swear?("bugger")   |> falsey
