@@ -68,21 +68,17 @@ defmodule Rude do
   end
 end
 
-fact "mocks must always be called for a pass" do
-  provided [Polite.swear?         |> true,
-            Rude.swear?("bugger") |> false] do
-    Polite.swear?           |> truthy
-    Rude.swear?("bugger")   |> falsey
-  end
+fact "mocks must always be called for a pass", provided: [Polite.swear? |> true,
+                                                          Rude.swear?("bugger") |> false] do
+  Polite.swear?           |> truthy
+  Rude.swear?("bugger")   |> falsey
 end
 
 #We can use a wildcard when we don't care about the exact value of a argument:
 
-fact "mock with a wildcard" do
-  provided [Rude.swear?(anything) |> false] do
-    Funk.swear?(:yes) |> falsey
-    Funk.swear?(:whatever) |> falsey
-  end
+fact "mock with a wildcard", provided: [Rude.swear?(anything) |> false] do
+  Funk.swear?(:yes) |> falsey
+  Funk.swear?(:whatever) |> falsey
 end
 
 ```
