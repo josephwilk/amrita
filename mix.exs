@@ -7,7 +7,9 @@ defmodule Amrita.Mixfile do
      name: "Amrita",
      source_url: "https://github.com/josephwilk/amrita",
      homepage_url: "http://amrita.io",
-     deps: deps]
+     env: [test: [deps: deps],
+           dev:  [deps: deps ++ dev_deps]],
+           prod: [deps: deps]]
   end
 
   def application do
@@ -15,7 +17,10 @@ defmodule Amrita.Mixfile do
   end
 
   defp deps do
-    [{:ex_doc, github: "elixir-lang/ex_doc"},
-     {:meck, "0.7.2", [github: "eproxus/meck"]}]
+    [{:meck, "0.7.2", [github: "eproxus/meck"]}]
+  end
+
+  defp dev_deps do
+    [{:ex_doc, github: "elixir-lang/ex_doc"}]
   end
 end
