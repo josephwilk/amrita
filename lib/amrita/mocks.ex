@@ -66,11 +66,7 @@ defmodule Amrita.Mocks do
                                           { :anything, _, _ } -> anything
                                           _ when is_tuple(arg) ->
                                             { evaled_arg, _ } = Code.eval_quoted(arg)
-                                            if is_regex(evaled_arg) do
-                                              evaled_arg
-                                            else
-                                              arg
-                                            end
+                                            evaled_arg
                                           _ -> arg
                                         end
 
@@ -87,18 +83,13 @@ defmodule Amrita.Mocks do
           :meck.unload(unquote(mock_modules))
 
           if not(Enum.empty? errors), do: Amrita.Message.fail "#{errors}",
-                                                              "Expected atleast once", {"called", ""}
+                                                         "Expected atleast once", {"called", ""}
         end
       end
     end
 
     def __add_expect__(mock_module, fn_name, args, value) do
-      args  = Enum.map args, fn arg -> case arg do
-                                         {:anything, _, _} -> {anything, [], nil}
-                                         _ when !is_tuple(arg) -> {arg, [], nil}
-                                         _ -> arg
-                                       end
-                             end
+      args  = Enum.map args, fn arg -> {anything, [], nil} end
       #TODO: replace this with a macro
       Code.eval_quoted(quote do
         :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)

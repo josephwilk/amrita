@@ -85,27 +85,51 @@ defmodule MocksTest do
       end
     end
 
-    future_fact "list" do
+    fact "list" do
       provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
         Funk.hip?([1, 2, 3]) |> falsey
       end
+
+      fail :list_mocks do
+        provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
+          Funk.hip?([1, 2, 3, 4]) |> falsey
+        end
+      end
     end
 
-    future_fact "tuple" do
+    fact "tuple" do
       provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
         Funk.hip?({1, 2, 3}) |> falsey
       end
-    end
 
-    future_fact "dict" do
-      provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
-        Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
+      fail :tuple_mocks do
+        provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
+          Funk.hip?({1, 2}) |> falsey
+        end
       end
     end
 
-    future_fact "range" do
+    fact "dict" do
+      provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
+        Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
+      end
+
+      fail :dict_mocks do
+        provided [MocksTest.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
+          Funk.hip?(HashDict.new([{:a, 2}])) |> falsey
+        end
+      end
+    end
+
+    fact "range" do
       provided [MocksTest.Funk.hip?(1..10) |> false] do
         Funk.hip?(1..10) |> falsey
+      end
+
+      fail :range_mocks do
+        provided [MocksTest.Funk.hip?(1..10) |> false] do
+          Funk.hip?(1..11) |> falsey
+        end
       end
     end
   end
