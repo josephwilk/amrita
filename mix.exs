@@ -9,7 +9,8 @@ defmodule Amrita.Mixfile do
      homepage_url: "http://amrita.io",
      env: [test: [deps: deps],
            dev:  [deps: deps ++ dev_deps]],
-           prod: [deps: deps]]
+           prod: [deps: deps],
+     deps: deps]
   end
 
   def application do
