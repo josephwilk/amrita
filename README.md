@@ -243,7 +243,7 @@ defmodule IDontLikeFacts do
 end
 ```
 
-## Amrita Examples
+## Amrita with Dynamo
 
 Checkout an example using Amrita with Dynamo: https://github.com/elixir-amrita/amrita_with_dynamo
 
