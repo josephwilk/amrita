@@ -84,6 +84,17 @@ defmodule MocksTest do
         end
       end
     end
+
+    future_fact "list" do
+      provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
+        Funk.hip?([1, 2, 3]) |> falsey
+      end
+    end
+
+    future_fact "tuple" do
+      provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
+        Funk.hip?({1, 2, 3}) |> falsey
+      end
     end
 
     future_fact "dict" do
