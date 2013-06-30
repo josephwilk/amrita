@@ -77,6 +77,13 @@ defmodule MocksTest do
       provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
         Funk.hip?(%r"monkey") |> falsey
       end
+
+      fail :regex_mocks do
+        provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
+          Funk.hip?(%r"mon") |> falsey
+        end
+      end
+    end
     end
 
     future_fact "dict" do
