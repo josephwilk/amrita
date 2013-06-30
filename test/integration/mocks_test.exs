@@ -72,17 +72,23 @@ defmodule MocksTest do
     end
   end
 
-  future_fact "mock with a elixir complex argument" do
-    provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
-      Funk.hip?(%r"monkey") |> falsey
+  facts "mock with elixir types" do
+    fact "regex" do
+      provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
+        Funk.hip?(%r"monkey") |> falsey
+      end
     end
 
-    provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
-      Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
+    future_fact "dict" do
+      provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
+        Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
+      end
     end
 
-    provided [MocksTest.Funk.hip?(1..10) |> false] do
-      Funk.hip?(1..10) |> falsey
+    future_fact "range" do
+      provided [MocksTest.Funk.hip?(1..10) |> false] do
+        Funk.hip?(1..10) |> falsey
+      end
     end
   end
 

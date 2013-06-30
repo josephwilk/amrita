@@ -63,9 +63,15 @@ defmodule Amrita.Mocks do
           errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
             messages = Enum.reduce mocks, [], fn {m, f, a, v}, message_list ->
               a = Enum.map a, fn arg -> case arg do
-                                          {:anything, _, _} -> anything
-                                          _ when is_tuple(arg) -> Code.eval_quoted(arg)
-                                          _                    -> arg
+                                          { :anything, _, _ } -> anything
+                                          _ when is_tuple(arg) ->
+                                            { evaled_arg, _ } = Code.eval_quoted(arg)
+                                            if is_regex(evaled_arg) do
+                                              evaled_arg
+                                            else
+                                              arg
+                                            end
+                                          _ -> arg
                                         end
 
                               end
