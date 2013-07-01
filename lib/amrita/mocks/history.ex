@@ -1,20 +1,24 @@
 defmodule History do
 
   def matches(module, fun) do
-    fn_invocations = history(module)
-
-    Enum.filter fn_invocations, fn {_, {m, f, _a}, _} ->
+    Enum.filter fn_invocations(module), fn { m, f, _a } ->
       m == module && f == fun
     end
   end
 
   def matches(module, fun, args) do
     matching_fns = matches(module, fun)
-    Enum.filter(matching_fns, fn {_, {_,_,a}, _} -> args_match(args, a) end)
+    Enum.filter matching_fns, fn { _, _, a } ->
+      args_match(args, a)
+    end
   end
 
   def match?(module, fun, args) do
     !Enum.empty?(matches(module, fun, args))
+  end
+
+  def fn_invocations(module) do
+    Enum.map history(module), fn {_, fn_invoked, _} -> fn_invoked end
   end
 
   defp history(module) do
