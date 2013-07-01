@@ -95,25 +95,6 @@ defmodule Amrita do
     end
 
     @doc """
-    If you are using mocks you can define them as part of your fact.
-
-    ## Example
-        fact "about mock", provided: [Flip.flop(:ok) |> true] do
-          Flip.flop(:ok) |> truthy
-        end
-    """
-    defmacro fact(description, provided, _ // quote(do: _), contents) do
-      {:provided, mocks} = Enum.at(provided, 0)
-      quote do
-        test Enum.join(@name_stack, "") <> unquote(description) do
-          provided unquote(mocks) do
-            unquote(contents)
-          end
-        end
-      end
-    end
-
-    @doc """
     A fact without a body is a pending fact. Much like a TODO.
     It prints a reminder when the tests are run.
 

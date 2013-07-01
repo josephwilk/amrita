@@ -183,7 +183,7 @@ defmodule MocksTest do
     end
   end
 
-  fact "mock with alternative syntax", provided: [Flip.flop(:ok) |> true] do
+  future_fact "mock with alternative syntax", provided: [Flip.flop(:ok) |> true] do
     Flip.flop(:ok) |> truthy
   end
 
