@@ -102,7 +102,7 @@ defmodule Amrita do
           Flip.flop(:ok) |> truthy
         end
     """
-    defmacro fact(description, provided // {}, _ // quote(do: _), contents) do
+    defmacro fact(description, provided, _ // quote(do: _), contents) do
       {:provided, mocks} = Enum.at(provided, 0)
       quote do
         test Enum.join(@name_stack, "") <> unquote(description) do
