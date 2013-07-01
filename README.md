@@ -13,7 +13,7 @@ Add to your mix.exs
 ```elixir
   defp deps do
     [
-      {:amrita, "0.1.2", github: "josephwilk/amrita"}
+      {:amrita, "0.1.3", github: "josephwilk/amrita"}
     ]
   end
 ```
@@ -68,8 +68,8 @@ defmodule Rude do
   end
 end
 
-fact "mocks must always be called for a pass", 
-  provided: [Polite.swear?         |> true, 
+fact "mocks must always be called for a pass",
+  provided: [Polite.swear?         |> true,
              Rude.swear?("bugger") |> false] do
 
   Polite.swear?           |> truthy
