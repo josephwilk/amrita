@@ -30,7 +30,7 @@ defmodule Amrita.Mocks do
         end
 
         #With a wildcard argument matcher
-        provided [Polite.swear?(:_) |> false] do
+        provided [Polite.swear?(anything) |> false] do
           Polite.swear?("bugger") |> falsey
           Polite.swear?("pants")  |> falsey
         end
@@ -46,9 +46,9 @@ defmodule Amrita.Mocks do
 
         :meck.new(unquote(mock_modules), [:passthrough])
 
-        Enum.map prerequisites, fn {m, mocks} ->
-          Enum.map mocks, fn {m, f, a, v} ->
-            unquote(__MODULE__).__add_expect__(m, f, a, v)
+        Enum.map prerequisites, fn {_, mocks} ->
+          Enum.map mocks, fn {module, fun, args, value} ->
+            unquote(__MODULE__).__add_expect__(module, fun, args, value)
           end
         end
 
@@ -60,19 +60,18 @@ defmodule Amrita.Mocks do
           end
 
         after
-          errors = Enum.reduce prerequisites, [], fn {m, mocks}, all_errors ->
-            messages = Enum.reduce mocks, [], fn {m, f, a, v}, message_list ->
-              a = Enum.map a, fn arg -> case arg do
-                                          { :anything, _, _ } -> anything
-                                          _ when is_tuple(arg) ->
-                                            { evaled_arg, _ } = Code.eval_quoted(arg)
-                                            evaled_arg
-                                          _ -> arg
-                                        end
-
-                              end
-              message = case :meck.called(m, f, a) do
-                false -> [Amrita.Checker.to_s(m, f, a) <> " called 0 times."]
+          errors = Enum.reduce prerequisites, [], fn {_, mocks}, all_errors ->
+            messages = Enum.reduce mocks, [], fn {module, fun, args, value}, message_list ->
+              args = Enum.map args, fn arg -> case arg do
+                                                { :anything, _, _ } -> anything
+                                                _ when is_tuple(arg) ->
+                                                  { evaled_arg, _ } = Code.eval_quoted(arg)
+                                                  evaled_arg
+                                                _ -> arg
+                                              end
+                                    end
+              message = case :meck.called(module, fun, args) do
+                false -> [Amrita.Checker.to_s(module, fun, args) <> " called 0 times."]
                 _     -> []
               end
               List.concat(message_list, message)
@@ -83,7 +82,7 @@ defmodule Amrita.Mocks do
           :meck.unload(unquote(mock_modules))
 
           if not(Enum.empty? errors), do: Amrita.Message.fail "#{errors}",
-                                                         "Expected atleast once", {"called", ""}
+                                                              "Expected atleast once", {"called", ""}
         end
       end
     end
@@ -109,10 +108,10 @@ defmodule Amrita.Mocks do
 
     def prerequisites(forms) do
       prerequisites = Enum.map(forms, fn form -> extract(form) end)
-      Enum.reduce prerequisites, HashDict.new, fn {m,f,a,v}, acc ->
-        mocks = HashDict.get(acc, m, [])
-        mocks = List.concat(mocks, [{m,f,a,v}])
-        HashDict.put(acc,m,mocks)
+      Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
+        mocks = HashDict.get(acc, module, [])
+        mocks = List.concat(mocks, [{module, fun, args, value}])
+        HashDict.put(acc, module, mocks)
       end
     end
 
