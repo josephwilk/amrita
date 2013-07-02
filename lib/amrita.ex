@@ -94,7 +94,7 @@ defmodule Amrita do
         end
 
     """
-    defmacro fact(description, provided // [], meta // quote(do: _), contents) do
+    defmacro fact(description, provided // [], _meta // quote(do: _), contents) do
       if is_list(provided) && !Enum.empty?(provided) do
         {:provided, mocks} = Enum.at(provided, 0)
 
