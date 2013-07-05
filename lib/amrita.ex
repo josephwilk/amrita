@@ -253,7 +253,7 @@ defmodule Amrita do
 
     defp failed_exception_match(error, expected) when is_bitstring(expected) do
       message = error.message
-      if not(Amrita.Elixir.String.contains?(expected, message)) do
+      if not(String.contains?(expected, message)) do
         Message.fail message, expected, __ENV__.function
       end
     end
@@ -442,7 +442,7 @@ defmodule Amrita do
             c when is_tuple(c)           -> element in tuple_to_list(c)
             c when is_list(c)            -> element in c
             c when is_regex(element)     -> Regex.match?(element, c)
-            c when is_bitstring(element) -> Amrita.Elixir.String.contains?(element, c)
+            c when is_bitstring(element) -> String.contains?(c, element)
           end
 
       if (not r), do: Message.fail collection, element, __ENV__.function
