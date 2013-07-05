@@ -29,9 +29,10 @@ defmodule Amrita do
     """
 
     @doc false
-    defmacro __using__(_ // []) do
+    defmacro __using__(opts // []) do
+      async = Keyword.get(opts, :async, false)
       quote do
-        use ExUnit.Case
+        use ExUnit.Case, async: unquote(async)
         import Kernel, except: [|>: 2]
         import Amrita.Elixir.Pipeline
 
