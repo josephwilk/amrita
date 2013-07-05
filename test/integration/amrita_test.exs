@@ -188,6 +188,18 @@ defmodule AmritaFacts do
 
   end
 
+  facts "message checkers" do
+    future_fact "receive" do
+      receive |> :hello
+      self <- :hello
+    end
+
+    future_fact "received" do
+      self <- :hello
+      received |> :hello
+    end
+  end
+
   defexception TestException, message: "golly gosh, sorry"
 
   facts "exceptions" do
