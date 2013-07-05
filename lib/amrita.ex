@@ -32,7 +32,15 @@ defmodule Amrita do
     defmacro __using__(opts // []) do
       async = Keyword.get(opts, :async, false)
       quote do
-        use ExUnit.Case, async: unquote(async)
+        if !Enum.any?(__ENV__.requires, fn(x) -> x == ExUnit.Case end) do
+          use ExUnit.Case, async: unquote(async)
+        end
+
+        import ExUnit.Callbacks
+        import ExUnit.Assertions
+        import ExUnit.Case
+        @ex_unit_case true
+
         import Kernel, except: [|>: 2]
         import Amrita.Elixir.Pipeline
 
