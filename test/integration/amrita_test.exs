@@ -43,7 +43,7 @@ defmodule AmritaFacts do
   facts "about simple matchers" do
     fact "|> defaults to equality when given ints or strings" do
       10 |> 10
-      "hello" |> "hello"
+      "hello" |> "helloz"
       [1,2,3,4] |> [1,2,3,4]
       true |> true
       false |> false
