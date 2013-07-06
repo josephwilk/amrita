@@ -1,8 +1,4 @@
 language: erlang
-script: make
+script: make ci
 otp_release:
   - R16B
-before_install:
-  - mkdir -p vendor/elixir
-  - wget -q http://dl.dropbox.com/u/4934685/elixir/v0.9.3.zip && unzip -qq v0.9.3.zip -d vendor/elixir
-  - export PATH="$PATH:$PWD/vendor/elixir/bin"
