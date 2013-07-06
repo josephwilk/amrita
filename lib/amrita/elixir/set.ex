@@ -1,4 +1,4 @@
-defmodule Set do
+defmodule Amrita.Set do
   @moduledoc """
   Until Sets are added to Elixir (pending this pullrequest: https://github.com/elixir-lang/elixir/pull/1241/files)
   Our own Set implementation.
@@ -17,7 +17,7 @@ defmodule Set do
     end
   end
 
-  def member?(set, member) when is_record(set, Set) do
+  def member?(set, member) when is_record(set, Amrita.Set) do
     case set_get(set, member) do
       ^member -> true
       _       -> false
@@ -81,16 +81,8 @@ defmodule Set do
 
 end
 
-defimpl Enumerable, for: Set do
-  def reduce(set, acc, fun), do: Set.reduce(set, acc, fun)
-  def member?(set, v),       do: Set.member?(set, v)
-  def count(set),            do: Set.size(set)
-end
-
-defimpl Binary.Inspect, for: Set do
-  import Kernel, except: [inspect: 2]
-
-  def inspect(set, opts) do
-    "#Set<" <> Kernel.inspect(Set.to_list(set), opts) <> ">"
-  end
+defimpl Enumerable, for: Amrita.Set do
+  def reduce(set, acc, fun), do: Amrita.Set.reduce(set, acc, fun)
+  def member?(set, v),       do: Amrita.Set.member?(set, v)
+  def count(set),            do: Amrita.Set.size(set)
 end

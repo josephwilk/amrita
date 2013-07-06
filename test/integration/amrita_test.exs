@@ -137,7 +137,7 @@ defmodule AmritaFacts do
 
       "mad hatter tea party" |> has_prefix "mad"
 
-      [1, 2, 3] |> has_prefix Set.new([2,1])
+      [1, 2, 3] |> has_prefix Amrita.Set.new([2,1])
 
       fail :has_prefix do
         [1, 2, 3] |> has_prefix [2, 1]
@@ -155,7 +155,7 @@ defmodule AmritaFacts do
 
       "white rabbit"  |> has_suffix "rabbit"
 
-      [1, 2, 3] |> has_suffix Set.new([3,2])
+      [1, 2, 3] |> has_suffix Amrita.Set.new([3,2])
 
       fail :has_suffix do
         [1, 2, 3, 4, 5] |> has_suffix [4, 3, 5]

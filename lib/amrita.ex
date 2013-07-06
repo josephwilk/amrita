@@ -297,7 +297,7 @@ defmodule Amrita do
     def odd(number) when is_integer(number) do
       r = rem(number, 2) == 1
 
-      if (not r), do: Message.fail number, __ENV__.function
+      if not(r), do: Message.fail(number, __ENV__.function)
     end
 
     @doc """
@@ -309,7 +309,7 @@ defmodule Amrita do
     def even(number) when is_integer(number) do
       r = rem(number, 2) == 0
 
-      if (not r), do: Message.fail number, __ENV__.function
+      if not(r), do: Message.fail(number, __ENV__.function)
     end
 
     @doc """
@@ -326,7 +326,7 @@ defmodule Amrita do
         r = false
       end
 
-      if (not r), do: Message.fail actual, __ENV__.function
+      if not(r), do: Message.fail(actual, __ENV__.function)
     end
 
     @doc """
@@ -343,7 +343,7 @@ defmodule Amrita do
         r = true
       end
 
-      if (not r), do: Message.fail actual, __ENV__.function
+      if not(r), do: Message.fail(actual, __ENV__.function)
     end
 
     @doc """
@@ -356,7 +356,7 @@ defmodule Amrita do
     def roughly(actual, expected, delta) do
       r = (expected >= (actual - delta)) and (expected <= (actual + delta))
 
-      if (not r), do: Message.fail actual, "#{expected} +-#{delta}", __ENV__.function
+      if not(r), do: Message.fail(actual, "#{expected} +-#{delta}", __ENV__.function)
     end
 
     @doc """
@@ -388,7 +388,7 @@ defmodule Amrita do
     def equals(actual, expected) do
       r = (actual == expected)
 
-      if (not r), do: Message.fail actual, expected, __ENV__.function
+      if (not r), do: Message.fail(actual, expected, __ENV__.function)
     end
 
     @doc false
@@ -416,7 +416,7 @@ defmodule Amrita do
         error -> raise(error)
       end
 
-      if r, do: Message.fail actual, r, __ENV__.function
+      if r, do: Message.fail(actual, r, __ENV__.function)
     end
 
     def :!.(actual, value) do
@@ -449,7 +449,7 @@ defmodule Amrita do
             c when is_bitstring(element) -> String.contains?(c, element)
           end
 
-      if (not r), do: Message.fail collection, element, __ENV__.function
+      if (not r), do: Message.fail(collection, element, __ENV__.function)
     end
 
     @doc false
@@ -472,12 +472,12 @@ defmodule Amrita do
         "I cannot explain myself for I am not myself" |> has_prefix "I"
 
     """
-    def has_prefix(collection, prefix) when is_list(collection) and is_record(prefix, Set) do
+    def has_prefix(collection, prefix) when is_list(collection) and is_record(prefix, Amrita.Set) do
       collection_prefix = Enum.take(collection, Enum.count(prefix))
 
       r = fail_fast_contains?(collection_prefix, prefix)
 
-      if (not r), do: Message.fail prefix, collection, __ENV__.function
+      if not(r), do: Message.fail(prefix, collection, __ENV__.function)
     end
 
     def has_prefix(collection, prefix) do
@@ -492,7 +492,7 @@ defmodule Amrita do
               String.starts_with?(collection, prefix)
           end
 
-      if (not r), do: Message.fail prefix, collection, __ENV__.function
+      if not(r), do: Message.fail(prefix, collection, __ENV__.function)
     end
 
     @doc false
@@ -515,12 +515,12 @@ defmodule Amrita do
         "I cannot explain myself for I am not myself" |> has_suffix "myself"
 
     """
-    def has_suffix(collection, suffix) when is_list(collection) and is_record(suffix, Set) do
+    def has_suffix(collection, suffix) when is_list(collection) and is_record(suffix, Amrita.Set) do
       collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
 
       r = fail_fast_contains?(collection_suffix, suffix)
 
-      if (not r), do: Message.fail suffix, collection, __ENV__.function
+      if not(r), do: Message.fail(suffix, collection, __ENV__.function)
     end
 
     def has_suffix(collection, suffix) do
@@ -536,7 +536,7 @@ defmodule Amrita do
               String.ends_with?(collection, suffix)
           end
 
-      if (not r), do: Message.fail suffix, collection, __ENV__.function
+      if not(r), do: Message.fail(suffix, collection, __ENV__.function)
     end
 
     @doc false
@@ -575,7 +575,7 @@ defmodule Amrita do
         end
       end)))
 
-      if (not r), do: Message.fail fun, collection, __ENV__.function
+      if not(r), do: Message.fail(fun, collection, __ENV__.function)
     end
 
     defp fail_fast_contains?(collection1, collection2) do

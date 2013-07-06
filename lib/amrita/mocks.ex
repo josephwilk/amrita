@@ -81,8 +81,8 @@ defmodule Amrita.Mocks do
 
           :meck.unload(unquote(mock_modules))
 
-          if not(Enum.empty? errors), do: Amrita.Message.fail "#{errors}",
-                                                              "Expected atleast once", {"called", ""}
+          if not(Enum.empty?(errors)), do: Amrita.Message.fail("#{errors}",
+                                                              "Expected atleast once", {"called", ""})
         end
       end
     end
