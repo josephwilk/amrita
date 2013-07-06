@@ -259,8 +259,8 @@ defmodule Amrita.Formatter.ProgressCreator do
 
           import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 4, format_test_case_failure: 4]
 
-          defrecord Config, tests_counter: 0, invalid_counter: 0,
-                            test_failures: [], case_failures: [], trace: false
+          defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0,
+                            test_failures: [], case_failures: [], pending_failures: [], trace: false
 
           ## Behaviour
 
@@ -296,7 +296,7 @@ defmodule Amrita.Formatter.ProgressCreator do
           end
 
           def handle_call({ :suite_finished, run_us, load_us }, _from, config) do
-            print_suite(config.tests_counter, config.invalid_counter,
+            print_suite(config.tests_counter, config.invalid_counter, config.pending_counter,
                         config.test_failures, config.case_failures, run_us, load_us)
             { :stop, :normal, length(config.test_failures), config }
           end
@@ -330,13 +330,23 @@ defmodule Amrita.Formatter.ProgressCreator do
           end
 
           def handle_cast({ :test_finished, test }, config) do
-            if config.trace do
-              IO.puts failure("\r  * #{trace_test_name test}")
+
+            ExUnit.Test[case: test_casex, name: testx, failure: { kind, reason, stacktrace }] = test
+            exception_type = reason.__record__(:name)
+
+            if exception_type == Elixir.Amrita.FactPending do
+              IO.write invalid("P")
+              { :noreply, config.update_pending_counter(&1 + 1).
+                update_pending_failures([test|&1]) }
             else
-              IO.write failure("F")
-            end
+              if config.trace do
+                IO.puts failure("\r  * #{trace_test_name test}")
+              else
+                IO.write failure("F")
+              end
             { :noreply, config.update_tests_counter(&1 + 1).
                 update_test_failures([test|&1]) }
+            end
           end
 
           def handle_cast({ :case_started, ExUnit.TestCase[name: name] }, config) do
@@ -363,10 +373,19 @@ defmodule Amrita.Formatter.ProgressCreator do
             end
           end
 
-          defp print_suite(counter, 0, [], [], run_us, load_us) do
+          defp print_suite(counter, 0, 0, [], [], run_us, load_us) do
             IO.write "\n\n"
             IO.puts format_time(run_us, load_us)
             IO.puts success("#{counter} facts, 0 failures")
+          end
+
+          defp print_suite(counter, 0, num_pending, [], [], run_us, load_us) do
+            IO.write "\n\n"
+            IO.puts format_time(run_us, load_us)
+            IO.write success("#{counter} facts, ")
+            IO.write pending("#{num_pending} pending, ")
+            IO.write success "0 failures"
+            IO.write "\n"
           end
 
           defp print_suite(counter, num_invalids, test_failures, case_failures, run_us, load_us) do
@@ -407,6 +426,10 @@ defmodule Amrita.Formatter.ProgressCreator do
 
           defp success(msg) do
             colorize("green", msg)
+          end
+
+          defp pending(msg) do
+            invalid(msg)
           end
 
           defp invalid(msg) do
