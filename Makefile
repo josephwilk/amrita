@@ -17,16 +17,17 @@ docs:
 
 ci: test_0_9_3 test_master
 
-test_0_9_3:
-	rm -rf vendor/*
-	mkdir -p vendor/elixir
+test_0_9_3: ci_clean
 	wget --no-clobber -q http://dl.dropbox.com/u/4934685/elixir/v0.9.3.zip && unzip -qq v0.9.3.zip -d vendor/elixir
 	${PWD}/vendor/elixir/bin/elixir --version
 	PATH="${PATH}:${PWD}/vendor/elixir/bin" make
 
-test_master:
-	rm -rf vendor/*
+test_master: ci_clean
 	cd vendor && git clone https://github.com/elixir-lang/elixir.git
 	cd vendor/elixir && make
 	${PWD}/vendor/elixir/bin/elixir --version
 	PATH="${PATH}:${PWD}/vendor/elixir/bin" make
+
+ci_clean:
+	rm -rf vendor/*
+	mkdir -p vendor/elixir
