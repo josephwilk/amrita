@@ -408,7 +408,9 @@ defmodule Amrita.Formatter.ProgressCreator do
 
             IO.puts format_time(run_us, load_us)
             IO.write success("#{counter} facts, ")
-            IO.write pending("#{num_pending} pending, ")
+            if num_pending > 0 do
+              IO.write pending("#{num_pending} pending, ")
+            end
             IO.write success "0 failures"
             IO.write "\n"
           end
@@ -426,7 +428,7 @@ defmodule Amrita.Formatter.ProgressCreator do
             Enum.reduce Enum.reverse(case_failures), num_fails, print_test_case_failure(&1, &2, File.cwd!)
 
             IO.puts format_time(run_us, load_us)
-            message = "#{counter} facts, #{num_fails} failures"
+            message = "#{counter} facts"
 
             if num_invalids > 0 do
               message = message <>  ", #{num_invalids} invalid"
@@ -434,6 +436,8 @@ defmodule Amrita.Formatter.ProgressCreator do
             if num_pending > 0 do
               message = message <>  ", #{num_pending} pending"
             end
+
+            message = message <> ", #{num_fails} failures"
 
             cond do
               num_fails > 0    -> IO.puts failure(message)
