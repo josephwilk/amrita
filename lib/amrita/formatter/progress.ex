@@ -71,7 +71,7 @@ defmodule Amrita.Formatter.ProgressCreator do
           end
 
           def handle_cast({ :test_finished, test }, config) do
-            
+
             ExUnit.Test[case: test_casex, name: testx, failure: { kind, reason, stacktrace }] = test
              exception_type = reason.__record__(:name)
 
@@ -100,10 +100,9 @@ defmodule Amrita.Formatter.ProgressCreator do
             IO.write "\n\n"
             print_time(run_us, load_us)
 
-
             IO.write success("#{counter} facts, ")
             if !Enum.empty?(pending_failures) do
-              IO.write pending("#{Enum.count(pending_failures)} pending, ")
+              IO.write success("#{Enum.count(pending_failures)} pending, ")
             end
             IO.write success "0 failures"
             IO.write "\n"
@@ -127,12 +126,12 @@ defmodule Amrita.Formatter.ProgressCreator do
             print_time(run_us, load_us)
 
             num_fails = num_fails - 1
-            message = "#{counter} facts, " 
-            
+            message = "#{counter} facts, "
+
             if(num_pending > 0) do
               message = message <> "#{num_pending} pending, "
-            end 
-            
+            end
+
             message = message <> "#{num_fails} failures"
             if num_invalids > 0, do: message = message <>  ", #{num_invalids} invalid"
             cond do
@@ -409,7 +408,7 @@ defmodule Amrita.Formatter.ProgressCreator do
             IO.puts format_time(run_us, load_us)
             IO.write success("#{counter} facts, ")
             if num_pending > 0 do
-              IO.write pending("#{num_pending} pending, ")
+              IO.write success("#{num_pending} pending, ")
             end
             IO.write success "0 failures"
             IO.write "\n"
@@ -468,7 +467,7 @@ defmodule Amrita.Formatter.Progress do
 
   import Amrita.Formatter.ProgressCreator
   define_progress_formatter
-  
+
   defp print_test_pending(test, acc, cwd) do
     IO.puts Amrita.Formatter.Formatter.format_test_pending(test, acc + 1, cwd, function(pending_formatter/2))
     acc + 1
