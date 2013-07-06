@@ -5,7 +5,7 @@ defmodule Amrita.Formatter.Formatter do
   Receives a pending test and formats it.
   """
   def format_test_pending(ExUnit.Test[] = test, counter, cwd, color) do
-    ExUnit.Test[case: test_case, name: test, failure: { kind, _, stacktrace }] = test
+    ExUnit.Test[case: test_case, name: test, failure: { kind, reason, stacktrace }] = test
 
     test_info("#{counter})", color) <>
       error_info("#{reason.message}", color) <>
