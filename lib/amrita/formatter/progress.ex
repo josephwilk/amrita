@@ -261,18 +261,6 @@ defmodule Amrita.Formatter.ProgressCreator do
 
           # Print styles
 
-          defp success(msg) do
-            IO.ANSI.escape("%{green}" <>  msg)
-          end
-
-          defp invalid(msg) do
-            IO.ANSI.escape("%{yellow}" <>  msg)
-          end
-
-          defp failure(msg) do
-            IO.ANSI.escape("%{red}" <>  msg)
-          end
-
           defp error_info(msg) do
             IO.ANSI.escape("%{red}     " <> msg)
           end
@@ -460,6 +448,12 @@ defmodule Amrita.Formatter.ProgressCreator do
             acc + 1
           end
 
+          # Color styles
+
+          defp formatter(:error_info, msg),    do: colorize("red", msg)
+          defp formatter(:location_info, msg), do: colorize("cyan", msg)
+          defp formatter(_,  msg),             do: msg
+
       end
     end
   end
@@ -495,10 +489,6 @@ defmodule Amrita.Formatter.Progress do
   end
 
   # Color styles
-
-  defp formatter(:error_info, msg),    do: colorize("red", msg)
-  defp formatter(:location_info, msg), do: colorize("cyan", msg)
-  defp formatter(_,  msg),             do: msg
 
   defp pending_formatter(:error_info, msg),    do: colorize("yellow", msg)
   defp pending_formatter(:location_info, msg), do: colorize("cyan", msg)
