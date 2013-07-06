@@ -253,7 +253,13 @@ Hacking on Amrita.
 
 ###Running tests
 
+Elixir runs tests Elixirs latest stable release and against Elixir master. Make is your friend for running these tests:
+
 ```
+#Run lastest stable and elixir master
+make ci
+
+#Run tests against your current Elixir install 
 make
 ```
 
