@@ -97,8 +97,12 @@ defmodule Amrita.Formatter.ProgressCreator do
           end
 
           defp print_suite(counter, [], [], pending_failures, run_us, load_us) do
-            Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2, File.cwd!)
             IO.write "\n\n"
+            if !Enum.empty?(pending_failures) do
+              IO.write "Pending:\n\n"
+              Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2, File.cwd!)
+            end
+
             print_time(run_us, load_us)
 
             IO.write success("#{counter} facts, ")
