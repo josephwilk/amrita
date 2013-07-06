@@ -486,10 +486,6 @@ defmodule Amrita.Formatter.Progress do
     colorize("green", msg)
   end
 
-  defp pending(msg) do
-    invalid(msg)
-  end
-
   defp invalid(msg) do
     colorize("yellow", msg)
   end
