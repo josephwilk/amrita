@@ -2,5 +2,3 @@ language: erlang
 script: make ci
 otp_release:
   - R16B
-before_install:
-  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
