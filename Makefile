@@ -26,7 +26,7 @@ test_0_9_3:
 
 test_master:
 	rm -rf vendor/*
-	cd vendor && git clone git@github.com:elixir-lang/elixir.git
+	cd vendor && git clone https://github.com/elixir-lang/elixir.git 
 	cd vendor/elixir && make
 	echo ${shell ${PWD}/vendor/elixir/bin/elixir --version}
 	PATH="${PATH}:${PWD}/vendor/elixir/bin" make
