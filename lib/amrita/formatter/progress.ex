@@ -1,4 +1,6 @@
 defmodule Amrita.Formatter.ProgressCreator do
+  @moduledoc false
+  
   def elixir_version do
     elixir_version = String.split(System.version, %r"[\.-]")
     Enum.map elixir_version, fn x -> if x != "dev", do: binary_to_integer(x) end
@@ -468,7 +470,7 @@ defmodule Amrita.Formatter.Progress do
   define_progress_formatter
 
   defp print_test_pending(test, acc, cwd) do
-    IO.puts Amrita.Formatter.Formatter.format_test_pending(test, acc + 1, cwd, function(pending_formatter/2))
+    IO.puts Amrita.Formatter.Format.format_test_pending(test, acc + 1, cwd, function(pending_formatter/2))
     acc + 1
   end
 
