@@ -210,7 +210,7 @@ Or if you want more details try with the Pretty formatter:
 
 ```
 mix test --trace
-``
+```
 
 ##Custom checkers
 
