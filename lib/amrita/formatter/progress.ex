@@ -1,16 +1,9 @@
 defmodule Amrita.Formatter.ProgressCreator do
   @moduledoc false
 
-  def elixir_version do
-    elixir_version = String.split(System.version, %r"[\.-]")
-    Enum.map elixir_version, fn x -> if x != "dev", do: binary_to_integer(x) end
-  end
-
   @doc false
   defmacro define_progress_formatter do
-    if Enum.fetch!(elixir_version, 0) <= 0 &&
-       Enum.fetch!(elixir_version, 1) <= 9 &&
-       Enum.fetch!(elixir_version, 2) <= 3 do
+    if Amrita.Elixir.Version.less_than([0, 9, 3]) do
       quote do
        @behaviour ExUnit.Formatter
           @timeout 30_000
