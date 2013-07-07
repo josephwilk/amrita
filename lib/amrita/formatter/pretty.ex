@@ -1,8 +1,8 @@
-if Amrita.Elixir.Version.less_than([0, 9, 3]) do
+if Amrita.Elixir.Version.less_than_or_equal?([0, 9, 3]) do
   defmodule Amrita.Formatter.Pretty do
     defexception Amrita.VersionError, message: ""  do
     end
-    
+
     def suite_started(_) do
       raise Amrita.VersionError, message: "Pretty formatter is not supported for <= 0.9.3"
     end

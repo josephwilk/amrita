@@ -3,7 +3,7 @@ defmodule Amrita.Formatter.ProgressCreator do
 
   @doc false
   defmacro define_progress_formatter do
-    if Amrita.Elixir.Version.less_than([0, 9, 3]) do
+    if Amrita.Elixir.Version.less_than_or_equal?([0, 9, 3]) do
       quote do
        @behaviour ExUnit.Formatter
           @timeout 30_000
