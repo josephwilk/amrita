@@ -15,7 +15,7 @@ else
 
       import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 4, format_test_case_failure: 4]
 
-      defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0,
+      defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0, scope: HashDict.new,
                         test_failures: [], case_failures: [], pending_failures: []
 
       ## Behaviour
@@ -62,13 +62,39 @@ else
       end
 
       def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
-        IO.write("  * #{trace_test_name test}")
+        name = trace_test_name(test)
+        name_parts = String.split(name, ":")
+        scope = Enum.at(name_parts, 0)
+        
+        if(Enum.count(name_parts) > 1) do
+          if !HashDict.has_key?(config.scope, scope) do
+            IO.write("\n")
+            Enum.each 0..Enum.count(name_parts)-2, fn n -> 
+              Enum.each 0..n, fn _ -> IO.write("  ") end
+              IO.write(Enum.at(name_parts, n))
+              IO.write("\n")
+            end
+
+            config = config.update_scope fn s -> HashDict.put(s, scope, []) end
+          end
+        end
+
         { :noreply, config }
       end
 
       def handle_cast({ :test_finished, ExUnit.Test[failure: nil] = test }, config) do
-        IO.puts success("\r  * #{trace_test_name test}")
-        { :noreply, config.update_tests_counter(&1 + 1) }
+        name = trace_test_name(test)
+        name_parts = String.split(name, ":")
+
+        if(Enum.count(name_parts) > 1) do
+          Enum.each 0..Enum.count(name_parts)-1, fn n -> IO.write "  " end
+          IO.write success("*#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+          
+          { :noreply, config.update_tests_counter(&1 + 1) }          
+        else
+          IO.puts success("\r  * #{trace_test_name test}")
+          { :noreply, config.update_tests_counter(&1 + 1) }
+        end
       end
 
       def handle_cast({ :test_finished, ExUnit.Test[failure: { :invalid, _ }] = test }, config) do
@@ -108,6 +134,7 @@ else
       end
 
       defp trace_test_name(ExUnit.Test[name: name]) do
+
         case atom_to_binary(name) do
           "test_" <> rest -> rest
           "test " <> rest -> rest
