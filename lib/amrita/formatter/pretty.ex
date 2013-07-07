@@ -11,7 +11,7 @@ defmodule Amrita.Formatter.Pretty do
     ## Behaviour
 
     def suite_started(opts) do
-      { :ok, pid } = :gen_server.start_link(__MODULE__, opts[:trace], [])
+      { :ok, pid } = :gen_server.start_link(__MODULE__, [], [])
       pid
     end
 
@@ -37,7 +37,7 @@ defmodule Amrita.Formatter.Pretty do
 
     ## Callbacks
 
-    def init(trace) do
+    def init(_) do
       { :ok, Config[] }
     end
 
