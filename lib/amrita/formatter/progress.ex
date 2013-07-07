@@ -358,7 +358,11 @@ defmodule Amrita.Formatter.ProgressCreator do
             exception_type = reason.__record__(:name)
 
             if exception_type == Elixir.Amrita.FactPending do
-              IO.write invalid("P")
+              if config.trace do
+                IO.puts invalid("\r  * #{trace_test_name test}")
+              else
+                IO.write invalid("P")
+              end
               { :noreply, config.update_pending_counter(&1 + 1).
                 update_pending_failures([test|&1]) }
             else
