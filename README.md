@@ -206,6 +206,12 @@ Use mix to run your tests:
 mix test
 ```
 
+Or if you want more details try with the Pretty formatter:
+
+```
+mix test --trace
+``
+
 ##Custom checkers
 
 Its simple to create your own checkers:
