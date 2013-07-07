@@ -1,6 +1,6 @@
 defmodule Amrita.Formatter.ProgressCreator do
   @moduledoc false
-  
+
   def elixir_version do
     elixir_version = String.split(System.version, %r"[\.-]")
     Enum.map elixir_version, fn x -> if x != "dev", do: binary_to_integer(x) end
@@ -354,7 +354,7 @@ defmodule Amrita.Formatter.ProgressCreator do
           end
 
           def handle_cast({ :test_finished, test }, config) do
-            ExUnit.Test[case: test_casex, name: testx, failure: { kind, reason, stacktrace }] = test
+            ExUnit.Test[case: _test_case, name: _test, failure: { kind, reason, stacktrace }] = test
             exception_type = reason.__record__(:name)
 
             if exception_type == Elixir.Amrita.FactPending do
