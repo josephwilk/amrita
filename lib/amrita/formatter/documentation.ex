@@ -196,7 +196,7 @@ else
       end
 
       defp print_indent(name_parts) do
-        Enum.each 0..Enum.count(name_parts)-1, fn n -> IO.write "  " end
+        Enum.each 0..Enum.count(name_parts)-1, fn _ -> IO.write "  " end
       end
 
       defp new_scope(config, name_parts) do
