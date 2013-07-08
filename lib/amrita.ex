@@ -7,9 +7,15 @@ defmodule Amrita do
   Start Amrita for a test run.
 
   This should be called in your test_helper.exs file.
+
+  Supports optional config:
+
+    * Amrita.start(formatter: Amrita.Foramtter.Pretty)   # Use a custom formatter. Defaults to Progress formatter.
+
   """
-  def start do
-    ExUnit.start formatter: Amrita.Formatter.Progress
+  def start(opts // []) do
+    formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
+    ExUnit.start formatter: formatter
   end
 
   @doc """
