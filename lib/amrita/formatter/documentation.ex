@@ -1,14 +1,14 @@
 if Amrita.Elixir.Version.less_than_or_equal?([0, 9, 3]) do
-  defmodule Amrita.Formatter.Pretty do
+  defmodule Amrita.Formatter.Documentation do
     defexception Amrita.VersionError, message: ""  do
     end
 
     def suite_started(_) do
-      raise Amrita.VersionError, message: "Pretty formatter is not supported for <= 0.9.3"
+      raise Amrita.VersionError, message: "Documentation formatter is not supported for <= 0.9.3"
     end
   end
 else
-  defmodule Amrita.Formatter.Pretty do
+  defmodule Amrita.Formatter.Documentation do
       @behaviour ExUnit.Formatter
       @timeout 30_000
       use GenServer.Behaviour
@@ -62,19 +62,9 @@ else
       end
 
       def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
-        name = trace_test_name(test)
-        name_parts = String.split(name, ":")
-        scope = Enum.at(name_parts, 0)
-        
-        if(Enum.count(name_parts) > 1) do
-          if !HashDict.has_key?(config.scope, scope) do
-            IO.write("\n")
-            Enum.each 0..Enum.count(name_parts)-2, fn n -> 
-              Enum.each 0..n, fn _ -> IO.write("  ") end
-              IO.write(Enum.at(name_parts, n))
-              IO.write("\n")
-            end
-
+        if(name_parts = scoped(test)) do
+          if(scope = new_scope(config, name_parts)) do
+            print_scopes(name_parts)
             config = config.update_scope fn s -> HashDict.put(s, scope, []) end
           end
         end
@@ -83,22 +73,19 @@ else
       end
 
       def handle_cast({ :test_finished, ExUnit.Test[failure: nil] = test }, config) do
-        name = trace_test_name(test)
-        name_parts = String.split(name, ":")
+        if(name_parts = scoped(test)) do
+          print_indent(name_parts)
+          IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
 
-        if(Enum.count(name_parts) > 1) do
-          Enum.each 0..Enum.count(name_parts)-1, fn n -> IO.write "  " end
-          IO.write success("*#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
-          
-          { :noreply, config.update_tests_counter(&1 + 1) }          
+          { :noreply, config.update_tests_counter(&1 + 1) }
         else
-          IO.puts success("\r  * #{trace_test_name test}")
+          IO.puts success("\r  #{trace_test_name test}")
           { :noreply, config.update_tests_counter(&1 + 1) }
         end
       end
 
       def handle_cast({ :test_finished, ExUnit.Test[failure: { :invalid, _ }] = test }, config) do
-        IO.puts invalid("\r  * #{trace_test_name test}")
+        IO.puts invalid("\r  #{trace_test_name test}")
         { :noreply, config.update_tests_counter(&1 + 1).update_invalid_counter(&1 + 1) }
       end
 
@@ -107,11 +94,11 @@ else
         exception_type = reason.__record__(:name)
 
         if exception_type == Elixir.Amrita.FactPending do
-          IO.puts invalid("\r  * #{trace_test_name test}")
+          IO.puts invalid("\r  #{trace_test_name test}")
           { :noreply, config.update_pending_counter(&1 + 1).
           update_pending_failures([test|&1]) }
         else
-          IO.puts failure("\r  * #{trace_test_name test}")
+          IO.puts failure("\r  #{trace_test_name test}")
         { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
         end
       end
@@ -198,6 +185,34 @@ else
       defp print_test_case_failure(test_case, acc, cwd) do
         IO.puts format_test_case_failure(test_case, acc + 1, cwd, function(formatter/2))
         acc + 1
+      end
+
+      defp print_scopes(name_parts) do
+        Enum.each 0..Enum.count(name_parts)-2, fn n ->
+          Enum.each 0..n, fn _ -> IO.write("  ") end
+          IO.write(Enum.at(name_parts, n))
+          IO.write("\n")
+        end
+      end
+
+      defp print_indent(name_parts) do
+        Enum.each 0..Enum.count(name_parts)-1, fn n -> IO.write "  " end
+      end
+
+      defp new_scope(config, name_parts) do
+        scope = Enum.take(name_parts, Enum.count(name_parts)-1)
+        scope = Enum.join(scope, ".")
+        if !HashDict.has_key?(config.scope, scope) do
+          scope
+        end
+      end
+
+      defp scoped(test) do
+        name = trace_test_name(test)
+        name_parts = String.split(name, ":")
+        if Enum.count(name_parts) > 1 do
+          name_parts
+        end
       end
 
       # Color styles
