@@ -3,14 +3,17 @@ defmodule Amrita.Mixfile do
 
   def project do
     [app: :amrita,
-     version: "0.1.3",
+     version: version,
      name: "Amrita",
      source_url: "https://github.com/josephwilk/amrita",
      homepage_url: "http://amrita.io",
      env: [test: [deps: deps],
            dev:  [deps: deps ++ dev_deps]],
-           prod: [deps: deps],
      deps: deps]
+  end
+
+  def version do
+    String.strip(File.read!("VERSION"))
   end
 
   def application do

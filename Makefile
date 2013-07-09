@@ -1,6 +1,7 @@
 VENDORED_ELIXIR=${PWD}/vendor/elixir/bin/elixir
 VENDORED_MIX=${PWD}/vendor/elixir/bin/mix
 RUN_VENDORED_MIX=${VENDORED_ELIXIR} ${VENDORED_MIX}
+VERSION := $(strip $(shell cat VERSION))
 
 .PHONY: all test
 
@@ -16,7 +17,7 @@ docs:
 	MIX_ENV=dev mix deps.get
 	git checkout gh-pages && git pull --rebase && git rm -rf docs && git commit -m "remove old docs"
 	git checkout master
-	elixir -pa ebin deps/ex_doc/bin/ex_doc "Amrita" "0.1.3" -u "https://github.com/josephwilk/amrita"
+	elixir -pa ebin deps/ex_doc/bin/ex_doc "Amrita" "${VERSION}" -u "https://github.com/josephwilk/amrita"
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
