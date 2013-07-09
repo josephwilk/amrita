@@ -16,19 +16,23 @@ docs:
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
-ci: test_0_9_3 test_master
+ci: ci_0_9_3 ci_master
 
-test_0_9_3:
+ci_0_9_3:
 	rm -rf vendor/*
 	mkdir -p vendor/elixir
 	wget --no-clobber -q http://dl.dropbox.com/u/4934685/elixir/v0.9.3.zip && unzip -qq v0.9.3.zip -d vendor/elixir
 	${PWD}/vendor/elixir/bin/elixir --version
 	PATH="${PATH}:${PWD}/vendor/elixir/bin" make
 
-test_master:
+ci_master:
 	rm -rf vendor/*
 	mkdir -p vendor/elixir
 	cd vendor && git clone https://github.com/elixir-lang/elixir.git
 	cd vendor/elixir && make
+	${PWD}/vendor/elixir/bin/elixir --version
+	PATH="${PATH}:${PWD}/vendor/elixir/bin" make
+
+test_vendored:
 	${PWD}/vendor/elixir/bin/elixir --version
 	PATH="${PATH}:${PWD}/vendor/elixir/bin" make
