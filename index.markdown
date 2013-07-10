@@ -103,8 +103,8 @@ defmodule Polite do
 end
 
 fact "mocking the swear function to be true" do
-  provided [MocksTest.Polite.swear? |> true] do
-    Polite.swear? |> truthy
+  provided: [MocksTest.Polite.swear(anything)? |> true] do
+    Polite.swear("balderdash")? |> truthy
   end
 end
 ```
@@ -223,7 +223,7 @@ Add to your mix.exs
 ```elixir
   defp deps do
     [
-      {:amrita, "0.1.2", github: "josephwilk/amrita"}
+      {:amrita, "0.1.4", github: "josephwilk/amrita"}
     ]
   end
 ```
