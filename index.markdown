@@ -103,7 +103,7 @@ defmodule Polite do
 end
 
 fact "mocking the swear function to be true" do
-  provided: [MocksTest.Polite.swear(anything)? |> true] do
+  provided [MocksTest.Polite.swear(anything)? |> true] do
     Polite.swear("balderdash")? |> truthy
   end
 end
