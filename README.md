@@ -31,11 +31,9 @@ Ensure you start Amrita in: test/test_helper.exs
 Amrita.start
 ```
 
-Create a new test file ending with "_test.exs".
-
-Require test_helper.exs in every test (this will ensure Amrita is started):
-
-Mix in `Amrita.Sweet` which will bring in everything you need to use Amrita:
+ * Test filenames must end with "_test.exs".
+ * Require test_helper.exs in every test (this will ensure Amrita is started):
+ * Mix in `Amrita.Sweet` which will bring in everything you need to use Amrita:
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
@@ -43,9 +41,8 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule ExampleFacts do
   use Amrita.Sweet
 
-  #If you want to use Amritas Mocks add:
+  # Write some facts here
 
-  use Amrita.Mocks
 end
 ```
 
