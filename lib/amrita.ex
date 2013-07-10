@@ -56,6 +56,7 @@ defmodule Amrita do
         import Amrita.Checkers.Simple
         import Amrita.Checkers.Collection
         import Amrita.Checkers.Exceptions
+        import Amrita.Checkers.Messages
       end
     end
   end
@@ -428,6 +429,28 @@ defmodule Amrita do
     def :!.(actual, value) do
       value |> ! equals actual
     end
+  end
+
+  defmodule Checkers.Messages do
+    @moduledoc """
+    Checkers which ease the work with messages
+    """
+
+    @doc """
+    Echos the recieved value to be checked
+
+    ## Examples
+        self <- :hello
+        received |> :hello
+
+    """
+    def received do
+      receive do
+        other -> other
+      end
+    end
+  end
+
   end
 
   defmodule Checkers.Collection do
