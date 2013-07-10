@@ -13,7 +13,7 @@ Add to your mix.exs
 ```elixir
   defp deps do
     [
-      {:amrita, "0.1.3", github: "josephwilk/amrita"}
+      {:amrita, "0.1.4", github: "josephwilk/amrita"}
     ]
   end
 ```
@@ -259,14 +259,14 @@ Hacking on Amrita.
 
 ###Running tests
 
-Amrita runs tests against Elixir's latest stable release and against Elixir master. 
+Amrita runs tests against Elixir's latest stable release and against Elixir master.
 Make is your friend for running these tests:
 
 ```
 #Run lastest stable and elixir master
 make ci
 
-#Run tests against your current Elixir install 
+#Run tests against your current Elixir install
 make
 ```
 
