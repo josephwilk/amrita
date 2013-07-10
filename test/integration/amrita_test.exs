@@ -206,7 +206,7 @@ defmodule AmritaFacts do
       self <- :hello
     end
 
-    future_fact "received" do
+    fact "received" do
       self <- :hello
       received |> :hello
     end
