@@ -51,6 +51,7 @@ defmodule Amrita do
         import Amrita.Elixir.Pipeline
 
         use Amrita.Facts
+        use Amrita.Mocks
         import Amrita.Describes
 
         import Amrita.Checkers.Simple
