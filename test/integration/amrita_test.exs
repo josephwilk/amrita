@@ -53,6 +53,14 @@ defmodule AmritaFacts do
       end
     end
 
+    fact "|> defaults to equality when given an atom" do
+      :hello |> :hello
+
+      fail "|>" do
+        :hello |> :bye
+      end
+    end
+
     fact "about odd" do
       1 |> odd
 
