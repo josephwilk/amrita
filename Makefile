@@ -32,8 +32,8 @@ vendor_$(ELIXIR_VERSION):
 vendor_master:
 	@rm -rf vendor/*
 	@mkdir -p vendor/elixir
-	git clone https://github.com/elixir-lang/elixir.git vendor/elixir
-	make --quiet -C vendor/elixir
+	git clone --quiet https://github.com/elixir-lang/elixir.git vendor/elixir
+	make --quiet -C vendor/elixir > /dev/null 2>&1
 
 ci_master: vendor_master
 	@${VENDORED_ELIXIR} --version
