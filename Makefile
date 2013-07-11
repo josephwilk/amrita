@@ -25,24 +25,24 @@ docs:
 ci: ci_$(ELIXIR_VERSION) ci_master
 
 vendor_$(ELIXIR_VERSION):
-	rm -rf vendor/*
-	mkdir -p vendor/elixir
-	wget --no-clobber -q http://dl.dropbox.com/u/4934685/elixir/v$(ELIXIR_VERSION).zip && unzip -qq v$(ELIXIR_VERSION).zip -d vendor/elixir
+	@rm -rf vendor/*
+	@mkdir -p vendor/elixir
+	@wget --no-clobber -q http://dl.dropbox.com/u/4934685/elixir/v$(ELIXIR_VERSION).zip && unzip -qq v$(ELIXIR_VERSION).zip -d vendor/elixir
 
 vendor_master:
-	rm -rf vendor/*
-	mkdir -p vendor/elixir
-	cd vendor && git clone https://github.com/elixir-lang/elixir.git
-	cd vendor/elixir && make
+	@rm -rf vendor/*
+	@mkdir -p vendor/elixir
+	git clone https://github.com/elixir-lang/elixir.git vendor/elixir
+	make --quiet -C vendor/elixir
 
 ci_master: vendor_master
-	${VENDORED_ELIXIR} --version
-	MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
+	@${VENDORED_ELIXIR} --version
+	@MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
 
 ci_$(ELIXIR_VERSION): vendor_$(ELIXIR_VERSION)
-	${VENDORED_ELIXIR} --version
-	MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
+	@${VENDORED_ELIXIR} --version
+	@MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
 
 test_vendored:
-	${VENDORED_ELIXIR} --version
-	MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
+	@${VENDORED_ELIXIR} --version
+	@MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
