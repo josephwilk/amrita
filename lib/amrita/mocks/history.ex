@@ -1,4 +1,4 @@
-defmodule History do
+defmodule Amrita.Mocks.History do
 
   def matches(module, fun) do
     Enum.filter fn_invocations(module), fn { m, f, _a } ->

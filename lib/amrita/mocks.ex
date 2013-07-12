@@ -75,7 +75,7 @@ defmodule Amrita.Mocks do
                 false -> [Error.new(module: module,
                                     fun: fun,
                                     args: args,
-                                    history: History.matches(module, fun))]
+                                    history: Amrita.Mocks.History.matches(module, fun))]
                 _     -> []
               end
               List.concat(message_list, message)
