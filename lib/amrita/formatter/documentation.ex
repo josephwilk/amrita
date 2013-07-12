@@ -93,12 +93,25 @@ else
         ExUnit.Test[case: _test_case, name: _test, failure: { _, reason, _ }] = test
         exception_type = reason.__record__(:name)
 
+        name_parts = scoped(test)
+        if(name_parts) do
+          print_indent(name_parts)
+        end
+
         if exception_type == Elixir.Amrita.FactPending do
-          IO.puts invalid("\r  #{trace_test_name test}")
+          if(name_parts) do
+            IO.write pending(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+          else
+            IO.puts  pending("  #{trace_test_name test}")
+          end
           { :noreply, config.update_pending_counter(&1 + 1).
           update_pending_failures([test|&1]) }
         else
-          IO.puts failure("\r  #{trace_test_name test}")
+          if(name_parts) do
+            IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+          else
+            IO.puts  failure("  #{trace_test_name test}")
+          end
         { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
         end
       end
@@ -226,6 +239,10 @@ else
       end
 
       defp invalid(msg) do
+        colorize("yellow", msg)
+      end
+
+      defp pending(msg) do
         colorize("yellow", msg)
       end
 
