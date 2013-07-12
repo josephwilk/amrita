@@ -10,7 +10,8 @@ defmodule Amrita do
 
   Supports optional config:
 
-    * Amrita.start(formatter: Amrita.Formatter.Documentation)   # Use a custom formatter. Defaults to Progress formatter.
+      # Use a custom formatter. Defaults to Progress formatter.
+      Amrita.start(formatter: Amrita.Formatter.Documentation)
 
   """
   def start(opts // []) do
