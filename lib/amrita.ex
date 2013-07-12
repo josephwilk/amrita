@@ -443,7 +443,7 @@ defmodule Amrita do
     """
 
     @doc """
-    Echos the recieved value to be checked
+    returns the received message with parameters
 
     ## Examples
         self <- :hello
