@@ -28,5 +28,9 @@ defmodule Support do
 
 end
 
-Amrita.start
+if Amrita.Elixir.Version.less_than_or_equal?([0, 9, 3]) do
+  Amrita.start
+else
+  Amrita.start(formatter: Amrita.Formatter.Documentation)
+end
 
