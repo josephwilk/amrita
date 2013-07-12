@@ -202,7 +202,7 @@ defmodule Amrita do
     end
 
     def mock_fail(errors) do
-      raise Amrita.FactError, mock_fail: true, errors: errors
+      raise Amrita.MockError, errors: errors
     end
 
     def pending(message) do
@@ -260,7 +260,7 @@ defmodule Amrita do
         error ->
           name = error.__record__(:name)
 
-          if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError] do
+          if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError, Amrita.MockError] do
             raise(error)
           else
             failed_exception_match(error, expected_exception)
@@ -425,7 +425,7 @@ defmodule Amrita do
       r = try do
         checker.(actual)
       rescue
-        error in [Amrita.FactError, ExUnit.AssertionError] -> false
+        error in [Amrita.FactError, Amrita.MockError, ExUnit.AssertionError] -> false
         error -> raise(error)
       end
 
@@ -608,7 +608,7 @@ defmodule Amrita do
           fun.(value)
           true
         rescue
-          [Amrita.FactError, ExUnit.AssertionError] -> false
+          [Amrita.FactError, Amrita.MockError, ExUnit.AssertionError] -> false
         end
       end)))
 

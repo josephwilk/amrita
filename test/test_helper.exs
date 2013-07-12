@@ -21,7 +21,7 @@ defmodule Support do
         unquote(contents)
         raise FactDidNotFail, name: unquote(name)
         rescue
-          Amrita.FactError ->
+          error in [Amrita.FactError, Amrita.MockError] ->
       end
     end
   end
