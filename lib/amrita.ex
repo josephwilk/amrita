@@ -201,11 +201,6 @@ defmodule Amrita do
                               predicate: checker
     end
 
-    def fail(message, {checker, _}) do
-      raise Amrita.FactError, predicate: checker,
-                              expected: message
-    end
-
     def pending(message) do
       raise Amrita.FactPending, message: message
     end
