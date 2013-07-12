@@ -22,12 +22,12 @@ docs:
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
-ci: ci_$(ELIXIR_VERSION) ci_master
+ci: ci_${ELIXIR_VERSION} ci_master
 
-vendor_$(ELIXIR_VERSION):
+vendor_${ELIXIR_VERSION}:
 	@rm -rf vendor/*
 	@mkdir -p vendor/elixir
-	@wget --no-clobber -q http://dl.dropbox.com/u/4934685/elixir/v$(ELIXIR_VERSION).zip && unzip -qq v$(ELIXIR_VERSION).zip -d vendor/elixir
+	@wget --no-clobber -q http://dl.dropbox.com/u/4934685/elixir/v${ELIXIR_VERSION}.zip && unzip -qq v${ELIXIR_VERSION}.zip -d vendor/elixir
 
 vendor_master:
 	@rm -rf vendor/*
@@ -39,7 +39,7 @@ ci_master: vendor_master
 	@${VENDORED_ELIXIR} --version
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
 
-ci_$(ELIXIR_VERSION): vendor_$(ELIXIR_VERSION)
+ci_$(ELIXIR_VERSION): vendor_${ELIXIR_VERSION}
 	@${VENDORED_ELIXIR} --version
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
 
