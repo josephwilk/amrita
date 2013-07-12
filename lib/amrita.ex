@@ -201,6 +201,10 @@ defmodule Amrita do
                               predicate: checker
     end
 
+    def mock_fail(errors) do
+      raise Amrita.FactError, mock_fail: true, errors: errors
+    end
+
     def pending(message) do
       raise Amrita.FactPending, message: message
     end

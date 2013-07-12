@@ -14,6 +14,7 @@ defmodule Amrita.Mocks do
   end
 
   defmodule Provided do
+    defrecord Error, module: nil, fun: nil, args: nil, history: []
 
     @doc """
     Adds prerequisites to a test.
@@ -71,7 +72,10 @@ defmodule Amrita.Mocks do
                                               end
                                     end
               message = case :meck.called(module, fun, args) do
-                false -> [Amrita.Checker.to_s(module, fun, args) <> " called 0 times."]
+                false -> [Error.new(module: module,
+                                    fun: fun,
+                                    args: args,
+                                    history: History.matches(module, fun))]
                 _     -> []
               end
               List.concat(message_list, message)
@@ -81,8 +85,10 @@ defmodule Amrita.Mocks do
 
           :meck.unload(unquote(mock_modules))
 
-          if not(Enum.empty?(errors)), do: Amrita.Message.fail("#{errors}",
-                                                              "Expected atleast once", {"called", ""})
+          if not(Enum.empty?(errors)) do
+            Amrita.Message.mock_fail(errors)
+          end
+
         end
       end
     end
