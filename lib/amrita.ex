@@ -452,8 +452,6 @@ defmodule Amrita do
     end
   end
 
-  end
-
   defmodule Checkers.Collection do
     @moduledoc """
     Checkers which are designed to work with collections (lists, tuples, keyword lists, strings)
