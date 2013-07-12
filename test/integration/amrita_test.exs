@@ -53,6 +53,14 @@ defmodule AmritaFacts do
       end
     end
 
+    fact "|> defaults to equality when given an atom" do
+      :hello |> :hello
+
+      fail "|>" do
+        :hello |> :bye
+      end
+    end
+
     fact "about odd" do
       1 |> odd
 
@@ -198,7 +206,7 @@ defmodule AmritaFacts do
       self <- :hello
     end
 
-    future_fact "received" do
+    fact "received" do
       self <- :hello
       received |> :hello
     end
