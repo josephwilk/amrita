@@ -200,6 +200,11 @@ defmodule Amrita do
                               predicate: checker
     end
 
+    def fail(message, {checker, _}) do
+      raise Amrita.FactError, predicate: checker,
+                              expected: message
+    end
+
     def pending(message) do
       raise Amrita.FactPending, message: message
     end
@@ -446,8 +451,12 @@ defmodule Amrita do
 
     """
     def received do
+      timeout = 0
       receive do
         other -> other
+      after
+        timeout ->
+          Message.fail("Expected to have received message", __ENV__.function)
       end
     end
   end

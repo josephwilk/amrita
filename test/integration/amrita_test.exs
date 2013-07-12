@@ -209,6 +209,20 @@ defmodule AmritaFacts do
     fact "received" do
       self <- :hello
       received |> :hello
+
+      fail "wrong match" do
+        self <- :sod
+        received |> :hello
+      end
+
+      fail "never received message" do
+        received |> :hello
+      end
+    end
+
+    future_fact "received with paramters" do
+      self <- { :hello, "sir" }
+      received |> { :hello, _ }
     end
   end
 
