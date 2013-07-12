@@ -37,12 +37,13 @@ vendor_master:
 
 ci_master: vendor_master
 	@${VENDORED_ELIXIR} --version
-	@MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
+	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
 
 ci_$(ELIXIR_VERSION): vendor_$(ELIXIR_VERSION)
 	@${VENDORED_ELIXIR} --version
-	@MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
+	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
 
 test_vendored:
 	@${VENDORED_ELIXIR} --version
-	@MIX_ENV=test ${RUN_VENDORED_MIX} do deps.get, test
+	@${RUN_VENDORED_MIX} clean
+	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
