@@ -10,12 +10,11 @@ defmodule Amrita.Mocks do
 
   defmacro __using__(_ // []) do
     quote do
-      import Amrita.Mocks.Provided
+      import Amrita.Mocks.ProvidedDsl
     end
   end
 
-  defmodule Provided do
-    defrecord Error, module: nil, fun: nil, args: nil, history: []
+  defmodule ProvidedDsl do
 
     @doc """
     Adds prerequisites to a test.
@@ -39,7 +38,7 @@ defmodule Amrita.Mocks do
 
     """
     defmacro provided(forms, test) do
-      prerequisites = Amrita.Mocks.ParsePrerequisites.prerequisites(forms)
+      prerequisites = Amrita.Mocks.Provided.Parse.prerequisites(forms)
       mock_modules = Dict.keys(prerequisites)
       prerequisite_list = Macro.escape Dict.to_list(prerequisites)
 
@@ -62,40 +61,14 @@ defmodule Amrita.Mocks do
           end
 
         after
-          errors = Amrita.Mocks.Provided.check_all_prerequistes(prerequisites)
+          fails = Amrita.Mocks.Provided.fails(prerequisites)
           :meck.unload(unquote(mock_modules))
 
-          if not(Enum.empty?(errors)) do
-            Amrita.Message.mock_fail(errors)
+          if not(Enum.empty?(fails)) do
+            Amrita.Message.mock_fail(fails)
           end
 
         end
-      end
-    end
-
-    def check_all_prerequistes(prerequisites) do
-      errors = Enum.reduce prerequisites, [], fn {_, mocks}, all_errors ->
-        messages = Enum.reduce mocks, [], fn {module, fun, args, value}, message_list ->
-          args = Enum.map args, fn arg ->
-            case arg do
-              { :anything, _, _ } -> anything
-              _ when is_tuple(arg) ->
-                { evaled_arg, _ } = Code.eval_quoted(arg)
-                evaled_arg
-              _ -> arg
-            end
-          end
-
-          message = case :meck.called(module, fun, args) do
-            false -> [Error.new(module: module,
-                                fun: fun,
-                                args: args,
-                                history: Amrita.Mocks.History.matches(module, fun))]
-            _     -> []
-          end
-          List.concat(message_list, message)
-        end
-        List.concat(all_errors, messages)
       end
     end
 
@@ -115,7 +88,41 @@ defmodule Amrita.Mocks do
     end
   end
 
-  defmodule ParsePrerequisites do
+  defmodule Provided do
+    defrecord Error, module: nil, fun: nil, args: nil, history: []
+
+    def fails(prerequisites) do
+      Enum.reduce prerequisites, [], fn {_, mocks}, all_errors ->
+        messages = Enum.reduce mocks, [],  fn mock, message_list ->
+          List.concat(message_list, called?(mock))
+        end
+        List.concat(all_errors, messages)
+      end
+    end
+
+    defp called?({module, fun, args, _}) do
+      args = Enum.map args, function(resolve_arg/1)
+
+      case :meck.called(module, fun, args) do
+        false -> [Error.new(module: module,
+                            fun: fun,
+                            args: args,
+                            history: Amrita.Mocks.History.matches(module, fun))]
+        _     -> []
+      end
+    end
+
+    defp resolve_arg(arg) do
+      case arg do
+        { :anything, _, _ } -> Amrita.Mocks.ProvidedDsl.anything
+        _ when is_tuple(arg) -> { evaled_arg, _ } = Code.eval_quoted(arg)
+                                evaled_arg
+        _ -> arg
+      end
+    end
+  end
+
+  defmodule Provided.Parse do
     @moduledoc false
 
     def prerequisites(forms) do
