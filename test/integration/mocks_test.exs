@@ -170,7 +170,7 @@ defmodule MocksTest do
     "brandy"
   end
 
-  future_fact "mock with a function defined inside a test" do
+  fact "mock with a function defined inside a test" do
     provided [MocksTest.Funk.hip?(tiplet) |> false] do
       Funk.hip?("brandy") |> falsey
     end
