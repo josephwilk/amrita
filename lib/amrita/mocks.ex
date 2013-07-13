@@ -62,6 +62,22 @@ defmodule Amrita.Mocks do
           end
 
         after
+          prerequisites = Enum.map prerequisites, fn {meta, mocks} ->
+            new_mocks = Enum.map mocks, fn { module, fun, args, value } ->
+             new_args = Enum.map args, fn arg ->
+               case arg do
+                 { :_, _, _ }         -> anything
+                 { :anything, _, _ }  -> anything
+                 _ when is_tuple(arg) -> { evaled_arg, _ } = Code.eval_quoted(arg, [], __ENV__)
+                                         evaled_arg
+                 _                    -> arg
+               end
+             end
+             { module, fun, new_args, value }
+            end
+            {meta, new_mocks}
+          end
+
           fails = Provided.Check.fails(prerequisites)
           :meck.unload(unquote(mock_modules))
 
@@ -102,24 +118,12 @@ defmodule Amrita.Mocks do
     end
 
     defp called?({module, fun, args, _}) do
-      args = Enum.map args, function(resolve_arg/1)
-
       case :meck.called(module, fun, args) do
         false -> [Provided.Error.new(module: module,
                                      fun: fun,
                                      args: args,
                                      history: Amrita.Mocks.History.matches(module, fun))]
         _     -> []
-      end
-    end
-
-    defp resolve_arg(arg) do
-      case arg do
-        { :_, _, _ }         -> Amrita.Mocks.Provided.anything
-        { :anything, _, _ }  -> Amrita.Mocks.Provided.anything
-        _ when is_tuple(arg) -> { evaled_arg, _ } = Code.eval_quoted(arg)
-                                evaled_arg
-        _                    -> arg
       end
     end
   end
