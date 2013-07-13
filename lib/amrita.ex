@@ -20,10 +20,10 @@ defmodule Amrita do
   end
 
   @doc """
-    Polite version of start.
+  Polite version of start.
   """
-  def please_start do
-    start
+  def please_start(opts // []) do
+    start(opts)
   end
 
   defmodule Sweet do
