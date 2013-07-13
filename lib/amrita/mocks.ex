@@ -115,10 +115,11 @@ defmodule Amrita.Mocks do
 
     defp resolve_arg(arg) do
       case arg do
-        { :anything, _, _ } -> Amrita.Mocks.Provided.anything
+        { :_, _, _ }         -> Amrita.Mocks.Provided.anything
+        { :anything, _, _ }  -> Amrita.Mocks.Provided.anything
         _ when is_tuple(arg) -> { evaled_arg, _ } = Code.eval_quoted(arg)
                                 evaled_arg
-        _ -> arg
+        _                    -> arg
       end
     end
   end
