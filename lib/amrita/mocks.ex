@@ -1,6 +1,7 @@
 defmodule Amrita.Mocks do
   @moduledoc """
   Add support for prerequisites or mocks to tests.
+  Automatically imported with `use Amrita.Sweet`
 
   ## Example:
       use Amrita.Mocks
