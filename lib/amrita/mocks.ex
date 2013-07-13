@@ -62,28 +62,7 @@ defmodule Amrita.Mocks do
           end
 
         after
-          errors = Enum.reduce prerequisites, [], fn {_, mocks}, all_errors ->
-            messages = Enum.reduce mocks, [], fn {module, fun, args, value}, message_list ->
-              args = Enum.map args, fn arg -> case arg do
-                                                { :anything, _, _ } -> anything
-                                                _ when is_tuple(arg) ->
-                                                  { evaled_arg, _ } = Code.eval_quoted(arg)
-                                                  evaled_arg
-                                                _ -> arg
-                                              end
-                                    end
-              message = case :meck.called(module, fun, args) do
-                false -> [Error.new(module: module,
-                                    fun: fun,
-                                    args: args,
-                                    history: Amrita.Mocks.History.matches(module, fun))]
-                _     -> []
-              end
-              List.concat(message_list, message)
-            end
-            List.concat(all_errors, messages)
-          end
-
+          errors = Amrita.Mocks.Provided.check_all_prerequistes(prerequisites)
           :meck.unload(unquote(mock_modules))
 
           if not(Enum.empty?(errors)) do
@@ -91,6 +70,32 @@ defmodule Amrita.Mocks do
           end
 
         end
+      end
+    end
+
+    def check_all_prerequistes(prerequisites) do
+      errors = Enum.reduce prerequisites, [], fn {_, mocks}, all_errors ->
+        messages = Enum.reduce mocks, [], fn {module, fun, args, value}, message_list ->
+          args = Enum.map args, fn arg ->
+            case arg do
+              { :anything, _, _ } -> anything
+              _ when is_tuple(arg) ->
+                { evaled_arg, _ } = Code.eval_quoted(arg)
+                evaled_arg
+              _ -> arg
+            end
+          end
+
+          message = case :meck.called(module, fun, args) do
+            false -> [Error.new(module: module,
+                                fun: fun,
+                                args: args,
+                                history: Amrita.Mocks.History.matches(module, fun))]
+            _     -> []
+          end
+          List.concat(message_list, message)
+        end
+        List.concat(all_errors, messages)
       end
     end
 
