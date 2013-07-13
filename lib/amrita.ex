@@ -30,6 +30,7 @@ defmodule Amrita do
     @moduledoc """
     Responsible for loading Amrita within a test module.
 
+    ## Example:
         defmodule TestsAboutSomething do
           use Amrita.Sweet
         end
@@ -104,7 +105,7 @@ defmodule Amrita do
           ...
         end
 
-    If you are using mocks you can define them as part of your fact
+    If you are using mocks you can define them as part of your fact.
 
     ## Example
         fact "about mock", provided: [Flip.flop(:ok) |> true] do
@@ -301,7 +302,7 @@ defmodule Amrita do
     """
 
     @doc """
-    Check if actual is odd
+    Check if actual is odd.
 
     ## Example
         2 |> even ; true
@@ -314,7 +315,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Check if actual is even
+    Check if actual is even.
 
     ## Example
         2 |> even ; true
@@ -326,7 +327,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Check if `actual` evaluates to precisely true
+    Check if `actual` evaluates to precisely true.
 
     ## Example
         "mercury" |> truthy ; true
@@ -392,7 +393,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Checks if actual == expected
+    Checks if actual == expected.
 
     ## Example
         1000 |> equals 1000 ; true
@@ -439,11 +440,11 @@ defmodule Amrita do
 
   defmodule Checkers.Messages do
     @moduledoc """
-    Checkers which ease the work with messages
+    Checkers which ease the work with messages.
     """
 
     @doc """
-    returns the received message with parameters
+    Returns the received message with parameters.
 
     ## Examples
         self <- :hello
@@ -463,11 +464,11 @@ defmodule Amrita do
 
   defmodule Checkers.Collection do
     @moduledoc """
-    Checkers which are designed to work with collections (lists, tuples, keyword lists, strings)
+    Checkers which are designed to work with collections (lists, tuples, keyword lists, strings).
     """
 
     @doc """
-    Checks that the collection contains element:
+    Checks that the collection contains element.
 
     ## Examples
         [1, 2, 3] |> contains 3
@@ -498,7 +499,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Checks that the actual result starts with the expected result:
+    Checks that the actual result starts with the expected result.
 
     ## Examples
         [1 2 3] |> has_prefix  [1 2]   ; true
@@ -541,7 +542,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Checks that the actual result ends with the expected result:
+    Checks that the actual result ends with the expected result.
 
     ## Examples:
         [1 2 3] |> has_suffix [2 3]  ; true
@@ -585,7 +586,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Checks whether a predicate holds for all elements in a collection
+    Checks whether a predicate holds for all elements in a collection.
 
     ## Examples:
         [1, 3, 5, 7] |> for_all odd(&1)  ; true
@@ -596,7 +597,7 @@ defmodule Amrita do
     end
 
     @doc """
-    Checks whether a predicate holds for at least one element in a collection
+    Checks whether a predicate holds for at least one element in a collection.
 
     ## Examples:
         [2, 4, 7, 8] |> for_some odd(&1) ; true
