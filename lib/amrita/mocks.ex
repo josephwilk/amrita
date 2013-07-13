@@ -67,8 +67,7 @@ defmodule Amrita.Mocks do
              new_args = Enum.map args, fn arg ->
                case arg do
                  { :_, _, _ }         -> anything
-                 { :anything, _, _ }  -> anything
-                 {name, meta, args} when is_tuple(arg) ->
+                 {name, _meta, _args} when is_tuple(arg) ->
                    if Enum.any? __MODULE__.__info__(:functions), fn {method, arity} -> method == name && arity == 0 end do
                      apply(__MODULE__, name, [])
                    else
