@@ -147,6 +147,13 @@ defmodule MocksTest do
     end
   end
 
+  future_fact "mock with a _ wildcard" do
+    provided [MocksTest.Funk.hip?(_) |> false] do
+      Funk.hip?(:yes) |> falsey
+      Funk.hip?(:whatever) |> falsey
+    end
+  end
+
   fact "mock anything wildcard" do
     provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
       Funk.hip?(:yes, :no, :maybe) |> falsey
