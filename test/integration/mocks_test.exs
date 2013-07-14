@@ -213,7 +213,7 @@ defmodule MocksTest do
     end
   end
 
-  future_fact "mock with a return a return value as a function" do
+  future_fact "mock with a return value as a function" do
     provided [MocksTest.Funk.hip?(_) |> tiplet(2)] do
       Funk.hip?("brandy") |> "brandy2"
     end
