@@ -54,6 +54,29 @@ defmodule Amrita.Mocks do
           end
         end
 
+
+        prerequisites = Enum.map prerequisites, fn {meta, mocks} ->
+          new_mocks = Enum.map mocks, fn { module, fun, args, value } ->
+            new_args = Enum.map args, fn arg ->
+              case arg do
+                { :_, _, _ }         -> anything
+                {name, _meta, args} when is_tuple(arg) ->
+                  args = args || []
+                  if Enum.any? __MODULE__.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
+                    apply(__MODULE__, name, args)
+                  else
+                    { evaled_arg, _ } = Code.eval_quoted(arg, [], __ENV__)
+                    evaled_arg
+                  end
+                _ -> arg
+              end
+            end
+            { module, fun, new_args, value }
+          end
+          {meta, new_mocks}
+        end
+
+
         try do
           unquote(test)
 
@@ -62,27 +85,6 @@ defmodule Amrita.Mocks do
           end
 
         after
-          prerequisites = Enum.map prerequisites, fn {meta, mocks} ->
-            new_mocks = Enum.map mocks, fn { module, fun, args, value } ->
-             new_args = Enum.map args, fn arg ->
-               case arg do
-                 { :_, _, _ }         -> anything
-                 {name, _meta, args} when is_tuple(arg) ->
-                   args = args || []
-                   if Enum.any? __MODULE__.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
-                     apply(__MODULE__, name, args)
-                   else
-                     { evaled_arg, _ } = Code.eval_quoted(arg, [], __ENV__)
-                     evaled_arg
-                   end
-                 _ -> arg
-               end
-             end
-             { module, fun, new_args, value }
-            end
-            {meta, new_mocks}
-          end
-
           fails = Provided.Check.fails(prerequisites)
           :meck.unload(unquote(mock_modules))
 
