@@ -176,6 +176,15 @@ defmodule MocksTest do
     end
   end
 
+  def tiplet(count) do
+    "brandy#{count}"
+  end
+
+  fact "mock with a function with args defined inside a test" do
+    provided [MocksTest.Funk.hip?(tiplet(1)) |> false] do
+      Funk.hip?("brandy1") |> falsey
+    end
+  end
 
   fact "mock with many arguments" do
     provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
