@@ -99,7 +99,7 @@ defmodule Amrita.Mocks do
       #TODO: replace this with a macro
       Code.eval_quoted(quote do
         :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)
-      end)
+      end, [], __ENV__)
     end
 
     @doc """
