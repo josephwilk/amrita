@@ -2,8 +2,7 @@ Code.require_file "../test_helper.exs", __DIR__
 
 defmodule MocksTest do
   use Amrita.Sweet
-  use Amrita.Mocks
-
+  
   import Support
 
   defmodule Polite do
