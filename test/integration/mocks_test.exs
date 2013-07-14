@@ -186,6 +186,10 @@ defmodule MocksTest do
       provided [MocksTest.Funk.hip?(tiplet(1)) |> true] do
         Funk.hip?("brandy1") |> truthy
       end
+
+      provided [MocksTest.Funk.hip?(MocksTest.tiplet(1)) |> true] do
+        Funk.hip?("brandy1") |> truthy
+      end
     end
 
     fact "mock with many arguments" do
@@ -213,11 +217,20 @@ defmodule MocksTest do
     end
   end
 
-  future_fact "mock with a return value as a function" do
+  fact "mock with a return value as a function" do
     provided [MocksTest.Funk.hip?(_) |> tiplet(2)] do
       Funk.hip?("brandy") |> "brandy2"
     end
+
+    provided [MocksTest.Funk.hip?(_) |> tiplet] do
+      Funk.hip?("shandy") |> "brandy"
+    end
+
+    provided [MocksTest.Funk.hip?(_) |> MocksTest.tiplet] do
+      Funk.hip?("shandy") |> "brandy"
+    end
   end
+
 
   fact "mock with alternative syntax", provided: [Flip.flop(:ok) |> true] do
     Flip.flop(:ok) |> truthy

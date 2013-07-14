@@ -48,34 +48,14 @@ defmodule Amrita.Mocks do
 
         :meck.new(unquote(mock_modules), [:passthrough])
 
+        # Setup mocks
         Enum.map prerequisites, fn {_, mocks} ->
           Enum.map mocks, fn {module, fun, args, value} ->
-            unquote(__MODULE__).__add_expect__(module, fun, args, value)
+            unquote(__MODULE__).__add_expect__(module, fun, args, value, __MODULE__, __ENV__)
           end
         end
 
-
-        prerequisites = Enum.map prerequisites, fn {meta, mocks} ->
-          new_mocks = Enum.map mocks, fn { module, fun, args, value } ->
-            new_args = Enum.map args, fn arg ->
-              case arg do
-                { :_, _, _ }         -> anything
-                {name, _meta, args} when is_tuple(arg) ->
-                  args = args || []
-                  if Enum.any? __MODULE__.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
-                    apply(__MODULE__, name, args)
-                  else
-                    { evaled_arg, _ } = Code.eval_quoted(arg, [], __ENV__)
-                    evaled_arg
-                  end
-                _ -> arg
-              end
-            end
-            { module, fun, new_args, value }
-          end
-          {meta, new_mocks}
-        end
-
+        prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
 
         try do
           unquote(test)
@@ -96,12 +76,49 @@ defmodule Amrita.Mocks do
       end
     end
 
-    def __add_expect__(mock_module, fn_name, args, value) do
+    def __resolve_args__(prerequisites, target_module, env) do
+      Enum.map prerequisites, fn {meta, mocks} ->
+        new_mocks = Enum.map mocks, fn { module, fun, args, value } ->
+          new_args = Enum.map args, fn arg ->
+            case arg do
+              { :_, _, _ }         -> anything
+              {name, _meta, args} when is_tuple(arg) ->
+                args = args || []
+                if Enum.any? target_module.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
+                  apply(target_module, name, args)
+                else
+                  { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
+                  evaled_arg
+                end
+              _ -> arg
+            end
+          end
+          { module, fun, new_args, value }
+        end
+        { meta, new_mocks }
+      end
+    end
+
+    def __add_expect__(mock_module, fn_name, args, value, target_module, env) do
+      value = if is_tuple(value) do
+        { fun_name, _m, fun_args } = value
+        fun_args = fun_args || []
+        if Enum.any? target_module.__info__(:functions), fn {method, arity} -> method == fun_name && arity == Enum.count(fun_args) end do
+          apply(target_module, fun_name, fun_args)
+        else
+          { new_value, _ } = Code.eval_quoted(value, [], env)
+          new_value
+        end
+      else
+        value
+      end
+
       args  = Enum.map args, fn _arg -> {anything, [], nil} end
-      #TODO: replace this with a macro
+
+      #TODO: Construct fn of n args without quoting. This would remove need for value resolving done above.
       Code.eval_quoted(quote do
-        :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)
-      end, [], __ENV__)
+                         :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)
+                       end, [], env)
     end
 
     @doc """
