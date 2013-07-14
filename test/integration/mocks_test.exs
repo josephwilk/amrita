@@ -60,153 +60,162 @@ defmodule MocksTest do
     end
   end
 
-  defmodule Funk do
-    def hip?(_arg) do
-      true
-    end
-  end
+  facts "about mocks with arguments" do
 
-  fact "mock with an argument" do
-    provided [MocksTest.Funk.hip?(:yes) |> false] do
-      Funk.hip?(:yes) |> falsey
-    end
-  end
-
-  facts "mock with elixir types" do
-    fact "regex" do
-      provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
-        Funk.hip?(%r"monkey") |> falsey
+    defmodule Funk do
+      def hip?(_arg) do
+        true
       end
+    end
 
-      fail :regex_mocks do
+    fact "mock with a single argument" do
+      provided [MocksTest.Funk.hip?(:yes) |> false] do
+        Funk.hip?(:yes) |> falsey
+      end
+    end
+
+    facts "mock with elixir types" do
+      fact "regex" do
         provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
-          Funk.hip?(%r"mon") |> falsey
+          Funk.hip?(%r"monkey") |> falsey
+        end
+
+        fail :regex_mocks do
+          provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
+            Funk.hip?(%r"mon") |> falsey
+          end
         end
       end
-    end
 
-    fact "list" do
-      provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
-        Funk.hip?([1, 2, 3]) |> falsey
-      end
-
-      fail :list_mocks do
+      fact "list" do
         provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
-          Funk.hip?([1, 2, 3, 4]) |> falsey
+          Funk.hip?([1, 2, 3]) |> falsey
+        end
+
+        fail :list_mocks do
+          provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
+            Funk.hip?([1, 2, 3, 4]) |> falsey
+          end
         end
       end
-    end
 
-    fact "tuple" do
-      provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
-        Funk.hip?({1, 2, 3}) |> falsey
-      end
-
-      fail :tuple_mocks do
+      fact "tuple" do
         provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
-          Funk.hip?({1, 2}) |> falsey
+          Funk.hip?({1, 2, 3}) |> falsey
+        end
+
+        fail :tuple_mocks do
+          provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
+            Funk.hip?({1, 2}) |> falsey
+          end
         end
       end
-    end
 
-    fact "dict" do
-      provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
-        Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
-      end
+      fact "dict" do
+        provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
+          Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
+        end
 
-      fail :dict_mocks do
-        provided [MocksTest.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
-          Funk.hip?(HashDict.new([{:a, 2}])) |> falsey
+        fail :dict_mocks do
+          provided [MocksTest.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
+            Funk.hip?(HashDict.new([{:a, 2}])) |> falsey
+          end
         end
       end
-    end
 
-    fact "range" do
-      provided [MocksTest.Funk.hip?(1..10) |> false] do
-        Funk.hip?(1..10) |> falsey
-      end
-
-      fail :range_mocks do
+      fact "range" do
         provided [MocksTest.Funk.hip?(1..10) |> false] do
-          Funk.hip?(1..11) |> falsey
+          Funk.hip?(1..10) |> falsey
         end
+
+        fail :range_mocks do
+          provided [MocksTest.Funk.hip?(1..10) |> false] do
+            Funk.hip?(1..11) |> falsey
+          end
+        end
+      end
+    end
+
+    failing_fact "mock with an argument that does not match fails" do
+      provided [MocksTest.Funk.hip?(:yes) |> false] do
+        Funk.hip?(:no) |> falsey
+      end
+    end
+
+    fact "mock with a wildcard" do
+      provided [MocksTest.Funk.hip?(:_) |> false] do
+        Funk.hip?(:yes) |> falsey
+        Funk.hip?(:whatever) |> falsey
+      end
+    end
+
+    fact "mock with a _ wildcard" do
+      provided [MocksTest.Funk.hip?(_) |> false] do
+        Funk.hip?(:yes) |> falsey
+        Funk.hip?(:whatever) |> falsey
+      end
+    end
+
+    fact "mock anything wildcard" do
+      provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
+        Funk.hip?(:yes, :no, :maybe) |> falsey
+      end
+    end
+
+    failing_fact "failing anything wildcard" do
+      provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
+        Funk.hip?(:yes, :no, :maybe, :funk) |> falsey
+      end
+    end
+
+    def tiplet do
+      "brandy"
+    end
+
+    fact "mock with a function defined inside a test" do
+      provided [MocksTest.Funk.hip?(tiplet) |> false] do
+        Funk.hip?("brandy") |> falsey
+      end
+    end
+
+    def tiplet(count) do
+      "brandy#{count}"
+    end
+
+    fact "mock with a function with args defined inside a test" do
+      provided [MocksTest.Funk.hip?(tiplet(1)) |> true] do
+        Funk.hip?("brandy1") |> truthy
+      end
+    end
+
+    fact "mock with many arguments" do
+      provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
+        Funk.flop?(:yes, :no, :yes) |> falsey
+      end
+    end
+
+    failing_fact "mock with a mismatch in arity of arguments fails" do
+      provided [MocksTest.Funk.hip?(:yes) |> false] do
+        Funk.hip?(:yes, :no) |> falsey
+      end
+    end
+
+    fact "mock with > 6 arguments" do
+      provided [MocksTest.Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> false] do
+        Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> falsey
+      end
+    end
+
+    future_fact "regex are matched against argument parameters" do
+      provided [Flip.flop(%r/mooo/) |> true] do
+        Flip.flop("this is a mooo thing") |> true
       end
     end
   end
 
-  failing_fact "mock with an argument that does not match fails" do
-    provided [MocksTest.Funk.hip?(:yes) |> false] do
-      Funk.hip?(:no) |> falsey
-    end
-  end
-
-  fact "mock with a wildcard" do
-    provided [MocksTest.Funk.hip?(:_) |> false] do
-      Funk.hip?(:yes) |> falsey
-      Funk.hip?(:whatever) |> falsey
-    end
-  end
-
-  fact "mock with a _ wildcard" do
-    provided [MocksTest.Funk.hip?(_) |> false] do
-      Funk.hip?(:yes) |> falsey
-      Funk.hip?(:whatever) |> falsey
-    end
-  end
-
-  fact "mock anything wildcard" do
-    provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
-      Funk.hip?(:yes, :no, :maybe) |> falsey
-    end
-  end
-
-  failing_fact "failing anything wildcard" do
-    provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
-      Funk.hip?(:yes, :no, :maybe, :funk) |> falsey
-    end
-  end
-
-  def tiplet do
-    "brandy"
-  end
-
-  fact "mock with a function defined inside a test" do
-    provided [MocksTest.Funk.hip?(tiplet) |> false] do
-      Funk.hip?("brandy") |> falsey
-    end
-  end
-
-  def tiplet(count) do
-    "brandy#{count}"
-  end
-
-  fact "mock with a function with args defined inside a test" do
-    provided [MocksTest.Funk.hip?(tiplet(1)) |> false] do
-      Funk.hip?("brandy1") |> falsey
-    end
-  end
-
-  fact "mock with many arguments" do
-    provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
-      Funk.flop?(:yes, :no, :yes) |> falsey
-    end
-  end
-
-  failing_fact "mock with a mismatch in arity of arguments fails" do
-    provided [MocksTest.Funk.hip?(:yes) |> false] do
-      Funk.hip?(:yes, :no) |> falsey
-    end
-  end
-
-  fact "mock with > 6 arguments" do
-    provided [MocksTest.Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> false] do
-      Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> falsey
-    end
-  end
-
-  future_fact "regex are matched against argument parameters" do
-    provided [Flip.flop(%r/mooo/) |> true] do
-      Flip.flop("this is a mooo thing") |> true
+  future_fact "mock with a return a return value as a function" do
+    provided [MocksTest.Funk.hip?(_) |> tiplet(2)] do
+      Funk.hip?("brandy") |> "brandy2"
     end
   end
 
