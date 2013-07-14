@@ -192,6 +192,16 @@ defmodule MocksTest do
       end
     end
 
+    defp drink do
+      :sherry
+    end
+
+    future_fact "mock with a private function defined inside a test" do
+      provided [MocksTest.Funk.hip?(drink) |> false] do
+        Funk.hip?(:sherry) |> falsey
+      end
+    end
+
     fact "mock with many arguments" do
       provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
         Funk.flop?(:yes, :no, :yes) |> falsey
