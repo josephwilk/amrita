@@ -28,7 +28,7 @@ defmodule Amrita.Formatter.Format do
   end
 
   defp format_stacktrace([{ test_case, test, _, [ file: file, line: line ] }|_], test_case, test, cwd, color) do
-    location_info("at #{Path.relative_to(file, cwd)}:#{line}", color)
+    location_info("##{Path.relative_to(file, cwd)}:#{line}", color)
   end
 
   defp format_stacktrace(stacktrace, _case, _test, cwd, color) do
