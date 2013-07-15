@@ -3,7 +3,6 @@ VENDORED_MIX=${PWD}/vendor/elixir/bin/mix
 RUN_VENDORED_MIX=${VENDORED_ELIXIR} ${VENDORED_MIX}
 VERSION := $(strip $(shell cat VERSION))
 STABLE_ELIXIR_VERSION = 0.10.0
-PREVIOUS_ELIXIR_VERSION = 0.9.3
 
 .PHONY: all test
 
@@ -24,12 +23,7 @@ docs:
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
-ci: ci_${STABLE_ELIXIR_VERSION} ci_${PREVIOUS_ELIXIR_VERSION} ci_master
-
-vendor/${PREVIOUS_ELIXIR_VERSION}:
-	@rm -rf vendor/*
-	@mkdir -p vendor/elixir
-	@wget --no-clobber -q https://github.com/elixir-lang/elixir/releases/download/v${PREVIOUS_ELIXIR_VERSION}/v${PREVIOUS_ELIXIR_VERSION}.zip && unzip -qq v${PREVIOUS_ELIXIR_VERSION}.zip -d vendor/elixir
+ci: ci_${STABLE_ELIXIR_VERSION} ci_master
 
 vendor/${STABLE_ELIXIR_VERSION}:
 	@rm -rf vendor/*
@@ -43,10 +37,6 @@ vendor/master:
 	make --quiet -C vendor/elixir > /dev/null 2>&1
 
 ci_master: vendor/master
-	@${VENDORED_ELIXIR} --version
-	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
-
-ci_$(PREVIOUS_ELIXIR_VERSION): vendor/${PREVIOUS_ELIXIR_VERSION}
 	@${VENDORED_ELIXIR} --version
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, test
 
