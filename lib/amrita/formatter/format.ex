@@ -44,7 +44,4 @@ defmodule Amrita.Formatter.Format do
   defp location_info(msg, nil),   do: "     " <> msg <> "\n"
   defp location_info(msg, color), do: location_info(color.(:location_info, msg), nil)
 
-  defp stacktrace_info(msg, nil),   do: "       " <> msg <> "\n"
-  defp stacktrace_info(msg, color), do: stacktrace_info(color.(:stacktrace_info, msg), nil)
-
 end
