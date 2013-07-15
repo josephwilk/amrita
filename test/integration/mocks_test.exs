@@ -59,7 +59,24 @@ defmodule MocksTest do
     end
   end
 
-  facts "about mocks with arguments" do
+  facts "about mocks with checker arguments" do
+
+    future_fact "contains %r/mooo/" do
+      provided [Flip.flop(contains(%r/mooo/)) |> true] do
+        Flip.flop("this is a mooo thing") |> true
+      end
+
+      fail :failing_contains do
+        provided [Flip.flop(contains(%r/mooo/)) |> true] do
+          Flip.flop("this is a mo thing") |> true
+        end
+      end
+
+    end
+
+  end
+
+  facts "about mocks with non checker arguments" do
 
     defmodule Funk do
       def hip?(_arg) do
@@ -219,11 +236,6 @@ defmodule MocksTest do
       end
     end
 
-    future_fact "regex are matched against argument parameters" do
-      provided [Flip.flop(%r/mooo/) |> true] do
-        Flip.flop("this is a mooo thing") |> true
-      end
-    end
   end
 
   fact "mock with a return value as a function" do
