@@ -143,8 +143,8 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        test unquote(description) do
-          Amrita.Message.pending Enum.join(@name_stack, "") <> unquote(description)
+        test Enum.join(@name_stack, "") <> unquote(description) do
+          Amrita.Message.pending unquote(description)
         end
       end
     end
@@ -160,8 +160,8 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
-        test unquote(description) do
-          Amrita.Message.pending Enum.join(@name_stack, "") <>  unquote(description)
+        test Enum.join(@name_stack, "") <> unquote(description) do
+          Amrita.Message.pending unquote(description)
         end
       end
     end

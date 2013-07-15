@@ -79,13 +79,13 @@ else
 
           { :noreply, config.update_tests_counter(&1 + 1) }
         else
-          IO.puts success("\r  #{trace_test_name test}")
+          IO.puts success("\r  #{format_test_name test}")
           { :noreply, config.update_tests_counter(&1 + 1) }
         end
       end
 
       def handle_cast({ :test_finished, ExUnit.Test[failure: { :invalid, _ }] = test }, config) do
-        IO.puts invalid("\r  #{trace_test_name test}")
+        IO.puts invalid("\r  #{format_test_name test}")
         { :noreply, config.update_tests_counter(&1 + 1).update_invalid_counter(&1 + 1) }
       end
 
@@ -102,7 +102,7 @@ else
           if(name_parts) do
             IO.write pending(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
           else
-            IO.puts  pending("  #{trace_test_name test}")
+            IO.puts  pending("  #{format_test_name test}")
           end
           { :noreply, config.update_pending_counter(&1 + 1).
           update_pending_failures([test|&1]) }
@@ -110,7 +110,7 @@ else
           if(name_parts) do
             IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
           else
-            IO.puts  failure("  #{trace_test_name test}")
+            IO.puts  failure("  #{format_test_name test}")
           end
         { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
         end
@@ -133,12 +133,8 @@ else
         super(request, config)
       end
 
-      defp trace_test_name(ExUnit.Test[name: name]) do
-
-        case atom_to_binary(name) do
-          "test_" <> rest -> rest
-          "test " <> rest -> rest
-        end
+      defp format_test_name(ExUnit.Test[] = test) do
+        Amrita.Formatter.Format.format_test_name(test)
       end
 
       defp print_suite(counter, 0, num_pending, [], [], pending_failures, run_us, load_us) do
@@ -221,7 +217,7 @@ else
       end
 
       defp scoped(test) do
-        name = trace_test_name(test)
+        name = format_test_name(test)
         name_parts = String.split(name, ":")
         if Enum.count(name_parts) > 1 do
           name_parts
