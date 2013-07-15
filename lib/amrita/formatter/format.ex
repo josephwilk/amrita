@@ -19,6 +19,14 @@ defmodule Amrita.Formatter.Format do
     end
   end
 
+  def colorize(escape, string) do
+    if System.get_env("NO_COLOR") do
+      string
+    else
+      IO.ANSI.escape_fragment("%{#{escape}}") <> string <> IO.ANSI.escape_fragment("%{reset}")
+    end
+  end
+
   defp format_stacktrace([{ test_case, test, _, [ file: file, line: line ] }|_], test_case, test, cwd, color) do
     location_info("at #{Path.relative_to(file, cwd)}:#{line}", color)
   end

@@ -226,32 +226,28 @@ else
 
       # Color styles
 
-      defp colorize(escape, string) do
-        IO.ANSI.escape_fragment("%{#{escape}}") <> string <> IO.ANSI.escape_fragment("%{reset}")
-      end
-
       defp success(msg) do
-        colorize("green", msg)
+        Amrita.Formatter.Format.colorize("green", msg)
       end
 
       defp invalid(msg) do
-        colorize("yellow", msg)
+        Amrita.Formatter.Format.colorize("yellow", msg)
       end
 
       defp pending(msg) do
-        colorize("yellow", msg)
+        Amrita.Formatter.Format.colorize("yellow", msg)
       end
 
       defp failure(msg) do
-        colorize("red", msg)
+        Amrita.Formatter.Format.colorize("red", msg)
       end
 
-      defp pending_formatter(:error_info, msg),    do: colorize("yellow", msg)
-      defp pending_formatter(:location_info, msg), do: colorize("cyan", msg)
+      defp pending_formatter(:error_info, msg),    do: Amrita.Formatter.Format.colorize("yellow", msg)
+      defp pending_formatter(:location_info, msg), do: Amrita.Formatter.Format.colorize("cyan", msg)
       defp pending_formatter(_,  msg),             do: msg
 
-      defp formatter(:error_info, msg),    do: colorize("red", msg)
-      defp formatter(:location_info, msg), do: colorize("cyan", msg)
+      defp formatter(:error_info, msg),    do: Amrita.Formatter.Format.colorize("red", msg)
+      defp formatter(:location_info, msg), do: Amrita.Formatter.Format.colorize("cyan", msg)
       defp formatter(_,  msg),             do: msg
 
   end
