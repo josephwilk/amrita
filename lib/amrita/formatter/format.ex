@@ -9,7 +9,7 @@ defmodule Amrita.Formatter.Format do
 
     test_info("#{counter})", color) <>
       error_info("#{format_test_name(test)}", color) <>
-      format_stacktrace(stacktrace, test_case, test_name, cwd, color)
+      format_location(stacktrace, test_case, test_name, cwd, color)
   end
 
   def format_test_name(ExUnit.Test[name: name]) do
@@ -27,13 +27,12 @@ defmodule Amrita.Formatter.Format do
     end
   end
 
-  defp format_stacktrace([{ test_case, test, _, [ file: file, line: line ] }|_], test_case, test, cwd, color) do
-    location_info("##{Path.relative_to(file, cwd)}:#{line}", color)
+  defp format_location([{ test_case, test, _, [ file: file, line: line ] }|_], test_case, test, cwd, color) do
+    location_info("# #{Path.relative_to(file, cwd)}:#{line}", color)
   end
 
-  defp format_stacktrace(stacktrace, _case, _test, cwd, color) do
-    location_info("stacktrace:", color) <>
-      Enum.map_join(stacktrace, fn(s) -> stacktrace_info format_stacktrace_entry(s, cwd), color end)
+  defp format_location(stacktrace, _case, _test, cwd, color) do
+    location_info("# #{Enum.map_join(stacktrace, fn(s) -> format_stacktrace_entry(s, cwd) end)}", color)
   end
 
   defp test_info(msg, nil),   do: "  " <> msg <> " "
