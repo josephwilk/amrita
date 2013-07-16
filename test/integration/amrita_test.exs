@@ -154,8 +154,8 @@ defmodule AmritaFacts do
       end
     end
 
-    future_fact "has_prefix with Sets" do
-      [1, 2, 3] |> has_prefix Amrita.Set.new([2, 1])
+    fact "has_prefix with Sets" do
+      [1, 2, 3] |> has_prefix HashSet.new([2, 1])
     end
 
     fact "has_suffix" do
@@ -174,8 +174,8 @@ defmodule AmritaFacts do
       end
     end
 
-    future_fact "hash suffix with Sets" do
-      [1, 2, 3] |> has_suffix Amrita.Set.new([3,2])
+    fact "hash suffix with Sets" do
+      [1, 2, 3] |> has_suffix HashSet.new([3,2])
     end
 
     fact "for_all" do
