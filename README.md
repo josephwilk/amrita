@@ -200,13 +200,17 @@ end
 Use mix to run your tests:
 
 ```
-mix test
+#Run all your tests
+mix amrita
+
+#Run a specific set of tests
+mix amrita test/integration/mocks_test.exs
 ```
 
 Or if you want more details try with the Pretty formatter:
 
 ```
-mix test --trace
+mix amrita --trace
 ```
 
 ##Custom checkers
