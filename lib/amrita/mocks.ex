@@ -48,7 +48,6 @@ defmodule Amrita.Mocks do
 
         :meck.new(unquote(mock_modules), [:passthrough])
 
-        # Setup mocks
         Enum.map prerequisites, fn {_, mocks} ->
           Enum.map mocks, fn {module, fun, args, value} ->
             unquote(__MODULE__).__add_expect__(module, fun, args, value, __MODULE__, __ENV__)
