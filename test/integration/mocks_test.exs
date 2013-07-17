@@ -236,6 +236,13 @@ defmodule MocksTest do
       end
     end
 
+    future_fact "mock the same function based on different arguments" do
+      provided [MocksTest.Funk.hip?(:ok) |> :bad, MocksTest.Funk.hip?(:bad) |> :ok] do
+        MocksTest.Funk.hip?(:ok) |> :bad
+        MocksTest.Funk.hip?(:bad) |> :ok
+      end
+    end
+
   end
 
   fact "mock with a return value as a function" do
