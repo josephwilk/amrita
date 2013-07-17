@@ -61,13 +61,13 @@ defmodule MocksTest do
 
   facts "about mocks with checker arguments" do
 
-    future_fact "contains %r/mooo/" do
-      provided [Flip.flop(contains(%r/mooo/)) |> true] do
+    future_fact "contains \"mooo\"" do
+      provided [Flip.flop(contains("mooo")) |> true] do
         Flip.flop("this is a mooo thing") |> true
       end
 
       fail :failing_contains do
-        provided [Flip.flop(contains(%r/mooo/)) |> true] do
+        provided [Flip.flop(contains("mooo")) |> true] do
           Flip.flop("this is a mo thing") |> true
         end
       end
