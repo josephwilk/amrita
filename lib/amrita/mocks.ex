@@ -48,13 +48,13 @@ defmodule Amrita.Mocks do
 
         :meck.new(unquote(mock_modules), [:passthrough])
 
+        prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
+
         Enum.map prerequisites, fn {_, mocks} ->
           Enum.map mocks, fn {module, fun, args, value} ->
             unquote(__MODULE__).__add_expect__(module, fun, args, value, __MODULE__, __ENV__)
           end
         end
-
-        prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
 
         try do
           unquote(test)
