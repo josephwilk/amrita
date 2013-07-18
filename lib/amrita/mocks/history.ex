@@ -21,7 +21,12 @@ defmodule Amrita.Mocks.History do
   end
 
   def fn_invocations(module) do
-    Enum.map history(module), fn {_, fn_invoked, _} -> fn_invoked end
+    Enum.map history(module), fn fn_call ->
+      case fn_call do
+        {_, fn_invoked, _} -> fn_invoked
+        {_, fn_invoked, :error, :function_clause, _} -> fn_invoked
+      end
+    end
   end
 
   defp history(module) do

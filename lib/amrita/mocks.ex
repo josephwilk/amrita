@@ -46,13 +46,14 @@ defmodule Amrita.Mocks do
       quote do
         prerequisites = unquote(prerequisite_list)
 
-        :meck.new(unquote(mock_modules), [:passthrough])
+        :meck.new(unquote(mock_modules), [:passthrough, :non_strict])
 
         prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
 
-        Enum.map prerequisites, fn {_, mocks} ->
-          Enum.map mocks, fn {module, fun, args, value} ->
-            unquote(__MODULE__).__add_expect__(module, fun, args, value, __MODULE__, __ENV__)
+        Enum.map prerequisites, fn { _, mocks } ->
+          Enum.map mocks, fn { module, fun, args, value } ->
+            mock = Enum.filter(mocks, fn { m, f, _, _ } ->  m == module && f == fun end)
+            unquote(__MODULE__).__add_expect__(mock, __MODULE__, __ENV__)
           end
         end
 
@@ -98,26 +99,26 @@ defmodule Amrita.Mocks do
       end
     end
 
-    def __add_expect__(mock_module, fn_name, args, value, target_module, env) do
-      value = if is_tuple(value) do
-        { fun_name, _m, fun_args } = value
-        fun_args = fun_args || []
-        if Enum.any? target_module.__info__(:functions), fn {method, arity} -> method == fun_name && arity == Enum.count(fun_args) end do
-          apply(target_module, fun_name, fun_args)
+    def __add_expect__(mocks, target_module, env) do
+      args_specs = Enum.map mocks, fn { _, _, args, value } ->
+        value = if is_tuple(value) do
+          { fun_name, _m, fun_args } = value
+          fun_args = fun_args || []
+          if Enum.any? target_module.__info__(:functions), fn { method, arity } -> method == fun_name && arity == Enum.count(fun_args) end do
+            apply(target_module, fun_name, fun_args)
+          else
+            { new_value, _ } = Code.eval_quoted(value, [], env)
+            new_value
+          end
         else
-          { new_value, _ } = Code.eval_quoted(value, [], env)
-          new_value
+          value
         end
-      else
-        value
+
+        { args, value }
       end
+      { mock_module, fn_name, _, _ } = Enum.at(mocks, 0)
 
-      args  = Enum.map args, fn _arg -> {anything, [], nil} end
-
-      #TODO: Construct fn of n args without quoting. This would remove need for value resolving done above.
-      Code.eval_quoted(quote do
-                         :meck.expect(unquote(mock_module), unquote(fn_name), fn unquote_splicing(args) -> unquote(value) end)
-                       end, [], env)
+      :meck.expect(mock_module, fn_name, args_specs)
     end
 
     @doc """

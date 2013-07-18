@@ -2,7 +2,7 @@ Code.require_file "../test_helper.exs", __DIR__
 
 defmodule MocksTest do
   use Amrita.Sweet
-  
+
   import Support
 
   defmodule Polite do
@@ -236,10 +236,10 @@ defmodule MocksTest do
       end
     end
 
-    future_fact "mock the same function based on different arguments" do
-      provided [MocksTest.Funk.hip?(:ok) |> :bad, MocksTest.Funk.hip?(:bad) |> :ok] do
-        MocksTest.Funk.hip?(:ok) |> :bad
-        MocksTest.Funk.hip?(:bad) |> :ok
+    fact "mock the same function based on different arguments" do
+      provided [MocksTest.Funk.hip?(:cats) |> false, MocksTest.Funk.hip?(:coffee) |> true] do
+        MocksTest.Funk.hip?(:cats) |> falsey
+        MocksTest.Funk.hip?(:coffee) |> truthy
       end
     end
 
@@ -258,7 +258,6 @@ defmodule MocksTest do
       Funk.hip?("shandy") |> "brandy"
     end
   end
-
 
   fact "mock with alternative syntax", provided: [Flip.flop(:ok) |> true] do
     Flip.flop(:ok) |> truthy

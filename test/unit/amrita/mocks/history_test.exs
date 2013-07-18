@@ -7,7 +7,7 @@ defmodule HistoryFacts do
 
   facts "about History.match?" do
     fact "regex arguments match bit_string arguments" do
-      :meck.new(Faker)
+      :meck.new(Faker, [:non_strict])
       :meck.expect(Faker, :shout, fn x -> x end)
       :meck.expect(Faker, :whisper, fn x -> x end)
 
@@ -19,7 +19,7 @@ defmodule HistoryFacts do
     end
 
     fact "regex arguments match regex arguments" do
-      :meck.new(Saker)
+      :meck.new(Saker, [:non_strict])
       :meck.expect(Saker, :shout, fn x -> x end)
       :meck.expect(Saker, :whisper, fn x -> x end)
 
