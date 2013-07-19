@@ -102,9 +102,10 @@ defmodule Polite do
   end
 end
 
+# A simple mock
 fact "mocking the swear function to be true" do
   provided [MocksTest.Polite.swear?(_) |> true] do
-    Polite.swear("balderdash")? |> truthy
+    Polite.swear?("balderdash") |> truthy
   end
 end
 
@@ -250,3 +251,4 @@ Checkout [Amrita on Github](https://github.com/josephwilk/amrita).
 
   </body>
 </html>
+  
