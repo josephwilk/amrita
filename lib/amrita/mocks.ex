@@ -158,7 +158,7 @@ defmodule Amrita.Mocks do
        prereqs(bucket: p)
     end
 
-    def all_modules(prereqs(bucket: bucket) = p) do
+    def all_modules(prereqs(bucket: bucket)) do
       Dict.keys(bucket)
     end
 
@@ -202,15 +202,15 @@ defmodule Amrita.Mocks do
       prereqs(bucket: list)
     end
 
-    def by_module_and_fun(prereqs() = p, module, fun) do
-      by_fun(by_module(p, module), fun)
+    def by_module_and_fun(prereqs(bucket: bucket), module, fun) do
+      by_fun(by_module(bucket, module), fun)
     end
 
     defp by_fun(bucket, fun) do
       Dict.get(bucket, fun)
     end
 
-    defp by_module(prereqs(bucket: bucket), module) do
+    defp by_module(bucket, module) do
       Dict.get(bucket, module)
     end
 
