@@ -81,7 +81,7 @@ defmodule Amrita.Mocks do
     end
 
     def __resolve_arg__(arg, target_module, env) do
-      case arg do
+      new_arg = case arg do
         { :_, _, _ }          -> anything
         { name, _meta, args } ->
           args = args || []
@@ -93,6 +93,12 @@ defmodule Amrita.Mocks do
             evaled_arg
           end
         _ -> arg
+      end
+
+      if Amrita.Mocks.Provided.Check.matcher?(new_arg) do
+        :meck.is(new_arg)
+      else
+        new_arg
       end
     end
 
@@ -118,7 +124,11 @@ defmodule Amrita.Mocks do
   @moduledoc false
 
     def fails(prerequisites) do
-      Provided.Prerequisites.reduce(prerequisites, [], fn mock -> called?(mock) end)
+      Provided.Prerequisites.reduce prerequisites, [], fn mock -> called?(mock) end
+    end
+
+    def matcher?(arg) do
+      is_function(arg) && :erlang.fun_info(arg)[:type] == :local
     end
 
     defp called?({module, fun, args, _}) do
