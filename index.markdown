@@ -110,7 +110,7 @@ fact "mocking the swear function to be true" do
 end
 
 # Powerful argument matchers
-fact "mocking the swear function to be true" do
+fact "mocking to return true only if the regex matches the argument" do
   provided [MocksTest.Polite.swear?(fn arg -> arg =~ %r"moo") end |> true] do
     Polite.swear?("is it ok to moo at people") |> truthy
   end
