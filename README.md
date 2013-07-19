@@ -77,7 +77,7 @@ fact "mock with a wildcard" do
 end
 ```
 
-#### Wildcard matchers for argument:
+#### Wildcard matchers for argument
 
 ```elixir
 fact "mock with a wildcard"
@@ -88,7 +88,7 @@ fact "mock with a wildcard"
 end
 ```
 
-#### Powerful custom predicates for argument matching.
+#### Powerful custom predicates for argument matching
 ```elixir
 fact "mock with a matcher function" do
   provided [Polite.swear?(fn arg -> arg =~ %r"moo") |> false] do
@@ -97,7 +97,7 @@ fact "mock with a matcher function" do
 end
 ```
 
-#### Control return values based on specific argument values
+#### Return values based on specific argument values
 ```elixir
 fact "mock with return based on argument" do
   provided [Polite.swear?(:pants) |> false,
@@ -116,7 +116,7 @@ end
 
 ## Checkers
 
-Amrita is all about checker based testing!
+Amrita is also all about checker based testing!
 
 ```elixir
 Code.require_file "../test_helper.exs", __FILE__
