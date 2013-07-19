@@ -57,30 +57,58 @@ defmodule Polite do
   def swear? do
     false
   end
-end
-
-defmodule Rude do
+  
   def swear?(word) do
-    true
+    false
   end
 end
+```
 
-fact "mocks must always be called for a pass",
-  provided: [Polite.swear?         |> true,
-             Rude.swear?("bugger") |> false] do
-
-  Polite.swear?           |> truthy
-  Rude.swear?("bugger")   |> falsey
+### A Simple mock
+```
+fact "mock with a wildcard" do
+  provided [Polite.swear? |> true] do
+    Polite.swear? |> truthy
+  end
 end
+```
 
-#We can use a wildcard when we don't care about the exact value of a argument:
-
-fact "mock with a wildcard", provided: [Rude.swear?(_) |> false] do
-  Funk.swear?(:yes) |> falsey
-  Funk.swear?(:whatever) |> falsey
-end
+### Wildcard matchers when we don't care about the exact value of a argument:
 
 ```
+fact "mock with a wildcard"
+  provided [Polite.swear?(_) |> true] do
+    Polite.swear?(:yes) |> truthy
+    Polite.swear?(:whatever) |> truthy
+  end
+end
+```
+
+### Powerful custom predicates for argument matching.
+```
+fact "mock with a matcher function" do
+  provided [Polite.swear?(fn arg -> arg =~ %r"moo") |> false] do
+    Polite.swear?("its ok to moo really") |> falsey
+  end
+end
+```
+
+### Control return values based on specific argument values
+```
+fact "mock with return based on argument" do
+  provided [Polite.swear?(:pants) |> false,
+            Polite.swear?(:bugger) |> true] do
+
+    Funk.swear?(:pants) |> falsey
+    Funk.swear?(:bugger) |> truthy
+  end
+end
+```
+
+### Polite Errors explaining when things went wrong
+
+![Polite mock error message](http://s9.postimg.org/j4y4dh7j3/Screen_Shot_2013_07_19_at_17_42_15.png)
+
 
 ## Checkers
 
