@@ -157,9 +157,9 @@ defmodule Amrita.Mocks do
 
     defexception Error, form: []  do
       def message(exception) do
-        "Amrita could not understand your `provided`:" <>
-        inspect(exception.form) <>
-        "Make sure it uses this format: [Module.fun |> :return_value]"
+        "Amrita could not understand your `provided`:\n" <>
+        "     " <> Macro.to_string(exception.form) <> "\n" <>
+        "     Make sure it uses this format: [Module.fun |> :return_value]"
       end
     end
 
