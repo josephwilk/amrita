@@ -218,7 +218,7 @@ else
 
       defp scoped(test) do
         name = format_test_name(test)
-        name_parts = String.split(name, ":")
+        name_parts = String.split(name, "-")
         if Enum.count(name_parts) > 1 do
           name_parts
         end
