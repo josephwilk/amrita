@@ -87,8 +87,7 @@ defmodule Amrita.Mocks do
                                  :meck.is(evaled_arg)
         { name, _meta, args } ->
           args = args || []
-          if Enum.any? target_module.__info__(:functions),
-                       fn {method, arity} -> method == name && arity == Enum.count(args) end do
+          if __in_scope__(name, args, target_module) do
             apply(target_module, name, args)
           else
             { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
@@ -98,7 +97,11 @@ defmodule Amrita.Mocks do
       end
     end
 
+    def __in_scope__(name, args, target_module) do
+      Enum.any? target_module.__info__(:functions),
+                              fn { method, arity } -> method == name && arity == Enum.count(args) end
     end
+
 
     def __add_expect__(mocks, target_module, env) do
       args_specs = Enum.map mocks, fn { _, _, args, value } ->
