@@ -13,7 +13,7 @@ Add to your mix.exs
 ```elixir
   defp deps do
     [
-      {:amrita, "0.1.4", github: "josephwilk/amrita"}
+      {:amrita, "~>0.2", github: "josephwilk/amrita"}
     ]
   end
 ```
