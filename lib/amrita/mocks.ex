@@ -155,6 +155,14 @@ defmodule Amrita.Mocks do
   defmodule Provided.Parse do
     @moduledoc false
 
+    defexception Error, form: []  do
+      def message(exception) do
+        "Amrita could not understand your `provided`:" <>
+        inspect(exception.form) <>
+        "Make sure it uses this format: [Module.fun |> :return_value]"
+      end
+    end
+
     def prerequisites(forms) do
       prerequisites = Enum.map(forms, fn form -> extract(form) end)
       Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
@@ -177,8 +185,8 @@ defmodule Amrita.Mocks do
       Module.concat ns
     end
 
-    defp extract(_) do
-      throw "Amrita could not understand your `provided`. Make sure it uses this format: [Module.fun |> :return_value]"
+    defp extract(form) do
+      raise Error.new(form: form)
     end
 
   end
