@@ -52,6 +52,8 @@ Now all thats left is to  write some tests!
 
 Amrita supports BDD style mocks.
 
+Examples:
+
 ```elixir
 defmodule Polite do
   def swear? do
@@ -64,7 +66,7 @@ defmodule Polite do
 end
 ```
 
-### A Simple mock
+#### A Simple mock
 ```elixir
 fact "mock with a wildcard" do
   provided [Polite.swear? |> true] do
@@ -73,7 +75,7 @@ fact "mock with a wildcard" do
 end
 ```
 
-### Wildcard matchers for argument:
+#### Wildcard matchers for argument:
 
 ```elixir
 fact "mock with a wildcard"
@@ -84,7 +86,7 @@ fact "mock with a wildcard"
 end
 ```
 
-### Powerful custom predicates for argument matching.
+#### Powerful custom predicates for argument matching.
 ```elixir
 fact "mock with a matcher function" do
   provided [Polite.swear?(fn arg -> arg =~ %r"moo") |> false] do
@@ -93,7 +95,7 @@ fact "mock with a matcher function" do
 end
 ```
 
-### Control return values based on specific argument values
+#### Control return values based on specific argument values
 ```elixir
 fact "mock with return based on argument" do
   provided [Polite.swear?(:pants) |> false,
@@ -105,7 +107,7 @@ fact "mock with return based on argument" do
 end
 ```
 
-### Polite Errors explaining when things went wrong
+#### Polite Errors explaining when things went wrong
 
 ![Polite mock error message](http://s9.postimg.org/j4y4dh7j3/Screen_Shot_2013_07_19_at_17_42_15.png)
 
