@@ -4,7 +4,7 @@
 
 A polite, well mannered and thoroughly upstanding testing framework for [Elixir](http://elixir-lang.org/).
 
-![Elixir of life](http://s9.postimg.org/uv0ubzjm7/elixir.jpg)
+![Elixir of life](http://s2.postimg.org/kmlrx9dp5/6337_33695901.jpg)
 
 ##Install
 
