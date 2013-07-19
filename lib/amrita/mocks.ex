@@ -50,9 +50,9 @@ defmodule Amrita.Mocks do
 
         prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
 
-        Provided.Prerequisites.each_mock_list(prerequisites, fn mocks ->
+        Provided.Prerequisites.each_mock_list prerequisites, fn mocks ->
           unquote(__MODULE__).__add_expect__(mocks, __MODULE__, __ENV__)
-        end)
+        end
 
         try do
           unquote(test)
@@ -147,7 +147,7 @@ defmodule Amrita.Mocks do
     defrecordp :prereqs, bucket: [HashDict.new(HashDict.new)]
 
     def new(prerequisites) do
-       p = Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
+       bucket = Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
         mocks_by_module = HashDict.get(acc, module, HashDict.new)
         mocks_by_fun    = HashDict.get(mocks_by_module, fun, [])
         mocks = List.concat(mocks_by_fun, [{module, fun, args, value}])
@@ -155,7 +155,7 @@ defmodule Amrita.Mocks do
         Dict.put(acc, module, Dict.put(mocks_by_module, fun, mocks))
       end
 
-       prereqs(bucket: p)
+       prereqs(bucket: bucket)
     end
 
     def all_modules(prereqs(bucket: bucket)) do
