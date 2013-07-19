@@ -22,7 +22,7 @@ defexception Amrita.MockError,
   end
 
   defp expected_call(e) do
-    "     #{Amrita.Checker.to_s(e.module, e.fun, e.args)} called 0 times |> called(Expected atleast once)"
+    "     #{Amrita.Checker.to_s(e.module, e.fun, e.args)} to be called but was called 0 times."
   end
 
 end

@@ -111,7 +111,7 @@ end
 
 #### Polite Errors explaining when things went wrong
 
-![Polite mock error message](http://s9.postimg.org/j4y4dh7j3/Screen_Shot_2013_07_19_at_17_42_15.png)
+![Polite mock error message](http://s9.postimg.org/wjwdo9dun/Screen_Shot_2013_07_19_at_20_11_17.png)
 
 
 ## Checkers
