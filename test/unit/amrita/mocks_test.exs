@@ -3,29 +3,27 @@ Code.require_file "../../../test_helper.exs", __FILE__
 defmodule MocksFacts do
   use Amrita.Sweet
 
-  defp find_mocks(prerequisites, module, fun) do
-    mocks_by_module = Dict.fetch!(prerequisites, module)
-    Dict.fetch!(mocks_by_module, fun)
-  end
+  import Amrita.Mocks.Provided.Prerequisites, as: Prerequisites
 
   facts "about parsing valid prerequisites" do
     fact "returns a dict indexed by module and function with {module, function, argument, return_value}" do
       prerequisites = Amrita.Mocks.Provided.Parse.prerequisites(quote do: [Funk.monkey(4) |> 10])
-      mocks = find_mocks(prerequisites, Funk, :monkey)
+      mocks = Prerequisites.by_module_and_fun(prerequisites, Funk, :monkey)
 
       mocks |> contains {Funk, :monkey, [4], 10}
     end
 
     fact "stores mocks with same module and function together" do
       prerequisites = Amrita.Mocks.Provided.Parse.prerequisites(quote do: [Funk.monkey(4) |> 10, Funk.monkey(5) |> 11])
-      mocks = find_mocks(prerequisites, Funk, :monkey)
+      mocks = Prerequisites.by_module_and_fun(prerequisites, Funk, :monkey)
+
 
       mocks |> contains {Funk, :monkey, [4], 10}
       mocks |> contains {Funk, :monkey, [5], 11}
     end
 
     fact "returns an empty dict when there are no prerequeistes" do
-      Amrita.Mocks.Provided.Parse.prerequisites(quote do: []) |> equals HashDict.new []
+      Amrita.Mocks.Provided.Parse.prerequisites(quote do: []) |> equals Prerequisites.new []
     end
   end
 
@@ -54,7 +52,7 @@ defmodule MocksFacts do
       prerequisites = Amrita.Mocks.Provided.Parse.prerequisites(quote do: [Funk.monkey(anything) |> 10])
       resolved_prerequisites = Amrita.Mocks.Provided.__resolve_args__(prerequisites, __MODULE__, __ENV__)
 
-      mocks = find_mocks(resolved_prerequisites, Funk, :monkey)
+      mocks = Prerequisites.by_module_and_fun(resolved_prerequisites, Funk, :monkey)
 
       mocks |> equals [{Funk, :monkey, [:_], 10}]
     end

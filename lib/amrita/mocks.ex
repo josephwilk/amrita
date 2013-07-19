@@ -40,21 +40,19 @@ defmodule Amrita.Mocks do
     """
     defmacro provided(forms, test) do
       prerequisites = Amrita.Mocks.Provided.Parse.prerequisites(forms)
-      mock_modules = Dict.keys(prerequisites)
-      prerequisite_list = Macro.escape Dict.to_list(prerequisites)
+      mock_modules = Provided.Prerequisites.all_modules(prerequisites)
+      prerequisite_list = Macro.escape(Provided.Prerequisites.to_list(prerequisites))
 
       quote do
-        prerequisites = unquote(prerequisite_list)
+        prerequisites = Provided.Prerequisites.to_prerequisites(unquote(prerequisite_list))
 
         :meck.new(unquote(mock_modules), [:passthrough, :non_strict])
 
         prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
 
-        Enum.map prerequisites, fn { _, mocks_by_module } ->
-          Enum.map mocks_by_module, fn { fun, mocks } ->
-            unquote(__MODULE__).__add_expect__(mocks, __MODULE__, __ENV__)
-          end
-        end
+        Provided.Prerequisites.each_mock_list(prerequisites, fn mocks ->
+          unquote(__MODULE__).__add_expect__(mocks, __MODULE__, __ENV__)
+        end)
 
         try do
           unquote(test)
@@ -76,28 +74,22 @@ defmodule Amrita.Mocks do
     end
 
     def __resolve_args__(prerequisites, target_module, env) do
-      Enum.map prerequisites, fn { module_key, mocks_by_module } ->
-        new_mocks_by_module = Enum.map mocks_by_module, fn {fun_key, mocks} ->
-          new_mocks_by_fun = Enum.map mocks, fn { module, fun, args, value } ->
-            new_args = Enum.map args, fn arg ->
-              case arg do
-                { :_, _, _ }         -> anything
-                { name, _meta, args }  ->
-                  args = args || []
-                  if Enum.any? target_module.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
-                    apply(target_module, name, args)
-                  else
-                    { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
-                    evaled_arg
-                  end
-                _ -> arg
+      Provided.Prerequisites.map prerequisites, fn { module, fun, args, value } ->
+        new_args = Enum.map args, fn arg ->
+          case arg do
+            { :_, _, _ }         -> anything
+            { name, _meta, args }  ->
+              args = args || []
+              if Enum.any? target_module.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
+                apply(target_module, name, args)
+              else
+                { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
+                evaled_arg
               end
-            end
-            { module, fun, new_args, value }
+            _ -> arg
           end
-          { fun_key, new_mocks_by_fun }
         end
-        { module_key, new_mocks_by_module }
+        { module, fun, new_args, value }
       end
     end
 
@@ -135,15 +127,7 @@ defmodule Amrita.Mocks do
   @moduledoc false
 
     def fails(prerequisites) do
-      Enum.reduce prerequisites, [], fn { _, mocks_by_module }, all_errors_acc ->
-        fails = Enum.reduce mocks_by_module, [], fn { _, mocks }, fn_fails_acc ->
-          fails = Enum.reduce mocks, [],  fn mock, fails_acc ->
-            List.concat(fails_acc, called?(mock))
-          end
-          List.concat(fn_fails_acc, fails)
-        end
-        List.concat(all_errors_acc, fails)
-      end
+      Provided.Prerequisites.reduce(prerequisites, [], fn mock -> called?(mock) end)
     end
 
     defp called?({module, fun, args, _}) do
@@ -155,6 +139,81 @@ defmodule Amrita.Mocks do
         _     -> []
       end
     end
+  end
+
+  defmodule Provided.Prerequisites do
+    @moduledoc false
+
+    defrecordp :prereqs, bucket: [HashDict.new(HashDict.new)]
+
+    def new(prerequisites) do
+       p = Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
+        mocks_by_module = HashDict.get(acc, module, HashDict.new)
+        mocks_by_fun    = HashDict.get(mocks_by_module, fun, [])
+        mocks = List.concat(mocks_by_fun, [{module, fun, args, value}])
+
+        Dict.put(acc, module, Dict.put(mocks_by_module, fun, mocks))
+      end
+
+       prereqs(bucket: p)
+    end
+
+    def all_modules(prereqs(bucket: bucket) = p) do
+      Dict.keys(bucket)
+    end
+
+    def each_mock_list(prereqs(bucket: bucket), fun) do
+      Enum.each bucket, fn { _, mocks_by_module } ->
+        Enum.each mocks_by_module, fn { _, mocks } ->
+          fun.(mocks)
+        end
+      end
+    end
+
+    def map(prereqs(bucket: bucket), fun) do
+      new_bucket = Enum.map bucket, fn { module_key, mocks_by_module } ->
+        new_mocks_by_module = Enum.map mocks_by_module, fn {fun_key, mocks} ->
+          new_mocks_by_fun = Enum.map mocks, fun
+          { fun_key, new_mocks_by_fun }
+        end
+        { module_key, new_mocks_by_module }
+      end
+      prereqs(bucket: new_bucket)
+    end
+
+    def reduce(prereqs(bucket: bucket), start, fun) do
+      Enum.reduce bucket, start, fn { _, mocks_by_module }, all_acc ->
+        results = Enum.reduce mocks_by_module, [], fn { _, mocks }, fn_acc ->
+          results = Enum.reduce mocks, [],  fn mock, acc ->
+            result = fun.(mock)
+            List.concat(acc, result)
+          end
+          List.concat(fn_acc, results)
+        end
+        List.concat(all_acc, results)
+      end
+    end
+
+    def to_list(prereqs(bucket: bucket)) do
+      Dict.to_list(bucket)
+    end
+
+    def to_prerequisites(list) do
+      prereqs(bucket: list)
+    end
+
+    def by_module_and_fun(prereqs() = p, module, fun) do
+      by_fun(by_module(p, module), fun)
+    end
+
+    defp by_fun(bucket, fun) do
+      Dict.get(bucket, fun)
+    end
+
+    defp by_module(prereqs(bucket: bucket), module) do
+      Dict.get(bucket, module)
+    end
+
   end
 
   defmodule Provided.Parse do
@@ -170,13 +229,7 @@ defmodule Amrita.Mocks do
 
     def prerequisites(forms) do
       prerequisites = Enum.map(forms, fn form -> extract(form) end)
-      Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
-        mocks_by_module = HashDict.get(acc, module, HashDict.new)
-        mocks_by_fun    = HashDict.get(mocks_by_module, fun, [])
-        mocks = List.concat(mocks_by_fun, [{module, fun, args, value}])
-
-        Dict.put(acc, module, Dict.put(mocks_by_module, fun, mocks))
-      end
+      Provided.Prerequisites.new(prerequisites)
     end
 
     defp extract({:|>, _, [{fun, _, args}, value]}) do
