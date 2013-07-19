@@ -65,7 +65,7 @@ end
 ```
 
 ### A Simple mock
-```
+```elixir
 fact "mock with a wildcard" do
   provided [Polite.swear? |> true] do
     Polite.swear? |> truthy
@@ -73,9 +73,9 @@ fact "mock with a wildcard" do
 end
 ```
 
-### Wildcard matchers when we don't care about the exact value of a argument:
+### Wildcard matchers for argument:
 
-```
+```elixir
 fact "mock with a wildcard"
   provided [Polite.swear?(_) |> true] do
     Polite.swear?(:yes) |> truthy
@@ -85,7 +85,7 @@ end
 ```
 
 ### Powerful custom predicates for argument matching.
-```
+```elixir
 fact "mock with a matcher function" do
   provided [Polite.swear?(fn arg -> arg =~ %r"moo") |> false] do
     Polite.swear?("its ok to moo really") |> falsey
@@ -94,7 +94,7 @@ end
 ```
 
 ### Control return values based on specific argument values
-```
+```elixir
 fact "mock with return based on argument" do
   provided [Polite.swear?(:pants) |> false,
             Polite.swear?(:bugger) |> true] do
