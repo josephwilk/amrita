@@ -15,6 +15,10 @@ defmodule Amrita.Mocks do
   end
 
   defmodule Provided do
+    @moduledoc """
+    The Mocking DSL.
+    """
+
     defrecord Error, module: nil, fun: nil, args: nil, history: []
 
     @doc """
