@@ -1,4 +1,6 @@
 defmodule Amrita.Formatter.Format do
+  @moduledoc false
+
   import Exception, only: [format_stacktrace_entry: 2]
 
   @doc """

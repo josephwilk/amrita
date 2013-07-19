@@ -59,9 +59,9 @@ defmodule MocksTest do
     end
   end
 
-  facts "about mocks with checker arguments" do
+  facts "about mocks with fn matcher arguments" do
 
-    fact "contains \"mooo\"" do
+    fact "fn matches against a regexp" do
       provided [Flip.flop(fn x -> x =~ %r"moo" end) |> true] do
         Flip.flop("this is a mooo thing") |> true
       end
@@ -71,7 +71,6 @@ defmodule MocksTest do
           Flip.flop("this is a mo thing") |> true
         end
       end
-
     end
 
   end

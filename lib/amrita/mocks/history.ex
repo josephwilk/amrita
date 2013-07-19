@@ -1,7 +1,5 @@
 defmodule Amrita.Mocks.History do
-  @moduledoc """
-  Find functions from the history of functions executed on a Module.
-  """
+  @moduledoc false
 
   def matches(module, fun) do
     Enum.filter fn_invocations(module), fn { m, f, _a } ->

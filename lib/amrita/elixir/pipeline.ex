@@ -1,4 +1,6 @@
 defmodule Amrita.Elixir.Pipeline do
+  @moduledoc false
+
   defmacro left |> right do
     pipeline_op(left, right)
   end

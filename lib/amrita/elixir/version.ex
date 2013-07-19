@@ -1,4 +1,5 @@
 defmodule Amrita.Elixir.Version do
+  @moduledoc false
 
   def less_than_or_equal?(version) do
     elixir_version = as_ints

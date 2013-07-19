@@ -241,6 +241,9 @@ defmodule Amrita do
   end
 
   defmodule Checkers.Exceptions do
+    @moduledoc """
+    Checkers for expectations about Exceptions.
+    """
 
     @doc """
     Checks if an exception was raised and that it was of the expected type or matches the
@@ -440,7 +443,7 @@ defmodule Amrita do
 
   defmodule Checkers.Messages do
     @moduledoc """
-    Checkers which ease the work with messages.
+    Checkers relating to messages.
     """
 
     @doc """
