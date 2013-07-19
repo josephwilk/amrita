@@ -65,6 +65,10 @@ defmodule Amrita do
   end
 
   defmodule Describes do
+    @moduledoc """
+    Provides an alternative DSL to facts and fact.
+    """
+
     defmacro describe(description, thing // quote(do: _), contents) do
       quote do
         Amrita.Facts.facts(unquote(description), unquote(thing), unquote(contents))
