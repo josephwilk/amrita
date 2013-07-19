@@ -75,39 +75,30 @@ defmodule Amrita.Mocks do
 
     def __resolve_args__(prerequisites, target_module, env) do
       Provided.Prerequisites.map prerequisites, fn { module, fun, args, value } ->
-        new_args = Enum.map args, fn arg ->
-          case arg do
-            { :_, _, _ }         -> anything
-            { name, _meta, args }  ->
-              args = args || []
-              if Enum.any? target_module.__info__(:functions), fn {method, arity} -> method == name && arity == Enum.count(args) end do
-                apply(target_module, name, args)
-              else
-                { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
-                evaled_arg
-              end
-            _ -> arg
-          end
-        end
+        new_args = Enum.map args, fn arg -> __resolve_arg__(arg, target_module, env) end
         { module, fun, new_args, value }
+      end
+    end
+
+    def __resolve_arg__(arg, target_module, env) do
+      case arg do
+        { :_, _, _ }          -> anything
+        { name, _meta, args } ->
+          args = args || []
+          if Enum.any? target_module.__info__(:functions),
+                       fn {method, arity} -> method == name && arity == Enum.count(args) end do
+            apply(target_module, name, args)
+          else
+            { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
+            evaled_arg
+          end
+        _ -> arg
       end
     end
 
     def __add_expect__(mocks, target_module, env) do
       args_specs = Enum.map mocks, fn { _, _, args, value } ->
-        value = if is_tuple(value) do
-          { fun_name, _m, fun_args } = value
-          fun_args = fun_args || []
-          if Enum.any? target_module.__info__(:functions), fn { method, arity } -> method == fun_name && arity == Enum.count(fun_args) end do
-            apply(target_module, fun_name, fun_args)
-          else
-            { new_value, _ } = Code.eval_quoted(value, [], env)
-            new_value
-          end
-        else
-          value
-        end
-
+        value = __resolve_arg__(value, target_module, env)
         { args, value }
       end
       { mock_module, fn_name, _, _ } = Enum.at(mocks, 0)
