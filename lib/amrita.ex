@@ -49,8 +49,6 @@ defmodule Amrita do
         import ExUnit.Case
         @ex_unit_case true
 
-        import Kernel, except: [|>: 2]
-        import Amrita.Elixir.Pipeline
 
         use Amrita.Facts
         use Amrita.Mocks
@@ -123,6 +121,9 @@ defmodule Amrita do
 
         quote do
           test Enum.join(@name_stack, "") <> unquote(description) do
+            import Kernel, except: [|>: 2]
+            import Amrita.Elixir.Pipeline
+
             provided unquote(mocks) do
               unquote(contents)
             end
@@ -131,6 +132,9 @@ defmodule Amrita do
       else
         quote do
           test Enum.join(@name_stack, "") <> unquote(description) do
+            import Kernel, except: [|>: 2]
+            import Amrita.Elixir.Pipeline
+
             unquote(contents)
           end
         end
