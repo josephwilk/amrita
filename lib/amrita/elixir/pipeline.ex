@@ -9,6 +9,10 @@ defmodule Amrita.Elixir.Pipeline do
     pipeline_op(pipeline_op(left, middle), right)
   end
 
+  defp pipeline_op(left, { call, line, atom }) when is_atom(atom) do
+    { call, line, [left] }
+  end
+
   # Comparing tuples
   defp pipeline_op({ :{}, _, _ }=left, { :{}, _, _ }=right) do
     quote do
@@ -40,10 +44,6 @@ defmodule Amrita.Elixir.Pipeline do
     quote do
       unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
     end
-  end
-
-  defp pipeline_op(left, { call, line, atom }) when is_atom(atom) do
-    { call, line, [left] }
   end
 
   defp pipeline_op(left, atom) when is_atom(atom) do
