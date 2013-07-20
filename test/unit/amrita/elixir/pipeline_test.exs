@@ -77,31 +77,44 @@ defmodule PipelineFacts do
     end
 
   end
+
+  facts "pipelines non test assertion behaviour" do
+    fact "simple" do
+      [1, [2], 3] |> List.flatten |> [1, 2, 3]
+
+      fail :simple do
+        [1, [2], 3] |> List.flatten |> [1, 2, 4]
+      end
+    end
+
+    fact "nested" do
+      [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) |> [2, 4, 6]
+
+      fail :nested do
+        [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) |> [2, 4, 9]
+      end
+    end
+
+    fact "local" do
+      [1, [2], 3] |> List.flatten |> local |> [2, 4, 6]
+
+      fail :local do
+        [1, [2], 3] |> List.flatten |> local |> [2, 4, 9]
+      end
+    end
+
+    fact "map" do
+      Enum.map([1, 2, 3], &1 |> twice |> twice) |> [4, 8, 12]
+
+      fail :map do
+        Enum.map([1, 2, 3], &1 |> twice |> twice) |> [4, 8, 19]
+      end
+    end
+
+    defp twice(a), do: a * 2
+
+    defp local(list) do
+      Enum.map(list, &1 * 2)
+    end
+  end
 end
-
-defmodule OriginalPipelineFacts do
-  use Amrita.Sweet
-
-  test :simple do
-    assert [1, [2], 3] |> List.flatten == [1, 2, 3]
-  end
-
-  test :nested do
-    assert [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) == [2, 4, 6]
-  end
-
-  test :local do
-    assert [1, [2], 3] |> List.flatten |> local == [2, 4, 6]
-  end
-
-  test :map do
-    assert Enum.map([1, 2, 3], &1 |> twice |> twice) == [4, 8, 12]
-  end
-
-  defp twice(a), do: a * 2
-
-  defp local(list) do
-    Enum.map(list, &1 * 2)
-  end
-end
-
