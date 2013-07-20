@@ -22,7 +22,18 @@ defexception Amrita.MockError,
   end
 
   defp expected_call(e) do
-    "     #{Amrita.Checker.to_s(e.module, e.fun, e.args)} to be called but was called 0 times."
+    "     #{Amrita.Checker.to_s(e.module, e.fun, printable_args(e))} to be called but was called 0 times."
+  end
+
+  defp printable_args(e) do
+    index = -1
+    args = Enum.map e.args, fn arg ->
+      index = index + 1
+      case arg do
+        {:"$meck.matcher", :predicate, _} -> Macro.to_string(Enum.at(e.raw_args, index))
+        _ -> arg
+      end
+    end
   end
 
 end
