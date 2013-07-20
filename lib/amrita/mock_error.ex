@@ -27,7 +27,7 @@ defexception Amrita.MockError,
 
   defp printable_args(e) do
     index = -1
-    args = Enum.map e.args, fn arg ->
+    Enum.map e.args, fn arg ->
       index = index + 1
       case arg do
         {:"$meck.matcher", :predicate, _} -> Macro.to_string(Enum.at(e.raw_args, index))
