@@ -4,7 +4,7 @@ defmodule PipelineFacts do
   use Amrita.Sweet
   import Support
 
-  future_fact "defaults to equals with vars" do
+  future_fact "right hand side is a var" do
     a = "yes"
     b = "yes"
 
