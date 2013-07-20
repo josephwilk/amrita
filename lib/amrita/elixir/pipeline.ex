@@ -27,6 +27,13 @@ defmodule Amrita.Elixir.Pipeline do
     end
   end
 
+  # Comparing HashDict
+  defp pipeline_op(left, {{ :., _, [{ :__aliases__, _, [:HashDict]}, _] }, _, _ }=right) do
+    quote do
+      unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
+    end
+  end
+
   defp pipeline_op(left, { call, line, args }=right) when is_list(args) do
     case validate_pipeline_args(args) do
       :error -> pipeline_error(right)

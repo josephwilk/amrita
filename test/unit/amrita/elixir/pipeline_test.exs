@@ -72,8 +72,12 @@ defmodule PipelineFacts do
       end
     end
 
-    future_fact "hashdict" do
-      HashDict.new |> HashDict.new
+    fact "hashdict" do
+      HashDict.new([{:b, 1}, {:a, 2}]) |> HashDict.new([{:b, 1}, {:a, 2}])
+
+      fail :hashdict do
+        HashDict.new([{:b, 1}, {:a, 2}]) |> HashDict.new([{:b, 1}, {:a, 6}])
+      end
     end
 
   end
