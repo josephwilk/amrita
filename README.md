@@ -29,6 +29,7 @@ mix deps.get
 Ensure you start Amrita in: test/test_helper.exs
 ```elixir
 Amrita.start
+
 #Or if you want a more documentation focused formatter:
 Amrita.start(formatter: Amrita.Formatter.Documentation)
 ```
@@ -44,7 +45,6 @@ defmodule ExampleFacts do
   use Amrita.Sweet
 
   # Write some facts here
-
 end
 ```
 
