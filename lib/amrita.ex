@@ -116,26 +116,24 @@ defmodule Amrita do
 
     """
     defmacro fact(description, provided // [], _meta // quote(do: _), contents) do
-      if is_list(provided) && !Enum.empty?(provided) do
-        {:provided, mocks} = Enum.at(provided, 0)
+      quote do
+        test Enum.join(@name_stack, "") <> unquote(description) do
+          import Kernel, except: [|>: 2]
+          import Amrita.Elixir.Pipeline
 
-        quote do
-          test Enum.join(@name_stack, "") <> unquote(description) do
-            import Kernel, except: [|>: 2]
-            import Amrita.Elixir.Pipeline
-
-            provided unquote(mocks) do
-              unquote(contents)
+          unquote do
+            if is_list(provided) && !Enum.empty?(provided) do
+              { :provided, mocks } = Enum.at(provided, 0)
+              quote do
+                provided unquote(mocks) do
+                  unquote(contents)
+                end
+              end
+            else
+              quote do
+                unquote(contents)
+              end
             end
-          end
-        end
-      else
-        quote do
-          test Enum.join(@name_stack, "") <> unquote(description) do
-            import Kernel, except: [|>: 2]
-            import Amrita.Elixir.Pipeline
-
-            unquote(contents)
           end
         end
       end
