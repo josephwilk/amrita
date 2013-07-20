@@ -4,6 +4,13 @@ defmodule PipelineFacts do
   use Amrita.Sweet
   import Support
 
+  future_fact "defaults to equals with vars" do
+    a = "yes"
+    b = "yes"
+
+    a |> b
+  end
+
   facts "defaults to equals checker" do
 
     fact "strings" do
