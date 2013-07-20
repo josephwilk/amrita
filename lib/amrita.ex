@@ -73,9 +73,9 @@ defmodule Amrita do
       end
     end
 
-    defmacro it(description, thing // quote(do: _), contents) do
+    defmacro it(description, provided // [], meta // quote(do: _), contents) do
       quote do
-        Amrita.Facts.fact(unquote(description), unquote(thing), unquote(contents))
+        Amrita.Facts.fact(unquote(description), unquote(provided), unquote(meta), unquote(contents))
       end
     end
 

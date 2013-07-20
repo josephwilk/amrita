@@ -306,4 +306,14 @@ defmodule AmritaFacts do
     assert 2 + 2 == 4
   end
 
+  describe "we can use describe in place of facts" do
+    it "works like fact" do
+      10 |> 10
+
+      fail :it do
+        1 |> 10
+      end
+    end
+  end
+
 end
