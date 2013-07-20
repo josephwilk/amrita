@@ -4,11 +4,22 @@ defmodule PipelineFacts do
   use Amrita.Sweet
   import Support
 
+  #For now this is impossible:
+  # a |> b         => _ |> { :a, _, nil  }
+  # true |> falsey => _ |> { :falsey, _, nil }
+  # We cannot tell the different between a function and a local var reference.
   future_fact "right hand side is a var" do
-    a = "yes"
-    b = "yes"
+    a = "var test"
+    b = "var test"
 
     a |> b
+
+    fail :var do
+      a = "var test"
+      b = "fail"
+
+      a |> b
+    end
   end
 
   facts "defaults to equals checker" do
