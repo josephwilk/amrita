@@ -77,6 +77,31 @@ defmodule PipelineFacts do
     end
 
   end
+end
 
+defmodule OriginalPipelineFacts do
+  use Amrita.Sweet
+
+  test :simple do
+    assert [1, [2], 3] |> List.flatten == [1, 2, 3]
+  end
+
+  test :nested do
+    assert [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) == [2, 4, 6]
+  end
+
+  test :local do
+    assert [1, [2], 3] |> List.flatten |> local == [2, 4, 6]
+  end
+
+  test :map do
+    assert Enum.map([1, 2, 3], &1 |> twice |> twice) == [4, 8, 12]
+  end
+
+  defp twice(a), do: a * 2
+
+  defp local(list) do
+    Enum.map(list, &1 * 2)
+  end
 end
 
