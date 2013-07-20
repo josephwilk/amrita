@@ -80,6 +80,14 @@ defmodule PipelineFacts do
       end
     end
 
+    fact "hashset" do
+      HashSet.new([1,2,3]) |> HashSet.new([1,2,3])
+
+      fail :hashset do
+        HashSet.new([1,2,3]) |> HashSet.new([1,2,4])
+      end
+    end
+
   end
 
   facts "pipelines non test assertion behaviour" do
