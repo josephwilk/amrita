@@ -176,7 +176,7 @@ defmodule ExampleFacts do
     fact "for_all checks if a predicate holds for all elements" do
       [2, 4, 6, 8] |> for_all even(&1)
 
-      ; or alternatively you could write
+      # or alternatively you could write
 
       [2, 4, 6, 8] |> Enum.all? even(&1)
     end
