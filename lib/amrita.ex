@@ -99,6 +99,14 @@ defmodule Amrita do
       end
     end
 
+    defp fact_name(name) do
+      if is_binary(name) do
+        name
+      else
+        "#{name}"
+      end
+    end
+
     @doc """
     A fact is the container of your test logic.
 
@@ -117,7 +125,7 @@ defmodule Amrita do
     """
     defmacro fact(description, provided // [], _meta // quote(do: _), contents) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(description) do
+        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
@@ -149,7 +157,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(description) do
+        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -166,7 +174,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(description) do
+        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -185,7 +193,7 @@ defmodule Amrita do
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
-        @name_stack List.concat(@name_stack, [unquote(description) <> " - "])
+        @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
         unquote(contents)
         if Enum.count(@name_stack) > 0 do
           @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)

@@ -318,4 +318,10 @@ defmodule AmritaFacts do
     end
   end
 
+  facts :atoms_are_ok do
+    fact :atoms_still_ok do
+      1 |> 1
+    end
+  end
+
 end
