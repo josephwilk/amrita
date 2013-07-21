@@ -125,6 +125,22 @@ defmodule ExampleFacts do
   use Amrita.Sweet
 
   facts "about Amrita checkers" do
+    
+    fact "`equals` checks equality" do
+      1 - 10 |> equals -9      
+      
+      # For convience the default checker is equals
+      # So we can write the above as
+      1 - 10 |> -9
+            
+      #Pattern matching with tuples
+      { 1, 2, { 3, 4 } } |> equals {1, _, { _, 4 } }
+
+      #Which is the same as 
+
+      { 1, 2, { 3, 4 } } |> {1, _, { _, 4 } }
+    end
+
     fact "contains checks if an element is in a collection" do
       [1, 2, 4, 5] |> contains 4
 
@@ -199,16 +215,6 @@ defmodule ExampleFacts do
 
     fact "truthy checks if expression evaulates to true" do
       "" |> truthy
-    end
-
-    fact "equals checks ==" do
-      1 - 10 |> equals -9
-
-      1 - 10 |> -9
-
-      { 1, 2, { 3, 4 } } |> equals {1, _, { _, 4 } }
-
-      { 1, 2, { 3, 4 } } |> {1, _, { _, 4 } }
     end
 
     defexception Boom, message: "Golly gosh"
