@@ -207,6 +207,8 @@ defmodule ExampleFacts do
       1 - 10 |> -9
 
       { 1, 2, { 3, 4 } } |> equals {1, _, { _, 4 } }
+
+      { 1, 2, { 3, 4 } } |> {1, _, { _, 4 } }
     end
 
     defexception Boom, message: "Golly gosh"
