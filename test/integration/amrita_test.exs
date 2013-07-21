@@ -5,12 +5,6 @@ defmodule AmritaFacts do
 
   import Support
 
-  describe "something" do
-    it "does addition" do
-      1 + 1 |> equals 2
-    end
-  end
-
   #Testing a single fact
   fact "addition" do
     assert 1 + 1 == 2
