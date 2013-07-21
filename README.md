@@ -231,7 +231,9 @@ defmodule ExampleFacts do
 end
 ```
 
-## Assertion Syntax
+## Assertion Syntax with |>
+
+The syntax for assertions is as follows: 
 
 ```elixir
 #Equality check
