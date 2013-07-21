@@ -102,11 +102,14 @@ defmodule AmritaFacts do
       end
     end
 
-    fact "matches" do
-      { 1, 2, 3 } |> matches { 1, _, 3 }
+    fact "tuples use matches when used with equals" do
+      { 1, 2, 3 } |> equals { 1, _, 3 }
+      { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, _ } }
 
       fail :matches do
-        { 1, 2, 3 } |> matches { 2, _, _ }
+        { 1, 2, 3 } |> { 2, _, _ }
+
+        { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, 4 } }
       end
     end
 

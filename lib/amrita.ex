@@ -429,10 +429,23 @@ defmodule Amrita do
         1000 |> equals 1000 ; true
         1000 |> equals 0    ; false
     """
-    def equals(actual, expected) do
-      r = (actual == expected)
+    defmacro equals(actual, expected) do
+      with_tuple = case expected do
+        { :{}, _, args } -> true
+                       _ -> false
+      end
 
-      if (not r), do: Message.fail(actual, expected, __ENV__.function)
+      if(with_tuple) do
+        quote do
+          unquote(actual) |> matches unquote(expected)
+        end
+      else
+        quote do
+          r = (unquote(actual) == unquote(expected))
+
+          if (not r), do: Message.fail(unquote(actual), unquote(expected), __ENV__.function)
+        end
+      end
     end
 
     @doc false
