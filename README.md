@@ -286,22 +286,6 @@ Amrita tries its best to be polite with its errors:
 
 ![Polite error message](http://s24.postimg.org/vlj6epnmt/Screen_Shot_2013_06_01_at_22_12_16.png)
 
-## Amrita I just want you for your checkers
-
-If facts are not your thing nothing is stopping you from using ExUnits `test` function.
-You still get all of Amrita's helpful checkers.
-
-```elixir
-
-defmodule IDontLikeFacts do
-  use Amrita.Sweet
-
-  test "I prefer test to fact" do
-    "hello" |> contains "ello"
-  end
-end
-```
-
 ## Amrita with Dynamo
 
 Checkout an example using Amrita with Dynamo: https://github.com/elixir-amrita/amrita_with_dynamo
