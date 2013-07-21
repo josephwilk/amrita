@@ -64,8 +64,12 @@ defmodule PipelineFacts do
       end
     end
 
-    future_fact "tuples with a pattern match" do
+    fact "tuples with a pattern match" do
       { 1, 2, 3 } |> { 1, _, 3 }
+
+      fail :pattern_match do
+        { 1, 2, 4 } |> { _, 2, 5 }
+      end
     end
 
     fact "ranges" do
