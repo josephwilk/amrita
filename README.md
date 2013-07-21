@@ -137,7 +137,6 @@ defmodule ExampleFacts do
       { 1, 2, { 3, 4 } } |> equals {1, _, { _, 4 } }
 
       #Which is the same as 
-
       { 1, 2, { 3, 4 } } |> {1, _, { _, 4 } }
     end
 
