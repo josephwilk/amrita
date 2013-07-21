@@ -173,6 +173,10 @@ defmodule ExampleFacts do
       {1, 2, 3, 4} |> has_suffix Set.new([{4, 3}])
     end
 
+    fact "matches supports pattern matching tuples" do
+     { 1, 2, 3 } |> matches { 1, _, 3 }
+    end
+
     fact "for_all checks if a predicate holds for all elements" do
       [2, 4, 6, 8] |> for_all even(&1)
 
