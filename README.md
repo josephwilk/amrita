@@ -231,6 +231,20 @@ defmodule ExampleFacts do
 end
 ```
 
+## Assertion Syntax
+
+```elixir
+#Equality check
+ACTUAL |> [EXPECTED]
+#Not equal check
+ACTUAL |> ! [EXPECTED]
+
+#Using a checker function
+ACTUAL |> CHECKER [EXPECTED]
+#or negative form
+ACTUAL |> !CHECKER [EXPECTED]
+```
+
 ## Running your tests
 
 Use mix to run your tests:
