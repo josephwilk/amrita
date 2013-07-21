@@ -402,6 +402,19 @@ defmodule Amrita do
     end
 
     @doc """
+    Checks if a tuple matches another tuple.
+
+    ## Example
+        { 1, 2, 3 } |> matches { _, 2, _ }
+    """
+    defmacro matches(actual, expected) do
+      quote do
+        r = match?(unquote(expected), unquote(actual))
+        if not(r), do: Amrita.Message.fail(unquote(actual), unquote(Macro.to_string(expected)), __ENV__.function)
+      end
+    end
+
+    @doc """
     Checks if actual == expected.
 
     ## Example

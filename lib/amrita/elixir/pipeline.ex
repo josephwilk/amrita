@@ -16,8 +16,7 @@ defmodule Amrita.Elixir.Pipeline do
   # Comparing tuples
   defp pipeline_op({ :{}, _, _ }=left, { :{}, _, _ }=right) do
     quote do
-      r = match?(unquote(right), unquote(left))
-      if not(r), do: Amrita.Message.fail(unquote(left), unquote(Macro.to_string(right)), {:equals, nil})
+      Amrita.Checkers.Simple.matches(unquote(left), unquote(right))
     end
   end
 

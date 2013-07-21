@@ -108,6 +108,14 @@ defmodule AmritaFacts do
       end
     end
 
+    fact "matches" do
+      { 1, 2, 3 } |> matches { 1, _, 3 }
+
+      fail :matches do
+        { 1, 2, 3 } |> matches { 2, _, _ }
+      end
+    end
+
     fact "equals" do
       999 |> equals 999
 
