@@ -1,6 +1,5 @@
 defmodule HistoryFacts do
   use Amrita.Sweet
-  use Amrita.Mocks
 
   #Example of meck history
   #[{#PID<0.301.0>,{Faker,:shout,["the mighty BOOSH"]},"the mighty BOOSH"}]
