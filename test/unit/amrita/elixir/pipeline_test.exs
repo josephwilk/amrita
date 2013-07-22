@@ -8,7 +8,7 @@ defmodule PipelineFacts do
   # a |> b         => _ |> { :a, _, nil  }
   # true |> falsey => _ |> { :falsey, _, nil }
   # We cannot tell the different between a function and a local var reference.
-  future_fact "right hand side is a var" do
+  future_fact "|> supports expected value as a var" do
     a = "var test"
     b = "var test"
 
