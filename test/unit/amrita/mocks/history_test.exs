@@ -1,3 +1,5 @@
+Code.require_file "../../../../test_helper.exs", __FILE__
+
 defmodule HistoryFacts do
   use Amrita.Sweet
 
