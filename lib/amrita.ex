@@ -430,12 +430,13 @@ defmodule Amrita do
         1000 |> equals 0    ; false
     """
     defmacro equals(actual, expected) do
-      with_tuple = case expected do
-        { :{}, _, args } -> true
-                       _ -> false
+      use_match = case expected do
+        { :{}, _, _ }     -> true
+        e when is_list(e) -> true
+                        _ -> false
       end
 
-      if(with_tuple) do
+      if(use_match) do
         quote do
           unquote(actual) |> matches unquote(expected)
         end

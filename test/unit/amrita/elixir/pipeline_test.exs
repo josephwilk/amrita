@@ -67,8 +67,16 @@ defmodule PipelineFacts do
     fact "tuples with a pattern match" do
       { 1, 2, 3 } |> { 1, _, 3 }
 
-      fail :pattern_match do
+      fail :tuple_pattern_match do
         { 1, 2, 4 } |> { _, 2, 5 }
+      end
+    end
+
+    fact "lists with a pattern match" do
+      [ 1, 2, 3 ] |> [ 1, _, 3 ]
+
+      fail :list_pattern_match do
+        [ 1, 2, 3 ] |> [ 2, _, 3 ]
       end
     end
 

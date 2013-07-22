@@ -102,23 +102,35 @@ defmodule AmritaFacts do
       end
     end
 
-    fact "tuples use matches when used with equals" do
-      { 1, 2, 3 } |> equals { 1, _, 3 }
-      { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, _ } }
-
-      fail :matches do
-        { 1, 2, 3 } |> { 2, _, _ }
-
-        { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, 4 } }
-      end
-    end
-
     fact "equals" do
       999 |> equals 999
 
       fail :equals do
         999 |> equals 998
       end
+    end
+
+    facts "equals with wild cards" do
+
+      fact "tuples use matches when used with equals" do
+        { 1, 2, 3 } |> equals { 1, _, 3 }
+        { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, _ } }
+
+        fail :tuples do
+          { 1, 2, 3 } |> { 2, _, _ }
+
+          { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, 4 } }
+        end
+      end
+
+      fact "lists use matches when used with equals" do
+        [ 3, 2, 1 ] |> equals [ 3, _, 1 ]
+
+        fail :lists do
+          [ 3, 2, 1 ] |> equals [ 3, _, 2 ]
+        end
+      end
+
     end
   end
 
