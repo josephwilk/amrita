@@ -49,12 +49,15 @@
 <span class="k">  </span><span class="n">factorial</span><span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="o">!</span> <span class="m">0</span>
   <span class="n">factorial</span><span class="p">(</span><span class="m">0</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="m">1</span>
 
-  <span class="n">list_of_factorials</span> <span class="o">=</span> <span class="no">Enum</span><span class="o">.</span><span class="n">map</span> <span class="m">1</span><span class="o">..</span><span class="m">10</span><span class="p">,</span> <span class="k">fn</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">end</span>
+  <span class="n">list_of_factorials</span> <span class="o">=</span> <span class="no">Enum</span><span class="o">.</span><span class="n">map</span> <span class="m">0</span><span class="o">..</span><span class="m">3</span><span class="p">,</span> <span class="k">fn</span> <span class="n">n</span> <span class="o">-&gt;</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">end</span>
 
   <span class="n">list_of_factorials</span> <span class="o">|&gt;</span> <span class="n">contains</span> <span class="m">1</span>
   <span class="n">list_of_factorials</span> <span class="o">|&gt;</span> <span class="o">!</span><span class="n">contains</span> <span class="m">2</span>
+
+  <span class="n">list_of_factorials</span> <span class="o">|&gt;</span> <span class="p">[</span> <span class="n">_</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">_</span> <span class="p">,</span> <span class="m">6</span> <span class="p">]</span>
 <span class="k">end</span>
 </pre></div>
+
 <h2>Simple syntax</h2>
 
 <div class="highlight"><pre><span class="c1">#Equality check</span>

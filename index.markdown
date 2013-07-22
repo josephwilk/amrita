@@ -49,10 +49,12 @@ fact "about factorial" do
   factorial(0) |> ! 0
   factorial(0) |> 1
 
-  list_of_factorials = Enum.map 1..10, fn n -> factorial(n) end
+  list_of_factorials = Enum.map 0..3, fn n -> factorial(n) end
 
   list_of_factorials |> contains 1
   list_of_factorials |> !contains 2
+  
+  list_of_factorials |> [ _, 1, _ , 6 ]
 end
 ```
 
