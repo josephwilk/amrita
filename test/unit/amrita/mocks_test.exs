@@ -3,7 +3,7 @@ Code.require_file "../../../test_helper.exs", __FILE__
 defmodule MocksFacts do
   use Amrita.Sweet
 
-  import Amrita.Mocks.Provided.Prerequisites, as: Prerequisites
+  alias Amrita.Mocks.Provided.Prerequisites, as: Prerequisites
 
   facts "about parsing valid prerequisites" do
     fact "returns a dict indexed by module and function with {module, function, argument, return_value}" do

@@ -1,0 +1,25 @@
+defmodule Amrita.Checkers.Messages do
+  alias Amrita.Message, as: Message
+  
+  @moduledoc """
+  Checkers relating to messages.
+  """
+
+  @doc """
+  Returns the received message with parameters.
+
+  ## Examples
+      self <- :hello
+      received |> :hello
+
+  """
+  def received do
+    timeout = 0
+    receive do
+      other -> other
+    after
+      timeout ->
+        Message.fail("Expected to have received message", __ENV__.function)
+    end
+  end
+end
