@@ -3,6 +3,8 @@ Code.require_file "../../../../test_helper.exs", __FILE__
 defmodule HistoryFacts do
   use Amrita.Sweet
 
+  alias Amrita.Mocks.History, as: History
+
   #Example of meck history
   #[{#PID<0.301.0>,{Faker,:shout,["the mighty BOOSH"]},"the mighty BOOSH"}]
 
@@ -15,8 +17,8 @@ defmodule HistoryFacts do
       Faker.shout("the mighty BOOSH")
       Faker.whisper("journey through space and time")
 
-      Amrita.Mocks.History.match?(Faker, :shout, [%r"mighty"]) |> truthy
-      Amrita.Mocks.History.match?(Faker, :shout, [%r"wrong"]) |> falsey
+      History.match?(Faker, :shout, [%r"mighty"]) |> truthy
+      History.match?(Faker, :shout, [%r"wrong"]) |> falsey
     end
 
     fact "regex arguments match regex arguments" do
@@ -27,8 +29,8 @@ defmodule HistoryFacts do
       Saker.shout(%r"funk")
       Saker.whisper("shh")
 
-      Amrita.Mocks.History.match?(Saker, :shout, [%r"funk"]) |> truthy
-      Amrita.Mocks.History.match?(Saker, :shout, [%r"sunk"]) |> falsey
+      History.match?(Saker, :shout, [%r"funk"]) |> truthy
+      History.match?(Saker, :shout, [%r"sunk"]) |> falsey
     end
 
   end
