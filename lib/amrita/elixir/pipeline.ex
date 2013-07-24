@@ -1,6 +1,8 @@
 defmodule Amrita.Elixir.Pipeline do
   @moduledoc false
 
+  import Kernel, except: [|>: 2]
+
   defmacro left |> right do
     pipeline_op(left, right)
   end
