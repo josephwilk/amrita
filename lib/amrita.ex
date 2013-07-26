@@ -193,7 +193,22 @@ defmodule Amrita do
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
         @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
-        unquote(contents)
+
+        message = if is_binary(unquote(description)) do
+                    binary_to_atom(unquote(description))
+                  else
+                    unquote(description)
+                  end
+
+        defmodule Module.concat(__MODULE__, unquote(description)) do
+          use ExUnit.Case
+          use Amrita.Sweet
+
+          @name_stack []
+
+          unquote(contents)
+        end
+
         if Enum.count(@name_stack) > 0 do
           @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
         end

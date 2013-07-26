@@ -17,7 +17,7 @@ defmodule ScopingFacts do
       2
     end
     
-    future_fact "echo 2" do
+    fact "echo 2" do
       echo |> 2
     end
   end
