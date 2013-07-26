@@ -132,8 +132,8 @@ defmodule Amrita.Checkers.Simple do
       quote do
         r = (unquote(actual) == unquote(expected))
 
-        if (not r), do: Message.fail(unquote(actual), unquote(expected), __ENV__.function)
-    end
+        if (not r), do: Message.fail(unquote(actual), unquote(expected), { :equals, 2 })
+      end
     end
   end
 
