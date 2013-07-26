@@ -16,7 +16,7 @@ defmodule Amrita do
   """
   def start(opts // []) do
     formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
-    ExUnit.start formatter: formatter
+    Amrita.start_it formatter: formatter
   end
 
   @doc """
@@ -25,6 +25,43 @@ defmodule Amrita do
   def please_start(opts // []) do
     start(opts)
   end
+
+  def start_it(options // []) do
+    :application.start(:elixir)
+    :application.start(:ex_unit)
+
+    configure(options)
+
+    if :application.get_env(:ex_unit, :started) != { :ok, true } do
+      :application.set_env(:ex_unit, :started, true)
+
+      System.at_exit fn
+        0 ->
+          failures = Amrita.run
+          System.at_exit fn _ ->
+            if failures > 0, do: System.halt(1), else: System.halt(0)
+          end
+        _ ->
+          :ok
+      end
+    end
+  end
+
+  def configuration do
+    :application.get_all_env(:ex_unit)
+  end
+
+  def configure(options) do
+    Enum.each options, fn { k, v } ->
+      :application.set_env(:ex_unit, k, v)
+    end
+  end
+
+  def run do
+    { async, sync, load_us } = ExUnit.Server.start_run
+    Amrita.Runner.run async, sync, configuration, load_us
+  end
+
 
   defmodule Sweet do
     @moduledoc """
@@ -57,6 +94,20 @@ defmodule Amrita do
         import Amrita.Checkers.Collections
         import Amrita.Checkers.Exceptions
         import Amrita.Checkers.Messages
+
+        @submodules []
+
+        @before_compile __MODULE__
+
+        defmacro __before_compile__(env) do
+          all_submodules =  Module.get_attribute(env.module, :submodules)
+          quote do
+            def __submodules__ do
+              unquote(all_submodules)
+            end
+          end
+        end
+
       end
     end
   end
@@ -193,7 +244,29 @@ defmodule Amrita do
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
         @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
-        unquote(contents)
+
+        message = if is_binary(unquote(description)) do
+                    binary_to_atom(unquote(description))
+                  else
+                    unquote(description)
+                  end
+
+        @submodules List.concat(@submodules, [message])
+
+        defmodule message do
+          use Amrita.Sweet
+
+          #TODO: remove need for this
+          def __ex_unit__(_,_) do
+            {:ok, []}
+          end
+
+          @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
+
+          @submodules []
+          unquote(contents)
+        end
+
         if Enum.count(@name_stack) > 0 do
           @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
         end
