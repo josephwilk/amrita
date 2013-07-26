@@ -110,6 +110,14 @@ defmodule AmritaFacts do
       end
     end
 
+    fact "msg" do
+      fn -> :hello end |> msg(:hello)
+
+      fail :msg do
+        fn -> :sod end |> msg(:hello)
+      end
+    end
+
     facts "equals with wild cards" do
 
       fact "tuples use matches when used with equals" do
@@ -225,15 +233,15 @@ defmodule AmritaFacts do
 
     fact "received" do
       self <- :hello
-      received |> :hello
+      received |> msg(:hello)
 
       fail "wrong match" do
         self <- :sod
-        received |> :hello
+        received |> msg(:hello)
       end
 
       fail "never received message" do
-        received |> :hello
+        received |> msg(:hello)
       end
     end
 

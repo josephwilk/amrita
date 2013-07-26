@@ -146,6 +146,22 @@ defmodule Amrita.Checkers.Simple do
   end
 
   @doc """
+  Checks if the function returns the expected result, this is used for
+  checking received messages
+
+  ## Examples
+      fn -> :hello end |> :hello
+      received |> msg(:hello)
+
+  """
+  def msg(function, expected) do
+    actual = function.()
+    r = actual == expected
+    if not(r), do: Message.fail(actual, expected, __ENV__.function)
+  end
+
+
+  @doc """
   Negates all following checkers.
 
   ## Examples
