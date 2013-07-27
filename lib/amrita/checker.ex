@@ -18,6 +18,10 @@ defmodule Amrita.Checker do
     "#{function_name}(#{Enum.join(str_args, ",")})"
   end
 
+  def to_s(function_name, args) when is_atom(args) do
+    "#{function_name}(#{inspect(args)})"
+  end
+
   def to_s(function_name, args) when args do
     "#{function_name}(#{inspect(args)})"
   end
