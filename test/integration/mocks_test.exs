@@ -187,14 +187,14 @@ defmodule MocksTest do
       "brandy"
     end
 
+    def tiplet(count) do
+      "brandy#{count}"
+    end
+
     fact "mock with a function defined inside a test" do
       provided [MocksTest.Funk.hip?(tiplet) |> false] do
         Funk.hip?("brandy") |> falsey
       end
-    end
-
-    def tiplet(count) do
-      "brandy#{count}"
     end
 
     fact "mock with a function with args defined inside a test" do
@@ -232,6 +232,14 @@ defmodule MocksTest do
       end
     end
 
+  end
+
+  def tiplet(count) do
+    "brandy#{count}"
+  end
+
+  def tiplet do
+    "brandy"
   end
 
   fact "mock with a return value as a function" do
