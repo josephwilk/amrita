@@ -121,6 +121,17 @@ defmodule Amrita do
           Flip.flop(:ok) |> truthy
         end
 
+    You can optionally examine meta data passed to each fact. Useful when used
+    with callbacks:
+
+    ## Example
+        setup do
+          {:ok, ping: "pong"}
+        end
+
+        fact "with meta data", meta do
+          meta[:pong] |> "pong"
+        end
     """
     defmacro fact(description, provided // [], var // quote(do: _), contents) do
       var = case provided do
