@@ -15,6 +15,18 @@ defmodule MocksTest do
     end
   end
 
+  defmodule Rude do
+    def swear? do
+      true
+    end
+  end
+
+  defmodule Funk do
+    def hip?(_arg) do
+      true
+    end
+  end
+
   fact "check unstubbed module was preserved after stub" do
     Polite.swear? |> falsey
     Polite.message |> "oh swizzlesticks"
@@ -45,12 +57,6 @@ defmodule MocksTest do
     end
   end
 
-  defmodule Rude do
-    def swear? do
-      true
-    end
-  end
-
   fact "multi mocks on different modules" do
     provided [MocksTest.Polite.swear? |> true,
               MocksTest.Rude.swear? |> false] do
@@ -76,12 +82,6 @@ defmodule MocksTest do
   end
 
   facts "about mocks with non checker arguments" do
-
-    defmodule Funk do
-      def hip?(_arg) do
-        true
-      end
-    end
 
     fact "mock with a single argument" do
       provided [MocksTest.Funk.hip?(:yes) |> false] do
