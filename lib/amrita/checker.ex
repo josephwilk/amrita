@@ -5,6 +5,10 @@ defmodule Amrita.Checker do
     to_s "#{inspect(module)}.#{fun}", args
   end
 
+  def to_s({function_name, 1}, _) do
+    "#{function_name}"
+  end
+
   def to_s({function_name, _arity}, args) do
     to_s(function_name, args)
   end
@@ -18,15 +22,12 @@ defmodule Amrita.Checker do
     "#{function_name}(#{Enum.join(str_args, ",")})"
   end
 
-  def to_s(function_name, args) when is_atom(args) do
-    "#{function_name}(#{inspect(args)})"
-  end
-
   def to_s(function_name, args) when args do
     "#{function_name}(#{inspect(args)})"
   end
 
-  def to_s(function_name, _) do
-    "#{function_name}"
+  def to_s(function_name, args) when is_atom(args) do
+    "#{function_name}(#{inspect(args)})"
   end
+
 end
