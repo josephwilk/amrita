@@ -22,7 +22,7 @@ defmodule AmritaFacts do
   end
 
   #Testing multiple depths of facts
-  facts "about subtraction" do
+  facts "more about subtraction" do
     facts "zero results" do
       fact "postive numbers" do
         assert 2 - 2 == 0
