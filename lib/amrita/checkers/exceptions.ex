@@ -54,7 +54,7 @@ defmodule Amrita.Checkers.Exceptions do
   def raises(expected_exception) do
     fn function ->
          function |> raises expected_exception
-         "raises(#{inspect expected_exception})"
+         {expected_exception,  __ENV__.function}
     end
   end
 end
