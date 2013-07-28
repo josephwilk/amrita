@@ -93,7 +93,7 @@ defmodule Amrita.Checkers.Simple do
   def roughly(expected) do
     fn actual ->
          actual |> roughly expected
-         Checker.to_s(__ENV__.function, expected)
+         {expected, __ENV__.function}
     end
   end
 

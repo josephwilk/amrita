@@ -1,7 +1,7 @@
 defmodule Amrita.Checkers.Collections do
   alias Amrita.Message, as: Message
   alias Amrita.Checker, as: Checker
-  
+
   @moduledoc """
   Checkers which are designed to work with collections (lists, tuples, keyword lists, strings).
   """
@@ -33,7 +33,7 @@ defmodule Amrita.Checkers.Collections do
   def contains(element) do
     fn collection ->
          collection |> contains element
-         Checker.to_s(__ENV__.function, element)
+         { element, __ENV__.function }
     end
   end
 
@@ -76,7 +76,7 @@ defmodule Amrita.Checkers.Collections do
   def has_prefix(element) do
     fn collection ->
          collection |> has_prefix element
-         Checker.to_s(__ENV__.function, element)
+         {element, __ENV__.function}
     end
   end
 
@@ -120,7 +120,7 @@ defmodule Amrita.Checkers.Collections do
   def has_suffix(element) do
     fn collection ->
          collection |> has_suffix element
-         Checker.to_s(__ENV__.function, element)
+         {element, __ENV__.function}
     end
   end
 
