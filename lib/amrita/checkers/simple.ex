@@ -1,7 +1,7 @@
 defmodule Amrita.Checkers.Simple do
   alias Amrita.Message, as: Message
   alias Amrita.Checker, as: Checker
-  
+
   @moduledoc """
   Checkers for operating on single forms like numbers, atoms, bools, floats, etc.
   """
@@ -141,7 +141,7 @@ defmodule Amrita.Checkers.Simple do
   def equals(expected) do
     fn actual ->
          actual |> equals expected
-         Checker.to_s(__ENV__.function, expected)
+         {expected, __ENV__.function}
     end
   end
 

@@ -13,6 +13,10 @@ defmodule Amrita.Checker do
     to_s(function_name, args)
   end
 
+  def to_s(:!, { expected, { fun, arity }}) do
+    "! " <> to_s({ fun, arity + 1 }, expected)
+  end
+
   def to_s(function_name, args) when is_bitstring(args) do
     "#{function_name}(#{args})"
   end

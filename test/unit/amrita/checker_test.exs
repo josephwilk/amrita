@@ -25,4 +25,12 @@ defmodule CheckerFacts do
     end
 
   end
+
+  facts "converts negated predicates into strings" do
+    fact "contains both predicate and negation symbol" do
+      checker_as_string = Amrita.Checker.to_s :!, {:pants, {:equals, 1}}
+      checker_as_string |> "! equals(:pants)"
+    end
+  end
+
 end

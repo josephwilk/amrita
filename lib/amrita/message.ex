@@ -7,8 +7,8 @@ defmodule Amrita.Message do
   end
 
   def fail(actual, expected, fun) do
-    raise Amrita.FactError, expected: inspect(expected),
-                            actual: inspect(actual),
+    raise Amrita.FactError, expected: expected,
+                            actual: actual,
                             predicate: fun
   end
 
