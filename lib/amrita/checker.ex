@@ -17,10 +17,6 @@ defmodule Amrita.Checker do
     "! " <> to_s({ fun, arity + 1 }, expected)
   end
 
-  def to_s(function_name, args) when is_bitstring(args) do
-    "#{function_name}(#{args})"
-  end
-
   def to_s(function_name, args) when is_list(args) do
     str_args = Enum.map args, fn a -> inspect(a) end
     "#{function_name}(#{Enum.join(str_args, ",")})"

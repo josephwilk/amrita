@@ -9,7 +9,7 @@ defmodule CheckerFacts do
       checker_as_string |> "equals(:pants)"
     end
 
-    future_fact "string argument is rendered" do
+    fact "string argument is rendered" do
       checker_as_string = Amrita.Checker.to_s { :equals, 2 }, "pants"
       checker_as_string |> "equals(\"pants\")"
     end
