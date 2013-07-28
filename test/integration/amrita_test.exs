@@ -316,6 +316,10 @@ defmodule AmritaFacts do
 
     fact "raises" do
       fn -> raise TestException end |> ! raises AmritaFacts.MadeUpException
+
+      fail "! raises" do
+        fn -> raise TestException end |> ! raises TestException
+      end
     end
 
     fact "|> defaulting to not(equality)" do
