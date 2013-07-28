@@ -317,6 +317,8 @@ defmodule AmritaFacts do
     fact "raises" do
       fn -> raise TestException end |> ! raises AmritaFacts.MadeUpException
 
+      fn -> raise TestException end |> ! raises %r".*posh.*"
+
       fail "! raises" do
         fn -> raise TestException end |> ! raises TestException
       end
