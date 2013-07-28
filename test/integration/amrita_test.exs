@@ -325,6 +325,22 @@ defmodule AmritaFacts do
         1 |> ! 1
       end
     end
+
+    fact "falsey" do
+      true |> ! falsey
+
+      fail "! falsey" do
+        false |> ! falsey
+      end
+    end
+
+    fact "truthy" do
+      false |> ! truthy
+
+      fail "! truthy" do
+        true |> ! truthy
+      end
+    end
   end
 
   test "Backwards compatible with ExUnit" do

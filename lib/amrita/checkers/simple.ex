@@ -48,6 +48,14 @@ defmodule Amrita.Checkers.Simple do
     if not(r), do: Message.fail(actual, __ENV__.function)
   end
 
+  @doc false
+  def truthy do
+    fn actual ->
+      actual |> truthy
+      {nil, __ENV__.function}
+    end
+  end
+
   @doc """
   Check if `actual` evaluates to precisely false.
 
@@ -63,6 +71,14 @@ defmodule Amrita.Checkers.Simple do
     end
 
     if not(r), do: Message.fail(actual, __ENV__.function)
+  end
+
+  @doc false
+  def falsey do
+    fn actual ->
+      actual |> falsey
+      {nil, __ENV__.function}
+    end
   end
 
   @doc """
