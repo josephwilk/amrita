@@ -53,6 +53,7 @@ defmodule Amrita do
         use Amrita.Mocks
         import Amrita.Describes
 
+        import Amrita.Checker.Helper
         import Amrita.Checkers.Simple
         import Amrita.Checkers.Collections
         import Amrita.Checkers.Exceptions
