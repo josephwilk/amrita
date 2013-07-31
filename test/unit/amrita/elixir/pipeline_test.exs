@@ -146,14 +146,4 @@ defmodule PipelineFacts do
     end
   end
 
-  fact "outside of a fact |> behaviours exactly the same as in Elixir" do
-    do_something_amrita_pipeline_does_not_support |> 13
-  end
-
-  def do_something_amrita_pipeline_does_not_support do
-    __MODULE__ |> :constant
-  end
-
-  def constant, do: 13
-
 end
