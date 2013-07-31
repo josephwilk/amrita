@@ -1,29 +1,41 @@
 defmodule Amrita.Checker do
   @moduledoc false
 
+  @moduledoc false
   defmodule Helper do
     defmacro defchecker(name, _ // quote(do: _), contents) do
-      {fun_name, _, vars} = name
+      { fun_name, _, vars } = name
+
+      neg_args = Enum.drop(vars, 1)
+      neg_args = Macro.escape(neg_args)
+
+      expected_arg = Enum.at(vars,1)
+      expected_arg = Macro.escape(expected_arg)
 
       args = Macro.escape(vars)
       contents = Macro.escape(contents)
-      fun_contents = Macro.escape(quote do: fn actual -> actual |> unquote(fun_name)
-                                                         {:nil, __ENV__.function}
-                                            end)
 
       quote do
-        def unquote(fun_name), unquote(args), [] do
+        def(unquote(fun_name), unquote(args), []) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
           unquote(contents)
         end
 
-        def unquote(fun_name), [],[] do
-          unquote(fun_contents)
+        def(unquote(fun_name), unquote(neg_args), []) do
+          name = unquote(fun_name)
+          expected = unquote(expected_arg)
+
+          case Enum.count(unquote(neg_args)) do
+            0 -> quote do: fn(actual) -> unquote(name)(actual); {nil, __ENV__.function}
+                 end
+
+            1 -> quote do: fn(actual) -> unquote(name)(actual, unquote(expected)); {unquote(expected), __ENV__.function}
+                 end
+          end
         end
       end
-
     end
   end
 
