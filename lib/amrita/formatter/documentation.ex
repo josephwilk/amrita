@@ -12,6 +12,11 @@ defmodule Amrita.Formatter.Documentation do
   defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0, scope: HashDict.new,
             test_failures: [], case_failures: [], pending_failures: []
 
+
+  # defcallback fact_fail(id, test) :: any
+  # defcallback fact_fail(id, test) :: any
+
+
   ## Behaviour
 
   def suite_started(_) do
@@ -39,6 +44,15 @@ defmodule Amrita.Formatter.Documentation do
     :gen_server.cast(id, { :test_finished, test })
   end
 
+
+  def fact_fail(id, test) do
+    :gen_server.cast(id, { :fact_fail, test })
+  end
+
+
+
+
+
   ## Callbacks
 
   def init(_) do
@@ -53,6 +67,12 @@ defmodule Amrita.Formatter.Documentation do
 
   def handle_call(reqest, from, config) do
     super(reqest, from, config)
+  end
+
+  def handle_cast({ :fact_fail, ExUnit.Test[]=test}, config) do
+    IO.puts  failure("  #{format_test_name test}")
+
+    { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
   end
 
   def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do

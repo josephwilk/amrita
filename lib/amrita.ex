@@ -16,7 +16,7 @@ defmodule Amrita do
   """
   def start(opts // []) do
     formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
-    ExUnit.start formatter: formatter
+    Amrita.start_it formatter: formatter
   end
 
   @doc """
@@ -24,6 +24,45 @@ defmodule Amrita do
   """
   def please_start(opts // []) do
     start(opts)
+  end
+
+
+
+def start_it(options // []) do
+    :application.start(:elixir)
+    :application.start(:ex_unit)
+
+    configure(options)
+
+    if :application.get_env(:ex_unit, :started) != { :ok, true } do
+      :application.set_env(:ex_unit, :started, true)
+
+      System.at_exit fn
+        0 ->
+          failures = Amrita.run
+          System.at_exit fn _ ->
+            if failures > 0, do: System.halt(1), else: System.halt(0)
+          end
+        _ ->
+          :ok
+      end
+    end
+  end
+
+ def configure(options) do
+    Enum.each options, fn { k, v } ->
+      :application.set_env(:ex_unit, k, v)
+    end
+  end
+
+def configuration do
+    :application.get_all_env(:ex_unit)
+  end
+
+
+  def run do
+    { async, sync, load_us } = ExUnit.Server.start_run
+    Amrita.Engine.Runner.run async, sync, configuration, load_us
   end
 
   defmodule Sweet do
@@ -134,6 +173,41 @@ defmodule Amrita do
           meta[:pong] |> "pong"
         end
     """
+
+    defmodule Wrap do
+      def assertions([ do: forms ]) when is_list(forms), do: [do: Enum.map(forms, assertions(&1))]
+
+      def assertions([ do: { :provided, [line: line], _mocks } ] = thing) do
+        inject_exception_test(thing, line)
+      end
+
+      def assertions([ do: thing ]), do: [do: assertions(thing)]
+
+      def assertions({ :__block__, m, forms }) do
+        { :__block__, m, Enum.map(forms, assertions(&1)) }
+      end
+
+      def assertions({ :|>, [line: line], _args } = test), do: inject_exception_test(test, line)
+
+      def assertions(form), do: form
+
+      defp inject_exception_test(form, line) do
+        #x = {:meta, [], nil}
+        #x = Macro.escape(x)
+        quote hygiene: [vars: false] do
+          try do
+            unquote(form)
+          rescue
+            error in [Amrita.FactError, Amrita.MockError] ->
+              current_test = meta[:test]
+              current_test = current_test.failure { :error, Exception.normalize(:Amrita.FactError, error), System.stacktrace }
+              meta[:__pid__] <- {self, :fact_fail, current_test}
+          end
+        end
+      end
+
+    end
+
     defmacro fact(description, provided // [], var // quote(do: _), contents) do
       var = case provided do
         [provided: _] -> var
@@ -151,12 +225,12 @@ defmodule Amrita do
               { :provided, mocks } = Enum.at(provided, 0)
               quote do
                 provided unquote(mocks) do
-                  unquote(contents)
+                  unquote(Wrap.assertions(contents))
                 end
               end
             else
               quote do
-                unquote(contents)
+                unquote(Wrap.assertions(contents))
               end
             end
           end
