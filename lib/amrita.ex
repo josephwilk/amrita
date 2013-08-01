@@ -197,11 +197,13 @@ def configuration do
         quote hygiene: [vars: false] do
           try do
             unquote(form)
+            current_test = meta[:test]
+            meta[:__pid__] <- {self, :fact_finished, current_test}
           rescue
             error in [Amrita.FactError, Amrita.MockError] ->
               current_test = meta[:test]
               current_test = current_test.failure { :error, Exception.normalize(:Amrita.FactError, error), System.stacktrace }
-              meta[:__pid__] <- {self, :fact_fail, current_test}
+              meta[:__pid__] <- {self, :fact_finished, current_test}
           end
         end
       end

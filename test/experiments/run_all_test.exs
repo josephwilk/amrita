@@ -9,6 +9,8 @@ defmodule RunAllFacts do
     10 |> 11
 
     9 |> 6
+
+    3 |> 3
   end
 
 end

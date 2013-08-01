@@ -161,7 +161,7 @@ defmodule Amrita.Engine.Runner do
 
   def receive_loop(test_pid, test_ref, test, config) do
     receive do
-      { ^test_pid, :fact_fail, test} -> config.formatter.fact_fail(config.formatter_id, test) ; receive_loop(test_pid, test_ref, test, config)
+      { ^test_pid, :fact_finished, test} -> config.formatter.fact_finished(config.formatter_id, test) ; receive_loop(test_pid, test_ref, test, config)
       { ^test_pid, :test_finished, test } ->  config.formatter.test_finished(config.formatter_id, test)
       { :DOWN, ^test_ref, :process, ^test_pid, { error, stacktrace } } ->
         test = test.failure { :EXIT, error, filter_stacktrace(stacktrace) }

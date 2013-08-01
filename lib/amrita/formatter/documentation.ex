@@ -45,13 +45,9 @@ defmodule Amrita.Formatter.Documentation do
   end
 
 
-  def fact_fail(id, test) do
-    :gen_server.cast(id, { :fact_fail, test })
+  def fact_finished(id, test) do
+    :gen_server.cast(id, { :fact_finished, test })
   end
-
-
-
-
 
   ## Callbacks
 
@@ -69,11 +65,18 @@ defmodule Amrita.Formatter.Documentation do
     super(reqest, from, config)
   end
 
-  def handle_cast({ :fact_fail, ExUnit.Test[]=test}, config) do
+  def handle_cast({ :fact_finished, ExUnit.Test[failure: nil]=test}, config) do
+    IO.puts  success("  #{format_test_name test}")
+
+    { :noreply, config.update_tests_counter(&1 + 1) }
+  end
+
+  def handle_cast({ :fact_finished, ExUnit.Test[]=test}, config) do
     IO.puts  failure("  #{format_test_name test}")
 
     { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
   end
+
 
   def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
     if(name_parts = scoped(test)) do
@@ -87,15 +90,15 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   def handle_cast({ :test_finished, ExUnit.Test[failure: nil] = test }, config) do
-    if(name_parts = scoped(test)) do
-      print_indent(name_parts)
-      IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+    #if(name_parts = scoped(test)) do
+      #print_indent(name_parts)
+      #IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
 
-      { :noreply, config.update_tests_counter(&1 + 1) }
-    else
-      IO.puts success("\r  #{format_test_name test}")
-      { :noreply, config.update_tests_counter(&1 + 1) }
-    end
+      { :noreply, config }
+    #else
+      #IO.puts success("\r  #{format_test_name test}")
+      { :noreply, config }
+    #end
   end
 
   def handle_cast({ :test_finished, ExUnit.Test[failure: { :invalid, _ }] = test }, config) do
