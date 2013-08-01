@@ -13,7 +13,7 @@ defmodule Integration.CheckerFacts do
        1000 |> thousand
        1001 |> ! thousand
 
-       fail :custom_checker do
+       fail do
          1001 |> thousand
          1000 |> ! thousand
        end
@@ -29,7 +29,7 @@ defmodule Integration.CheckerFacts do
       100 |> valid 100
       100 |> ! valid 101
 
-      fail :more_custom_checkers do
+      fail do
         100 |> valid 101
         100 |> ! valid 100
       end

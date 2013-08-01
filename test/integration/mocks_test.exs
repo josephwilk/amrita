@@ -66,7 +66,7 @@ defmodule MocksTest do
         Flip.flop("this is a mooo thing") |> true
       end
 
-      fail :failing do
+      fail do
         provided [Flip.flop(fn x -> x =~ %r"moo" end) |> true] do
           Flip.flop("this is a mo thing") |> true
         end
@@ -95,7 +95,7 @@ defmodule MocksTest do
           Funk.hip?(%r"monkey") |> falsey
         end
 
-        fail :regex_mocks do
+        fail do
           provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
             Funk.hip?(%r"mon") |> falsey
           end
@@ -107,7 +107,7 @@ defmodule MocksTest do
           Funk.hip?([1, 2, 3]) |> falsey
         end
 
-        fail :list_mocks do
+        fail do
           provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
             Funk.hip?([1, 2, 3, 4]) |> falsey
           end
@@ -119,7 +119,7 @@ defmodule MocksTest do
           Funk.hip?({1, 2, 3}) |> falsey
         end
 
-        fail :tuple_mocks do
+        fail do
           provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
             Funk.hip?({1, 2}) |> falsey
           end
@@ -131,7 +131,7 @@ defmodule MocksTest do
           Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
         end
 
-        fail :dict_mocks do
+        fail do
           provided [MocksTest.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
             Funk.hip?(HashDict.new([{:a, 2}])) |> falsey
           end
@@ -143,7 +143,7 @@ defmodule MocksTest do
           Funk.hip?(1..10) |> falsey
         end
 
-        fail :range_mocks do
+        fail do
           provided [MocksTest.Funk.hip?(1..10) |> false] do
             Funk.hip?(1..11) |> falsey
           end

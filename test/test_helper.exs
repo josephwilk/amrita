@@ -23,7 +23,7 @@ defmodule Support do
     end
   end
 
-  defmacro fail(_name // "", _ // quote(do: _), contents) do
+  defmacro fail(name // "", _ // quote(do: _), contents) do
     Support.Wrap.assertions(contents)
   end
 

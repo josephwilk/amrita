@@ -14,7 +14,7 @@ defmodule PipelineFacts do
 
     a |> b
 
-    fail :var do
+    fail do
       a = "var test"
       b = "fail"
 
@@ -43,7 +43,7 @@ defmodule PipelineFacts do
     fact "atoms" do
       :yes |> :yes
 
-      fail :atoms do
+      fail do
         :no |> :yes
       end
     end
@@ -51,7 +51,7 @@ defmodule PipelineFacts do
     fact "lists" do
       [1, 2, 3] |> [1, 2, 3]
 
-      fail :lists do
+      fail do
         [1, 2, 3] |> [1, 2, 4]
       end
     end
@@ -59,7 +59,7 @@ defmodule PipelineFacts do
     fact "tuples" do
       { 1, 2, 3 } |> { 1, 2, 3 }
 
-      fail :tuples do
+      fail do
         { 1, 2, 3 } |> { 1, 2, 4 }
       end
     end
@@ -67,7 +67,7 @@ defmodule PipelineFacts do
     fact "tuples with a pattern match" do
       { 1, 2, 3 } |> { 1, _, 3 }
 
-      fail :tuple_pattern_match do
+      fail do
         { 1, 2, 4 } |> { _, 2, 5 }
       end
     end
@@ -75,7 +75,7 @@ defmodule PipelineFacts do
     fact "lists with a pattern match" do
       [ 1, 2, 3 ] |> [ 1, _, 3 ]
 
-      fail :list_pattern_match do
+      fail do
         [ 1, 2, 3 ] |> [ 2, _, 3 ]
       end
     end
@@ -83,7 +83,7 @@ defmodule PipelineFacts do
     fact "ranges" do
       1..2 |> 1..2
 
-      fail :ranges do
+      fail do
         1..2 |> 1..3
       end
     end
@@ -91,7 +91,7 @@ defmodule PipelineFacts do
     fact "hashdict" do
       HashDict.new([{:b, 1}, {:a, 2}]) |> HashDict.new([{:b, 1}, {:a, 2}])
 
-      fail :hashdict do
+      fail do
         HashDict.new([{:b, 1}, {:a, 2}]) |> HashDict.new([{:b, 1}, {:a, 6}])
       end
     end
@@ -99,7 +99,7 @@ defmodule PipelineFacts do
     fact "hashset" do
       HashSet.new([1,2,3]) |> HashSet.new([1,2,3])
 
-      fail :hashset do
+      fail do
         HashSet.new([1,2,3]) |> HashSet.new([1,2,4])
       end
     end
@@ -110,7 +110,7 @@ defmodule PipelineFacts do
     fact "simple" do
       [1, [2], 3] |> List.flatten |> [1, 2, 3]
 
-      fail :simple do
+      fail do
         [1, [2], 3] |> List.flatten |> [1, 2, 4]
       end
     end
@@ -118,7 +118,7 @@ defmodule PipelineFacts do
     fact "nested" do
       [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) |> [2, 4, 6]
 
-      fail :nested do
+      fail do
         [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) |> [2, 4, 9]
       end
     end
@@ -126,7 +126,7 @@ defmodule PipelineFacts do
     fact "local" do
       [1, [2], 3] |> List.flatten |> local |> [2, 4, 6]
 
-      fail :local do
+      fail do
         [1, [2], 3] |> List.flatten |> local |> [2, 4, 9]
       end
     end
@@ -134,7 +134,7 @@ defmodule PipelineFacts do
     fact "map" do
       Enum.map([1, 2, 3], &1 |> twice |> twice) |> [4, 8, 12]
 
-      fail :map do
+      fail do
         Enum.map([1, 2, 3], &1 |> twice |> twice) |> [4, 8, 19]
       end
     end

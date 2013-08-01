@@ -42,7 +42,7 @@ defmodule AmritaFacts do
       true |> true
       false |> false
 
-      fail "|>" do
+      fail do
         false |> true
       end
     end
@@ -50,7 +50,7 @@ defmodule AmritaFacts do
     fact "|> defaults to equality when given an atom" do
       :hello |> :hello
 
-      fail "|>" do
+      fail do
         :hello |> :bye
       end
     end
@@ -58,7 +58,7 @@ defmodule AmritaFacts do
     fact "about odd" do
       1 |> odd
 
-      fail :odd do
+      fail do
         2 |> odd
       end
     end
@@ -66,7 +66,7 @@ defmodule AmritaFacts do
     fact "about even" do
       2 |> even
 
-      fail :even do
+      fail do
         1 |> even
       end
     end
@@ -76,7 +76,7 @@ defmodule AmritaFacts do
       []   |> truthy
       ""   |> truthy
 
-      fail :truthy do
+      fail do
         false |> truthy
       end
     end
@@ -85,7 +85,7 @@ defmodule AmritaFacts do
       false |> falsey
       nil   |> falsey
 
-      fail :falsey do
+      fail do
         true |> falsey
       end
     end
@@ -97,7 +97,7 @@ defmodule AmritaFacts do
 
       1 |> roughly 2, 2
 
-      fail :roughly do
+      fail do
         0.1 |> equals 0.2
       end
     end
@@ -105,7 +105,7 @@ defmodule AmritaFacts do
     fact "equals" do
       999 |> equals 999
 
-      fail :equals do
+      fail do
         999 |> equals 998
       end
     end
@@ -113,7 +113,7 @@ defmodule AmritaFacts do
     fact "msg" do
       fn -> :hello end |> msg(:hello)
 
-      fail :msg do
+      fail do
         fn -> :sod end |> msg(:hello)
       end
     end
@@ -124,7 +124,7 @@ defmodule AmritaFacts do
         { 1, 2, 3 } |> equals { 1, _, 3 }
         { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, _ } }
 
-        fail :tuples do
+        fail do
           { 1, 2, 3 } |> { 2, _, _ }
 
           { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, 4 } }
@@ -134,7 +134,7 @@ defmodule AmritaFacts do
       fact "lists use matches when used with equals" do
         [ 3, 2, 1 ] |> equals [ 3, _, 1 ]
 
-        fail :lists do
+        fail do
           [ 3, 2, 1 ] |> equals [ 3, _, 2 ]
         end
       end
@@ -154,11 +154,8 @@ defmodule AmritaFacts do
 
       "mad hatter tea party" |> contains %r"h(\w+)er"
 
-      fail :contains do
+      fail do
         [1, 2, 3] |> contains 4
-      end
-
-      fail :contains_with_string do
         "mad" |> contains "hatter"
       end
     end
@@ -170,11 +167,8 @@ defmodule AmritaFacts do
 
       "mad hatter tea party" |> has_prefix "mad"
 
-      fail :has_prefix do
+      fail do
         [1, 2, 3] |> has_prefix [2, 1]
-      end
-
-      fail :has_prefix_with_string do
         "mad" |> has_prefix "hatter"
       end
     end
@@ -190,11 +184,8 @@ defmodule AmritaFacts do
 
       "white rabbit"  |> has_suffix "rabbit"
 
-      fail :has_suffix do
+      fail do
         [1, 2, 3, 4, 5] |> has_suffix [4, 3, 5]
-      end
-
-      fail :has_suffix_with_string do
         "mad" |> has_suffix "hatter"
       end
     end
@@ -208,7 +199,7 @@ defmodule AmritaFacts do
 
       [2, 4, 6, 8] |> Enum.all? even(&1)
 
-      fail :for_all do
+      fail do
         [2, 4, 7, 8] |> for_all even(&1)
       end
     end
@@ -216,7 +207,7 @@ defmodule AmritaFacts do
     fact "for_some" do
       [2, 4, 7, 8] |> for_some odd(&1)
 
-      fail :for_some do
+      fail do
         [1, 3, 5, 7] |> for_some even(&1)
       end
     end
@@ -257,7 +248,7 @@ defmodule AmritaFacts do
     fact "should allow checking of exceptions" do
       fn -> raise TestException end |> raises AmritaFacts.TestException
 
-      fail :raises do
+      fail do
         fn -> true end |> raises AmritaFacts.TestException
       end
     end
@@ -267,7 +258,7 @@ defmodule AmritaFacts do
 
       fn -> raise TestException end |> raises "golly gosh, sorry"
 
-      fail :raises do
+      fail do
         fn -> raise TestException end |> raises %r"pants"
       end
     end
@@ -277,7 +268,7 @@ defmodule AmritaFacts do
     fact "contains" do
       [1, 2, 3, 4] |> ! contains 9999
 
-      fail "! contains" do
+      fail do
         [1, 2, 3, 4] |> ! contains 1
       end
     end
@@ -285,7 +276,7 @@ defmodule AmritaFacts do
     fact "equals" do
       1999 |> ! equals 0
 
-      fail "! equals" do
+      fail do
         199 |> ! 199
       end
     end
@@ -293,7 +284,7 @@ defmodule AmritaFacts do
     fact "roughly" do
       0.1001 |> ! roughly 0.2
 
-      fail "! roughly" do
+      fail do
         0.1001 |> ! roughly 0.1
       end
     end
@@ -301,7 +292,7 @@ defmodule AmritaFacts do
     fact "has_suffix" do
       [1, 2, 3, 4] |> ! has_suffix [3,1]
 
-      fail "! has_suffix" do
+      fail do
         [1, 2, 3, 4] |> ! has_suffix [3,4]
       end
     end
@@ -309,7 +300,7 @@ defmodule AmritaFacts do
     fact "has_prefix" do
       [1, 2, 3, 4] |> ! has_prefix [1, 3]
 
-      fail "! has_prefix" do
+      fail do
         [1, 2, 3, 4] |> ! has_prefix [1, 2]
       end
     end
@@ -319,7 +310,7 @@ defmodule AmritaFacts do
 
       fn -> raise TestException end |> ! raises %r".*posh.*"
 
-      fail "! raises" do
+      fail do
         fn -> raise TestException end |> ! raises TestException
       end
     end
@@ -327,7 +318,7 @@ defmodule AmritaFacts do
     fact "|> defaulting to not(equality)" do
       1 |> ! 2
 
-      fail "! |>" do
+      fail do
         1 |> ! 1
       end
     end
@@ -335,7 +326,7 @@ defmodule AmritaFacts do
     fact "falsey" do
       true |> ! falsey
 
-      fail "! falsey" do
+      fail do
         false |> ! falsey
       end
     end
@@ -343,7 +334,7 @@ defmodule AmritaFacts do
     fact "truthy" do
       false |> ! truthy
 
-      fail "! truthy" do
+      fail do
         true |> ! truthy
       end
     end
@@ -357,7 +348,7 @@ defmodule AmritaFacts do
     it "works like fact" do
       10 |> 10
 
-      fail :it do
+      fail do
         1 |> 10
       end
     end
