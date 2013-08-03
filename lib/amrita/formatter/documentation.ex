@@ -66,13 +66,33 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   def handle_cast({ :fact_finished, ExUnit.Test[failure: nil]=test}, config) do
-    IO.puts  success("  #{format_test_name test}")
+    if(name_parts = scoped(test)) do
+      print_indent(name_parts)
+      IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+
+      { :noreply, config }
+    else
+      IO.puts success("\r  #{format_test_name test}")
+      { :noreply, config }
+    end
 
     { :noreply, config.update_tests_counter(&1 + 1) }
   end
 
   def handle_cast({ :fact_finished, ExUnit.Test[]=test}, config) do
-    IO.puts  failure("  #{format_test_name test}")
+    ExUnit.Test[case: _test_case, name: _test, failure: { _, reason, _ }] = test
+    exception_type = reason.__record__(:name)
+
+    name_parts = scoped(test)
+    if(name_parts) do
+      print_indent(name_parts)
+    end
+
+    if(name_parts) do
+      IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+    else
+      IO.puts  failure("  #{format_test_name test}")
+    end
 
     { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
   end
