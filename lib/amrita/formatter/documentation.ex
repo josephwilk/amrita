@@ -111,7 +111,20 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   def handle_cast({ :case_started, ExUnit.TestCase[name: name] }, config) do
-    IO.puts("\n#{name}")
+    names = String.split("#{name}", ".")
+    name_list = Enum.take(names, 2)
+    root_name = Enum.join(name_list, ".")
+
+    if !HashDict.has_key?(config.scope, root_name) do
+      config = config.update_scope fn s -> HashDict.put(s, "#{root_name}", []) end
+
+      IO.puts("\n#{root_name}")
+    end
+    if Enum.count(names) > 2 do
+      Enum.each 1..Enum.count(names)-2, fn _ -> IO.write "  " end
+      IO.write Enum.fetch!(names, Enum.count(names)-1) <> "\n"
+    end
+
     { :noreply, config }
   end
 
