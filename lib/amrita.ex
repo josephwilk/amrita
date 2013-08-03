@@ -192,18 +192,13 @@ def configuration do
       def assertions(form), do: form
 
       defp inject_exception_test(form, line) do
-        #x = {:meta, [], nil}
-        #x = Macro.escape(x)
         quote hygiene: [vars: false] do
           try do
-            unquote(form)
-            current_test = meta[:test]
-            meta[:__pid__] <- {self, :fact_finished, current_test}
+            unquote(form); __pid__ <- {self, :fact_finished,  __test__}
           rescue
             error in [Amrita.FactError, Amrita.MockError] ->
-              current_test = meta[:test]
-              current_test = current_test.failure { :error, Exception.normalize(:Amrita.FactError, error), System.stacktrace }
-              meta[:__pid__] <- {self, :fact_finished, current_test}
+              __fail_test__ = __test__.failure { :error, Exception.normalize(:Amrita.FactError, error), System.stacktrace }
+              __pid__ <- {self, :fact_finished, __fail_test__}
           end
         end
       end
@@ -218,7 +213,7 @@ def configuration do
       end
 
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)), unquote(var) do
+        testz Enum.join(@name_stack, "") <> unquote(fact_name(description)), unquote(var) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
@@ -293,6 +288,50 @@ def configuration do
         end
       end
     end
+    
+    defmacro testz(message, var // quote(do: _), contents) do
+      contents =
+        case contents do
+          [do: _] ->
+            quote do
+              unquote(contents)
+              :ok
+            end
+          _ ->
+            quote do
+              try(unquote(contents))
+              :ok
+            end
+        end
+
+      var      = Macro.escape(var)
+      pid_var = {:__pid__, [line: 8], nil}
+      pid_var = Macro.escape(pid_var)
+
+      test_var = {:__test__, [line: 8], nil}
+      test_var = Macro.escape(test_var)
+
+      contents = Macro.escape(contents, unquote: true)
+
+      quote bind_quoted: binding do
+        message = if is_binary(message) do
+          :"test #{message}"
+        else
+          :"test_#{message}"
+        end
+
+        def unquote(message)(unquote(var), unquote(pid_var), unquote(test_var))  do
+          unquote(contents)
+        end
+      end
+    end
+    
+    
+    
+    
+    
+    
+    
   end
 
 end

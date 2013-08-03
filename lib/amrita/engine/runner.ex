@@ -134,10 +134,8 @@ defmodule Amrita.Engine.Runner do
           try do
           { :ok, context } = case_name.__ex_unit__(:setup, Keyword.put(context, :test, test))
 
-          context = Keyword.put(context, :__pid__, self_pid)
-
           test = try do
-            apply case_name, test.name, [context]
+            apply(case_name, test.name, [context, self_pid, test])
             test
           catch
             kind1, error1 ->
@@ -191,7 +189,7 @@ defmodule Amrita.Engine.Runner do
   defp tests_for(case_name) do
     exports = case_name.__info__(:functions)
 
-    lc { function, 1 } inlist exports, is_test?(atom_to_list(function)) do
+    lc { function, 3 } inlist exports, is_test?(atom_to_list(function)) do
       ExUnit.Test[name: function, case: case_name]
     end
   end
