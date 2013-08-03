@@ -120,8 +120,6 @@ defmodule Amrita.Formatter.Documentation do
       IO.puts("\n#{root_name}")
     end
     if Enum.count(names) > 2 do
-      new_names = Enum.drop(names, 2)
-
       Enum.each 0..Enum.count(names)-3, fn _ -> IO.write "  " end
       IO.write Enum.fetch!(names, Enum.count(names)-1) <> "\n"
 
@@ -204,14 +202,6 @@ defmodule Amrita.Formatter.Documentation do
   defp print_test_case_failure(test_case, acc, cwd) do
     IO.puts format_test_case_failure(test_case, acc + 1, cwd, function(formatter/2))
     acc + 1
-  end
-
-  defp print_scopes(name_parts) do
-    Enum.each 0..Enum.count(name_parts)-2, fn n ->
-                                                Enum.each 0..n, fn _ -> IO.write("  ") end
-                                                IO.write(Enum.at(name_parts, n))
-                                                IO.write("\n")
-                                           end
   end
 
   defp print_indent(name_parts) do
