@@ -26,8 +26,6 @@ defmodule Amrita do
     start(opts)
   end
 
-
-
   def start_it(options // []) do
     :application.start(:elixir)
     :application.start(:ex_unit)
@@ -83,29 +81,12 @@ defmodule Amrita do
   """
   def run do
     { async, sync, load_us } = ExUnit.Server.start_run
-    
+
     async = Enum.sort(async, fn(c,c1) -> c <= c1 end)
     sync = Enum.sort(sync, fn(c,c1) -> c <= c1 end)
-    
-    
-    
+
     ExUnit.Runner.run async, sync, configuration, load_us
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   defmodule Sweet do
     @moduledoc """
@@ -174,7 +155,6 @@ defmodule Amrita do
     @doc false
     defmacro __using__(_) do
       quote do
-        @name_stack []
         import Amrita.Facts
       end
     end
@@ -205,7 +185,7 @@ defmodule Amrita do
     """
     defmacro fact(description, provided // [], _meta // quote(do: _), contents) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        test unquote(fact_name(description)) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
@@ -237,7 +217,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        test unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -254,7 +234,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        test unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -273,8 +253,6 @@ defmodule Amrita do
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
-        @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
-
         message = if is_binary(unquote(description)) do
                     binary_to_atom(unquote(description))
                   else
@@ -285,14 +263,9 @@ defmodule Amrita do
           use ExUnit.Case
           use Amrita.Sweet
 
-          @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
-
           unquote(contents)
         end
 
-        if Enum.count(@name_stack) > 0 do
-          @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
-        end
       end
     end
   end
