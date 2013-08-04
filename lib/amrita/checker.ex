@@ -1,7 +1,6 @@
 defmodule Amrita.Checker do
   @moduledoc false
 
-  @moduledoc false
   defmodule Helper do
     
     @doc """
