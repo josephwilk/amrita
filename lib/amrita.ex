@@ -253,13 +253,7 @@ defmodule Amrita do
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
-        message = if is_binary(unquote(description)) do
-                    binary_to_atom(unquote(description))
-                  else
-                    unquote(description)
-                  end
-
-        defmodule Module.concat(__MODULE__, unquote(description)) do
+        defmodule Module.concat(__MODULE__, String.replace("#{unquote(description)}", ".", "\\.")) do
           use ExUnit.Case
           use Amrita.Sweet
 

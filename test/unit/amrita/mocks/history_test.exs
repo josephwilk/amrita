@@ -8,7 +8,7 @@ defmodule HistoryFacts do
   #Example of meck history
   #[{#PID<0.301.0>,{Faker,:shout,["the mighty BOOSH"]},"the mighty BOOSH"}]
 
-  facts "about Historymatch?" do
+  facts "about History.match?" do
     fact "regex arguments match bit_string arguments" do
       :meck.new(Faker, [:non_strict])
       :meck.expect(Faker, :shout, fn x -> x end)

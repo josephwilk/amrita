@@ -110,7 +110,8 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   def handle_cast({ :case_started, ExUnit.TestCase[name: name] }, config) do
-    names = String.split("#{name}", ".")
+    names = String.split("#{name}", %r"(?<!\\)\.")
+    names = Enum.map(names, fn name -> String.replace(name, "\\.", ".") end)
     name_list = Enum.take(names, 2)
     root_name = Enum.join(name_list, ".")
 
