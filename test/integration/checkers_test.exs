@@ -4,11 +4,11 @@ defmodule Integration.CheckerFacts do
   use Amrita.Sweet
   import Support
 
-  defchecker thousand(actual) do
-    actual |> equals 1000
-  end
-
    facts "about checkers with no expected argument" do
+     defchecker thousand(actual) do
+       actual |> equals 1000
+     end
+
      fact "supports ! and positive form" do
        1000 |> thousand
        1001 |> ! thousand
@@ -20,11 +20,11 @@ defmodule Integration.CheckerFacts do
      end
    end
 
-  defchecker valid(actual, expected) do
-    actual |> equals expected
-  end
-
   facts "about checkers with an expected argument" do
+    defchecker valid(actual, expected) do
+      actual |> equals expected
+    end
+
     fact "supports ! and postive form" do
       100 |> valid 100
       100 |> ! valid 101
@@ -36,11 +36,11 @@ defmodule Integration.CheckerFacts do
     end
   end
 
-  defchecker sumed_up(actual, expected, x, y, z) do
-    actual |> equals expected + x + y + z
-  end
-
   facts "about checkers with many expected arguments" do
+    defchecker sumed_up(actual, expected, x, y, z) do
+      actual |> equals expected + x + y + z
+    end
+
     fact "supports ! and postive form" do
       190 |> sumed_up 100, 20, 30, 40
 
