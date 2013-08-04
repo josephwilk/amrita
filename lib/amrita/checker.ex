@@ -3,6 +3,22 @@ defmodule Amrita.Checker do
 
   @moduledoc false
   defmodule Helper do
+    
+    @doc """
+    Helper function to create your own checker functions.
+    
+    ## Example:
+    
+        defchecker thousand(actual) do
+          actual |> 1000
+        end
+        
+        fact "using thousand checker" do
+          1000 |> thousand
+          1001 |> ! thousand
+        end
+    
+    """
     defmacro defchecker(name, _ // quote(do: _), contents) do
       { fun_name, _, vars } = name
 
