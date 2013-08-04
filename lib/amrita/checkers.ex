@@ -1,4 +1,4 @@
-defmodule Amrita.Checker do
+defmodule Amrita.Checkers do
   @moduledoc false
 
   defmodule Helper do

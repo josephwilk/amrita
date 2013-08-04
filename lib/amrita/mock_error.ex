@@ -12,7 +12,7 @@ defexception Amrita.MockError,
   end
 
   defp actual_calls(e) do
-    history = Enum.map e.history, fn({m,f,a}) -> "         * #{Amrita.Checker.to_s(m, f, a)}" end
+    history = Enum.map e.history, fn({m,f,a}) -> "         * #{Amrita.Checkers.to_s(m, f, a)}" end
 
     if not(Enum.empty?(history)) do
       "\n\n       Actuals calls:\n" <> Enum.join(history, "\n")
@@ -22,7 +22,7 @@ defexception Amrita.MockError,
   end
 
   defp expected_call(e) do
-    "     #{Amrita.Checker.to_s(e.module, e.fun, printable_args(e))} to be called but was called 0 times."
+    "     #{Amrita.Checkers.to_s(e.module, e.fun, printable_args(e))} to be called but was called 0 times."
   end
 
   defp printable_args(e) do
