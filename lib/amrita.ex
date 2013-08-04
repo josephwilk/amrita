@@ -16,7 +16,7 @@ defmodule Amrita do
   """
   def start(opts // []) do
     formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
-    ExUnit.start formatter: formatter
+    Amrita.start_it formatter: formatter
   end
 
   @doc """
@@ -24,6 +24,68 @@ defmodule Amrita do
   """
   def please_start(opts // []) do
     start(opts)
+  end
+
+  def start_it(options // []) do
+    :application.start(:elixir)
+    :application.start(:ex_unit)
+
+    configure(options)
+
+    System.at_exit fn
+      0 ->
+        failures = Amrita.run
+        System.at_exit fn _ ->
+          if failures > 0, do: System.halt(1), else: System.halt(0)
+        end
+      _ ->
+        :ok
+    end
+  end
+
+  @doc """
+  Configures ExUnit.
+
+  ## Options
+
+  ExUnit supports the following options:
+
+  * `:formatter` - The formatter that will print results.
+                   Defaults to `ExUnit.CLIFormatter`;
+
+  * `:max_cases` - Maximum number of cases to run in parallel.
+                   Defaults to `:erlang.system_info(:schedulers_online)`;
+
+  * `:trace` - Set ExUnit into trace mode, this set `:max_cases` to 1
+               and prints each test case and test while running;
+
+  """
+  def configure(options) do
+    Enum.each options, fn { k, v } ->
+      :application.set_env(:ex_unit, k, v)
+    end
+  end
+
+  @doc """
+  Returns ExUnit configuration.
+  """
+  def configuration do
+    :application.get_all_env(:ex_unit)
+  end
+
+  @doc """
+  API used to run the tests. It is invoked automatically
+  if ExUnit is started via `ExUnit.start`.
+
+  Returns the number of failures.
+  """
+  def run do
+    { async, sync, load_us } = ExUnit.Server.start_run
+
+    async = Enum.sort(async, fn(c,c1) -> c <= c1 end)
+    sync = Enum.sort(sync, fn(c,c1) -> c <= c1 end)
+
+    ExUnit.Runner.run async, sync, configuration, load_us
   end
 
   defmodule Sweet do
@@ -94,7 +156,6 @@ defmodule Amrita do
     @doc false
     defmacro __using__(_) do
       quote do
-        @name_stack []
         import Amrita.Facts
       end
     end
@@ -142,7 +203,7 @@ defmodule Amrita do
       end
 
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)), unquote(var) do
+        test unquote(fact_name(description)), unquote(var) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
@@ -174,7 +235,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        test unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -191,7 +252,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        test unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -210,11 +271,13 @@ defmodule Amrita do
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
-        @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
-        unquote(contents)
-        if Enum.count(@name_stack) > 0 do
-          @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)
+        defmodule Module.concat(__MODULE__, String.replace("#{unquote(description)}", ".", "\\.")) do
+          use ExUnit.Case
+          use Amrita.Sweet
+
+          unquote(contents)
         end
+
       end
     end
   end

@@ -58,7 +58,6 @@ defmodule Amrita.Formatter.Documentation do
   def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
     if(name_parts = scoped(test)) do
       if(scope = new_scope(config, name_parts)) do
-        print_scopes(name_parts)
         config = config.update_scope fn s -> HashDict.put(s, scope, []) end
       end
     end
@@ -69,7 +68,7 @@ defmodule Amrita.Formatter.Documentation do
   def handle_cast({ :test_finished, ExUnit.Test[failure: nil] = test }, config) do
     if(name_parts = scoped(test)) do
       print_indent(name_parts)
-      IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+      IO.write success(String.lstrip "#{format_test_name test}\n")
 
       { :noreply, config.update_tests_counter(&1 + 1) }
     else
@@ -94,7 +93,7 @@ defmodule Amrita.Formatter.Documentation do
 
     if exception_type == Elixir.Amrita.FactPending do
       if(name_parts) do
-        IO.write pending(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+        IO.write pending(String.lstrip "#{format_test_name test}\n")
       else
         IO.puts  pending("  #{format_test_name test}")
       end
@@ -102,7 +101,7 @@ defmodule Amrita.Formatter.Documentation do
         update_pending_failures([test|&1]) }
     else
       if(name_parts) do
-        IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+        IO.write failure(String.lstrip "#{format_test_name test}\n")
       else
         IO.puts  failure("  #{format_test_name test}")
       end
@@ -111,7 +110,23 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   def handle_cast({ :case_started, ExUnit.TestCase[name: name] }, config) do
-    IO.puts("\n#{name}")
+    names = String.split("#{name}", %r"(?<!\\)\.")
+    names = Enum.map(names, fn name -> String.replace(name, "\\.", ".") end)
+    name_list = Enum.take(names, 2)
+    root_name = Enum.join(name_list, ".")
+
+    if !HashDict.has_key?(config.scope, root_name) do
+      config = config.update_scope fn s -> HashDict.put(s, "#{root_name}", []) end
+
+      IO.puts("\n#{root_name}")
+    end
+    if Enum.count(names) > 2 do
+      Enum.each 0..Enum.count(names)-3, fn _ -> IO.write "  " end
+      IO.write Enum.fetch!(names, Enum.count(names)-1) <> "\n"
+
+      config = config.update_scope fn s -> HashDict.put(s, "#{Enum.join(Enum.drop(names, 2), ".")}", []) end
+    end
+
     { :noreply, config }
   end
 
@@ -190,16 +205,8 @@ defmodule Amrita.Formatter.Documentation do
     acc + 1
   end
 
-  defp print_scopes(name_parts) do
-    Enum.each 0..Enum.count(name_parts)-2, fn n ->
-                                                Enum.each 0..n, fn _ -> IO.write("  ") end
-                                                IO.write(Enum.at(name_parts, n))
-                                                IO.write("\n")
-                                           end
-  end
-
   defp print_indent(name_parts) do
-    Enum.each 0..Enum.count(name_parts)-1, fn _ -> IO.write "  " end
+    Enum.each 0..Enum.count(name_parts), fn _ -> IO.write "  " end
   end
 
   defp new_scope(config, name_parts) do
@@ -211,10 +218,10 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   defp scoped(test) do
-    name = format_test_name(test)
-    name_parts = String.split(name, "-")
-    if Enum.count(name_parts) > 1 do
-      name_parts
+    name_parts = String.split("#{test.case}", ".")
+
+    if Enum.count(name_parts) > 2 do
+      Enum.drop(name_parts,2)
     end
   end
 
