@@ -23,13 +23,13 @@ defmodule ScopingFacts do
       {:ok, pong: :ping}
     end
 
-    fact "has access to parent and local setup", meta do
-      meta[:ping] |> :pong
+    fact "has access to local setup", meta do
+      meta[:ping] |> ! :pong
       meta[:pong] |> :ping
     end
   end
 
-  future_fact "parent should only have access to root setup", meta do
+  fact "parent should only have access to root setup", meta do
     meta[:ping] |> :pong
     meta[:pong] |> ! :ping
   end

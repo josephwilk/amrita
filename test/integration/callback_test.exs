@@ -12,7 +12,7 @@ defmodule CallbackFacts do
   end
 
   facts "within a facts group" do
-    fact "passed data from setup", meta do
+    future_fact "passed data from setup", meta do
       meta[:ping] |> :hello
     end
   end
