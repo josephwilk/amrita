@@ -26,12 +26,16 @@ defmodule Amrita.Checker do
         def(unquote(fun_name), unquote(neg_args), []) do
           name = unquote(fun_name)
           expected = unquote(expected_arg)
+          actual = unquote(Enum.take(args,1))
+          args = List.concat(actual ,unquote(Enum.drop(args,2 )))
+          call_args = unquote(args)
 
           case Enum.count(unquote(neg_args)) do
             0 -> quote do: fn(actual) -> unquote(name)(actual); {nil, __ENV__.function}
                  end
 
-            1 -> quote do: fn(actual) -> unquote(name)(actual, unquote(expected)); {unquote(expected), __ENV__.function}
+            _ -> quote do: fn(unquote_splicing(args)) ->
+                               unquote(name)(unquote_splicing(call_args)); {unquote(expected), __ENV__.function}
                  end
           end
         end

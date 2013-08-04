@@ -36,4 +36,19 @@ defmodule Integration.CheckerFacts do
     end
   end
 
+  defchecker sumed_up(actual, expected, x, y, z) do
+    actual |> equals expected + x + y + z
+  end
+
+  facts "about checkers with many expected arguments" do
+    fact "supports ! and postive form" do
+      190 |> sumed_up 100, 20, 30, 40
+
+      fail do
+        100 |> sumed_up 100, 20, 30, 40
+      end
+    end
+  end
+
+
 end
