@@ -34,7 +34,6 @@ Amrita.start
 Amrita.start(formatter: Amrita.Formatter.Documentation)
 ```
 
- * Test filenames must end with "_test.exs".
  * Require test_helper.exs in every test (this will ensure Amrita is started):
  * Mix in `Amrita.Sweet` which will bring in everything you need to use Amrita:
 
