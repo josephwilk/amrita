@@ -1,6 +1,6 @@
 Code.require_file "../../test_helper.exs", __FILE__
 
-defmodule AmritaFacts do
+defmodule Integration.AmritaFacts do
   use Amrita.Sweet
 
   import Support

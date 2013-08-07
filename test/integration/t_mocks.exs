@@ -1,6 +1,6 @@
 Code.require_file "../test_helper.exs", __DIR__
 
-defmodule MocksTest do
+defmodule Integration.MockFacts do
   use Amrita.Sweet
 
   import Support
@@ -21,13 +21,13 @@ defmodule MocksTest do
   end
 
   fact "simple mock on existing module" do
-    provided [MocksTest.Polite.swear? |> true] do
+    provided [Integration.MocksTest.Polite.swear? |> true] do
       Polite.swear? |> truthy
     end
   end
 
   failing_fact "provided when not called raises a fail" do
-    provided [MocksTest.Polite.swear? |> true] do
+    provided [Integration.MocksTest.Polite.swear? |> true] do
       Polite.message |> "oh swizzlesticks"
     end
   end
@@ -38,8 +38,8 @@ defmodule MocksTest do
   end
 
   fact "multi mocks on same module" do
-    provided [MocksTest.Polite.swear? |> true,
-              MocksTest.Polite.message |> "funk"] do
+    provided [Integration.MocksTest.Polite.swear? |> true,
+              Integration.MocksTest.Polite.message |> "funk"] do
       Polite.swear? |> truthy
       Polite.message |> "funk"
     end
@@ -52,8 +52,8 @@ defmodule MocksTest do
   end
 
   fact "multi mocks on different modules" do
-    provided [MocksTest.Polite.swear? |> true,
-              MocksTest.Rude.swear? |> false] do
+    provided [Integration.MocksTest.Polite.swear? |> true,
+              Integration.MocksTest.Rude.swear? |> false] do
       Polite.swear? |> truthy
       Rude.swear? |> falsey
     end
@@ -84,67 +84,67 @@ defmodule MocksTest do
     end
 
     fact "mock with a single argument" do
-      provided [MocksTest.Funk.hip?(:yes) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(:yes) |> false] do
         Funk.hip?(:yes) |> falsey
       end
     end
 
     facts "mock with elixir types" do
       fact "regex" do
-        provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
+        provided [Integration.MocksTest.Funk.hip?(%r"monkey") |> false] do
           Funk.hip?(%r"monkey") |> falsey
         end
 
         fail do
-          provided [MocksTest.Funk.hip?(%r"monkey") |> false] do
+          provided [Integration.MocksTest.Funk.hip?(%r"monkey") |> false] do
             Funk.hip?(%r"mon") |> falsey
           end
         end
       end
 
       fact "list" do
-        provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
+        provided [Integration.MocksTest.Funk.hip?([1, 2, 3]) |> false] do
           Funk.hip?([1, 2, 3]) |> falsey
         end
 
         fail do
-          provided [MocksTest.Funk.hip?([1, 2, 3]) |> false] do
+          provided [Integration.MocksTest.Funk.hip?([1, 2, 3]) |> false] do
             Funk.hip?([1, 2, 3, 4]) |> falsey
           end
         end
       end
 
       fact "tuple" do
-        provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
+        provided [Integration.MocksTest.Funk.hip?({1, 2, 3}) |> false] do
           Funk.hip?({1, 2, 3}) |> falsey
         end
 
         fail do
-          provided [MocksTest.Funk.hip?({1, 2, 3}) |> false] do
+          provided [Integration.MocksTest.Funk.hip?({1, 2, 3}) |> false] do
             Funk.hip?({1, 2}) |> falsey
           end
         end
       end
 
       fact "dict" do
-        provided [MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
+        provided [Integration.MocksTest.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
           Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
         end
 
         fail do
-          provided [MocksTest.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
+          provided [Integration.MocksTest.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
             Funk.hip?(HashDict.new([{:a, 2}])) |> falsey
           end
         end
       end
 
       fact "range" do
-        provided [MocksTest.Funk.hip?(1..10) |> false] do
+        provided [Integration.MocksTest.Funk.hip?(1..10) |> false] do
           Funk.hip?(1..10) |> falsey
         end
 
         fail do
-          provided [MocksTest.Funk.hip?(1..10) |> false] do
+          provided [Integration.MocksTest.Funk.hip?(1..10) |> false] do
             Funk.hip?(1..11) |> falsey
           end
         end
@@ -152,33 +152,33 @@ defmodule MocksTest do
     end
 
     failing_fact "mock with an argument that does not match fails" do
-      provided [MocksTest.Funk.hip?(:yes) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(:yes) |> false] do
         Funk.hip?(:no) |> falsey
       end
     end
 
     fact "mock with a wildcard" do
-      provided [MocksTest.Funk.hip?(:_) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(:_) |> false] do
         Funk.hip?(:yes) |> falsey
         Funk.hip?(:whatever) |> falsey
       end
     end
 
     fact "mock with a _ wildcard" do
-      provided [MocksTest.Funk.hip?(_) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(_) |> false] do
         Funk.hip?(:yes) |> falsey
         Funk.hip?(:whatever) |> falsey
       end
     end
 
     fact "mock anything wildcard" do
-      provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(anything, anything, anything) |> false] do
         Funk.hip?(:yes, :no, :maybe) |> falsey
       end
     end
 
     failing_fact "failing anything wildcard" do
-      provided [MocksTest.Funk.hip?(anything, anything, anything) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(anything, anything, anything) |> false] do
         Funk.hip?(:yes, :no, :maybe, :funk) |> falsey
       end
     end
@@ -188,7 +188,7 @@ defmodule MocksTest do
     end
 
     fact "mock with a function defined inside a test" do
-      provided [MocksTest.Funk.hip?(tiplet) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(tiplet) |> false] do
         Funk.hip?("brandy") |> falsey
       end
     end
@@ -198,52 +198,52 @@ defmodule MocksTest do
     end
 
     fact "mock with a function with args defined inside a test" do
-      provided [MocksTest.Funk.hip?(tiplet(1)) |> true] do
+      provided [Integration.MocksTest.Funk.hip?(tiplet(1)) |> true] do
         Funk.hip?("brandy1") |> truthy
       end
 
-      provided [MocksTest.Funk.hip?(MocksTest.tiplet(1)) |> true] do
+      provided [Integration.MocksTest.Funk.hip?(Integration.MocksTest.tiplet(1)) |> true] do
         Funk.hip?("brandy1") |> truthy
       end
     end
 
     fact "mock with many arguments" do
-      provided [MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
+      provided [Integration.MocksTest.Funk.flop?(:yes, :no, :yes) |> false] do
         Funk.flop?(:yes, :no, :yes) |> falsey
       end
     end
 
     failing_fact "mock with a mismatch in arity of arguments fails" do
-      provided [MocksTest.Funk.hip?(:yes) |> false] do
+      provided [Integration.MocksTest.Funk.hip?(:yes) |> false] do
         Funk.hip?(:yes, :no) |> falsey
       end
     end
 
     fact "mock with > 6 arguments" do
-      provided [MocksTest.Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> false] do
+      provided [Integration.MocksTest.Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> false] do
         Funk.flop?(:a, :b, :c, :d, :e, :f, :g, :h) |> falsey
       end
     end
 
     fact "mock the same function based on different arguments" do
-      provided [MocksTest.Funk.hip?(:cats) |> false, MocksTest.Funk.hip?(:coffee) |> true] do
-        MocksTest.Funk.hip?(:cats) |> falsey
-        MocksTest.Funk.hip?(:coffee) |> truthy
+      provided [Integration.MocksTest.Funk.hip?(:cats) |> false, Integration.MocksTest.Funk.hip?(:coffee) |> true] do
+        Integration.MocksTest.Funk.hip?(:cats) |> falsey
+        Integration.MocksTest.Funk.hip?(:coffee) |> truthy
       end
     end
 
   end
 
   fact "mock with a return value as a function" do
-    provided [MocksTest.Funk.hip?(_) |> tiplet(2)] do
+    provided [Integration.MocksTest.Funk.hip?(_) |> tiplet(2)] do
       Funk.hip?("brandy") |> "brandy2"
     end
 
-    provided [MocksTest.Funk.hip?(_) |> tiplet] do
+    provided [Integration.MocksTest.Funk.hip?(_) |> tiplet] do
       Funk.hip?("shandy") |> "brandy"
     end
 
-    provided [MocksTest.Funk.hip?(_) |> MocksTest.tiplet] do
+    provided [Integration.MocksTest.Funk.hip?(_) |> Integration.MocksTest.tiplet] do
       Funk.hip?("shandy") |> "brandy"
     end
   end
