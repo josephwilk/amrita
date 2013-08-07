@@ -246,10 +246,10 @@ defmodule Integration.AmritaFacts do
 
   facts "exceptions" do
     fact "should allow checking of exceptions" do
-      fn -> raise TestException end |> raises AmritaFacts.TestException
+      fn -> raise TestException end |> raises Integration.AmritaFacts.TestException
 
       fail do
-        fn -> true end |> raises AmritaFacts.TestException
+        fn -> true end |> raises Integration.AmritaFacts.TestException
       end
     end
 
