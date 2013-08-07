@@ -15,7 +15,7 @@ defexception Amrita.FactError,
   end
 
   def full_checker(exception) do
-    Amrita.Checker.to_s exception.predicate, exception.expected
+    Amrita.Checkers.to_s exception.predicate, exception.expected
   end
 
   def actual_result(exception) do

@@ -1,8 +1,23 @@
-defmodule Amrita.Checker do
+defmodule Amrita.Checkers do
   @moduledoc false
 
-  @moduledoc false
   defmodule Helper do
+    
+    @doc """
+    Helper function to create your own checker functions.
+    
+    ## Example:
+    
+        defchecker thousand(actual) do
+          actual |> 1000
+        end
+        
+        fact "using thousand checker" do
+          1000 |> thousand
+          1001 |> ! thousand
+        end
+    
+    """
     defmacro defchecker(name, _ // quote(do: _), contents) do
       { fun_name, _, vars } = name
 
@@ -26,12 +41,16 @@ defmodule Amrita.Checker do
         def(unquote(fun_name), unquote(neg_args), []) do
           name = unquote(fun_name)
           expected = unquote(expected_arg)
+          actual = unquote(Enum.take(args,1))
+          args = List.concat(actual ,unquote(Enum.drop(args,2 )))
+          call_args = unquote(args)
 
           case Enum.count(unquote(neg_args)) do
             0 -> quote do: fn(actual) -> unquote(name)(actual); {nil, __ENV__.function}
                  end
 
-            1 -> quote do: fn(actual) -> unquote(name)(actual, unquote(expected)); {unquote(expected), __ENV__.function}
+            _ -> quote do: fn(unquote_splicing(args)) ->
+                               unquote(name)(unquote_splicing(call_args)); {unquote(expected), __ENV__.function}
                  end
           end
         end

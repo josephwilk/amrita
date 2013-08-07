@@ -176,12 +176,12 @@ defmodule Amrita.Formatter.Progress do
   end
 
   defp print_test_failure(test, acc, cwd) do
-    IO.puts format_test_failure(test, acc + 1, cwd, function(formatter/2))
+    IO.puts format_test_failure(test, acc + 1, cwd, &formatter/2)
     acc + 1
   end
 
   defp print_test_case_failure(test_case, acc, cwd) do
-    IO.puts format_test_case_failure(test_case, acc + 1, cwd, function(formatter/2))
+    IO.puts format_test_case_failure(test_case, acc + 1, cwd, &formatter/2)
     acc + 1
   end
 
@@ -192,7 +192,7 @@ defmodule Amrita.Formatter.Progress do
   defp formatter(_,  msg),             do: msg
 
   defp print_test_pending(test, acc, cwd) do
-    IO.puts Amrita.Formatter.Format.format_test_pending(test, acc + 1, cwd, function(pending_formatter/2))
+    IO.puts Amrita.Formatter.Format.format_test_pending(test, acc + 1, cwd, &pending_formatter/2)
     acc + 1
   end
 
