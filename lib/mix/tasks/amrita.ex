@@ -7,6 +7,19 @@ defmodule Mix.Tasks.Amrita do
   def run(args) do
     { opts, files } = OptionParser.parse(args, switches: @switches)
 
+    selectors = Enum.map files, fn file ->
+      splits = String.split(file, ":")
+      case splits do
+        [file, line] -> [file: file, line: binary_to_integer(line)]
+        _ -> [file: file]
+      end
+    end
+
+    selectors = Enum.reject selectors, fn selector -> selector == nil end
+    files = Enum.map selectors, fn selector -> selector[:file] end
+
+    opts = opts ++ [selectors: selectors]
+
     unless System.get_env("MIX_ENV") do
       Mix.env(:test)
     end
@@ -16,7 +29,7 @@ defmodule Mix.Tasks.Amrita do
     project = Mix.project
 
     :application.load(:ex_unit)
-    ExUnit.configure(Dict.take(opts, [:trace, :max_cases, :color]))
+    Amrita.Engine.Start.configure(Dict.take(opts, [:trace, :max_cases, :color, :selectors]))
 
     test_paths = project[:test_paths] || ["test"]
     Enum.each(test_paths, require_test_helper(&1))

@@ -16,7 +16,7 @@ defmodule Amrita do
   """
   def start(opts // []) do
     formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
-    ExUnit.start formatter: formatter
+    Amrita.Engine.Start.now formatter: formatter
   end
 
   @doc """
@@ -142,7 +142,7 @@ defmodule Amrita do
       end
 
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)), unquote(var) do
+        deffact Enum.join(@name_stack, "") <> unquote(fact_name(description)), unquote(var) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
@@ -174,7 +174,7 @@ defmodule Amrita do
     """
     defmacro fact(description) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        deffact Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -191,7 +191,7 @@ defmodule Amrita do
     """
     defmacro future_fact(description, _ // quote(do: _), _) do
       quote do
-        test Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
+        deffact Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
         end
       end
@@ -217,6 +217,41 @@ defmodule Amrita do
         end
       end
     end
+
+    @doc false
+    defmacro deffact(message, var // quote(do: _), contents) do
+      contents =
+       case contents do
+         [do: _] ->
+           quote do
+             unquote(contents)
+             :ok
+           end
+         _ ->
+           quote do
+             try(unquote(contents))
+             :ok
+           end
+       end
+
+      var      = Macro.escape(var)
+      contents = Macro.escape(contents, unquote: true)
+
+      quote bind_quoted: binding do
+       message = if is_binary(message) do
+         :"test #{message}"
+       else
+         :"test_#{message}"
+       end
+
+       def unquote(message)(unquote(var))  do
+         unquote(contents)
+       end
+       
+       def unquote(:"__#{message}__")(), do: [file: __ENV__.file, line: __ENV__.line]
+      end
+    end
+    
   end
 
 end
