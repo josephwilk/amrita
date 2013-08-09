@@ -52,12 +52,12 @@ end
 
 Run your tests through mix:
 
-```
-mix amrita # Run all your tests
+```shell
+$ mix amrita # Run all your tests
 
-mix amrita test/integration/t_mocks.ex # Run a specific file
+$ mix amrita test/integration/t_mocks.ex # Run a specific file
 
-mix amrita test/integration/t_mocks.ex:10 # Run a specific test at a line number
+$ mix amrita test/integration/t_mocks.ex:10 # Run a specific test at a line number
 ```
 
 Now time to write some tests!
