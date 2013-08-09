@@ -68,7 +68,8 @@ defmodule Integration.MockFacts do
 
       fail do
         provided [Flip.flop(fn x -> x =~ %r"moo" end) |> true] do
-          Flip.flop("this is a mo thing") |> true
+          Flip.flop("this is a doo thing") |> true
+          Flip.flop("this is a zoo thing") |> true
         end
       end
     end

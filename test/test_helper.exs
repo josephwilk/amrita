@@ -30,8 +30,8 @@ defmodule Support do
   defmodule Wrap do
     def assertions([ do: forms ]) when is_list(forms), do: [do: Enum.map(forms, assertions(&1))]
 
-    def assertions([ do: { :provided, [line: line], _mocks } ] = thing) do
-      inject_exception_test(thing, line)
+    def assertions([ do: { :provided, [line: line], [a, mocks] } ]) do
+      inject_exception_test([ do: { :provided, [line: line], [a, assertions(mocks)]}], line)
     end
 
     def assertions([ do: thing ]), do: [do: assertions(thing)]
@@ -40,17 +40,25 @@ defmodule Support do
       { :__block__, m, Enum.map(forms, assertions(&1)) }
     end
 
-    def assertions({ :|>, [line: line], _args } = test), do: inject_exception_test(test, line)
+    def assertions({ :|>, [line: line], _args } = test) do
+      inject_exception_test(test, line)
+    end
 
-    def assertions(form), do: form
+    def assertions(form) do
+      form
+    end
 
     defp inject_exception_test(form, line) do
       quote do
         try do
           unquote(form)
+
           raise FactDidNotFail, file: __ENV__.file, line: unquote(line), form: unquote(Macro.escape(form))
+        catch
+          #Raised by :meck when a match is not found with a mock
+          :error, error in [:function_clause, :undef] -> true
         rescue
-            error in [Amrita.FactError, Amrita.MockError] -> true
+          error in [Amrita.FactError, Amrita.MockError] -> true
         end
       end
     end
