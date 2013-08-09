@@ -31,6 +31,7 @@ Ensure you start Amrita in: test/test_helper.exs
 Amrita.start
 
 #Or if you want a more documentation focused formatter:
+
 Amrita.start(formatter: Amrita.Formatter.Documentation)
 ```
 
@@ -43,11 +44,23 @@ Code.require_file "../test_helper.exs", __FILE__
 defmodule ExampleFacts do
   use Amrita.Sweet
 
-  # Write some facts here
+  fact "addition" do
+    1 + 1 |> 2
+  end
 end
 ```
 
-Now all thats left is to  write some tests!
+Run your tests through mix:
+
+```
+mix amrita # Run all your tests
+
+mix amrita test/integration/t_mocks.ex # Run a specific file
+
+mix amrita test/integration/t_mocks.ex:10 # Run a specific test at a line number
+```
+
+Now time to write some tests!
 
 ## Prerequisites / Mocks
 
@@ -253,36 +266,19 @@ ACTUAL |> CHECKER [EXPECTED]
 ACTUAL |> !CHECKER [EXPECTED]
 ```
 
-## Running your tests
-
-Use mix to run your tests:
-
-```
-#Run all your tests
-mix amrita
-
-#Run a specific set of tests
-mix amrita test/integration/mocks_test.exs
-```
-
-Or if you want more details try with the Pretty formatter:
-
-```
-mix amrita --trace
-```
 
 ##Custom checkers
 
 Its simple to create your own checkers:
 
 ```elixir
-  def a_thousand(actual) do
+  defchecker a_thousand(actual) do
     rem(actual, 1000) |> equals 0
   end
 
   fact "about 1000s" do
-    1000 |> a_thousand ; true
-    1200 |> a_thousand ; false
+    1000 |> a_thousand   # true
+    1200 |> ! a_thousand # true
   end
 ```
 
