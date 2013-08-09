@@ -120,9 +120,21 @@ defmodule Amrita.Checkers.Simple do
       { 1, 2, 3 } |> matches { _, 2, _ }
   """
   defmacro matches(actual, expected) do
-    quote do
-      r = match?(unquote(expected), unquote(actual))
-      if not(r), do: Amrita.Message.fail(unquote(actual), unquote(Macro.to_string(expected)), __ENV__.function)
+    need_extract = case actual do
+      { :received, _, _ } -> true
+                        _ -> false
+    end
+
+    if(need_extract) do
+      quote do
+        r = match?(unquote(expected), (unquote(actual).()))
+        if not(r), do: Amrita.Message.fail(unquote(actual), unquote(Macro.to_string(expected)), __ENV__.function)
+      end
+    else
+      quote do
+        r = match?(unquote(expected), unquote(actual))
+        if not(r), do: Amrita.Message.fail(unquote(actual), unquote(Macro.to_string(expected)), __ENV__.function)
+      end
     end
   end
 
@@ -140,15 +152,28 @@ defmodule Amrita.Checkers.Simple do
                       _ -> false
     end
 
+    need_extract = case actual do
+      { :received, _, _ } -> true
+                        _ -> false
+    end
+
     if(use_match) do
       quote do
         unquote(actual) |> matches unquote(expected)
       end
     else
-      quote do
-        r = (unquote(actual) == unquote(expected))
+      if(need_extract) do
+        quote do
+          r = ((unquote(actual).()) == unquote(expected))
 
-        if (not r), do: Message.fail(unquote(actual), unquote(expected), { :equals, 2 })
+          if (not r), do: Message.fail((unquote(actual).()), unquote(expected), { :equals, 2 })
+        end
+      else
+        quote do
+          r = (unquote(actual) == unquote(expected))
+
+          if (not r), do: Message.fail(unquote(actual), unquote(expected), { :equals, 2 })
+        end
       end
     end
   end
@@ -172,10 +197,8 @@ defmodule Amrita.Checkers.Simple do
   """
   def msg(function, expected) do
     actual = function.()
-    r = actual == expected
-    if not(r), do: Message.fail(actual, expected, __ENV__.function)
+    actual |> equals expected
   end
-
 
   @doc """
   Negates all following checkers.
