@@ -1,6 +1,6 @@
 Code.require_file "../../test_helper.exs", __FILE__
 
-defmodule AmritaFacts do
+defmodule Integration.AmritaFacts do
   use Amrita.Sweet
 
   import Support
@@ -224,21 +224,21 @@ defmodule AmritaFacts do
 
     fact "received" do
       self <- :hello
-      received |> msg(:hello)
+      received |> :hello
 
       fail "wrong match" do
         self <- :sod
-        received |> msg(:hello)
+        received |> :hello
       end
 
       fail "never received message" do
-        received |> msg(:hello)
+        received |> :hello
       end
     end
 
-    future_fact "received with paramters" do
+    fact "received with paramters" do
       self <- { :hello, "sir" }
-      received |> { :hello, _ }
+      received |> matches { :hello, _ }
     end
   end
 
@@ -246,10 +246,10 @@ defmodule AmritaFacts do
 
   facts "exceptions" do
     fact "should allow checking of exceptions" do
-      fn -> raise TestException end |> raises AmritaFacts.TestException
+      fn -> raise TestException end |> raises Integration.AmritaFacts.TestException
 
       fail do
-        fn -> true end |> raises AmritaFacts.TestException
+        fn -> true end |> raises Integration.AmritaFacts.TestException
       end
     end
 

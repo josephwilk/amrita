@@ -1,6 +1,6 @@
 Code.require_file "../test_helper.exs", __DIR__
 
-defmodule CallbackFacts do
+defmodule Integration.CallbackFacts do
   use Amrita.Sweet
 
   setup do

@@ -1,6 +1,6 @@
 Code.require_file "../test_helper.exs", __DIR__
 
-defmodule ScopingFacts do
+defmodule Integration.ScopingFacts do
   use Amrita.Sweet
   import Support
 
