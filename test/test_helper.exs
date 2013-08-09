@@ -44,9 +44,7 @@ defmodule Support do
       inject_exception_test(test, line)
     end
 
-    def assertions(form) do
-      form
-    end
+    def assertions(form), do: form
 
     defp inject_exception_test(form, line) do
       quote do
