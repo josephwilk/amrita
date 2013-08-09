@@ -1,7 +1,7 @@
 defmodule Amrita.Engine.Runner do
   @moduledoc false
 
-  defrecord Config, formatter: ExUnit.CLIFormatter, formatter_id: nil,
+  defrecord Config, formatter: Amrita.Formatter.Progress, formatter_id: nil,
                     max_cases: 4, taken_cases: 0, async_cases: [], sync_cases: [], selectors: []
 
   def run(async, sync, opts, load_us) do
@@ -199,7 +199,7 @@ defmodule Amrita.Engine.Runner do
   defp filter_stacktrace([{ ExUnit.Assertions, _, _, _ }|t]), do: filter_stacktrace(t)
 
   # As soon as we see a Runner, it is time to ignore the stacktrace
-  defp filter_stacktrace([{ ExUnit.Runner, _, _, _ }|_]), do: []
+  defp filter_stacktrace([{ Amrita.Engine.Runner, _, _, _ }|_]), do: []
 
   # All other cases
   defp filter_stacktrace([h|t]), do: [h|filter_stacktrace(t)]
