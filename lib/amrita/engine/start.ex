@@ -31,8 +31,9 @@ defmodule Amrita.Engine.Start do
   def run do
     { async, sync, load_us } = ExUnit.Server.start_run
 
-    async = Enum.sort async, fn(c,c1) -> c >= c1 end
+    async = Enum.sort async, fn(c,c1) -> c <= c1 end
     sync = Enum.sort  sync, fn(c,c1) -> c <= c1 end
+    
     Amrita.Engine.Runner.run async, sync, configuration, load_us
   end
 
