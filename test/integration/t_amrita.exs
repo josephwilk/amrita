@@ -122,6 +122,8 @@ defmodule Integration.AmritaFacts do
 
       fact "tuples use matches when used with equals" do
         { 1, 2, 3 } |> equals { 1, _, 3 }
+        # { 1, 2 } is actually a different code path than { 1, 2, 3 }
+        { 1, 2 } |> equals { 1, _ }
         { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, _ } }
 
         fail do
@@ -129,6 +131,11 @@ defmodule Integration.AmritaFacts do
 
           { 1, 2, { 1, 2 } } |> equals { 1, _,  { 1, 4 } }
         end
+      end
+
+      fact "tuples use equals matcher implicitly" do
+        { 1, 2, 3 } |> { 1, _, 3 }
+        { 1, 2 } |> { 1, _ }
       end
 
       fact "lists use matches when used with equals" do
@@ -239,11 +246,6 @@ defmodule Integration.AmritaFacts do
     fact "received tuples" do
       self <- { :hello, 1, 2 }
       received |> { :hello, _, 2 }
-    end
-
-    future_fact "received 2 element tuples" do
-      self <- { :hello, "sir" }
-      received |> { :hello, _ }
     end
   end
 
