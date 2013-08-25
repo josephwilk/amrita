@@ -158,8 +158,14 @@ defmodule Amrita.Checkers.Simple do
     end
 
     if(use_match) do
-      quote do
-        unquote(actual) |> matches unquote(expected)
+      if(need_extract) do
+        quote do
+          unquote(actual).() |> matches unquote(expected)
+        end
+      else
+        quote do
+          unquote(actual) |> matches unquote(expected)
+        end
       end
     else
       if(need_extract) do
