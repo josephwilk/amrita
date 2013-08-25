@@ -236,9 +236,14 @@ defmodule Integration.AmritaFacts do
       end
     end
 
-    fact "received with paramters" do
+    fact "received tuples" do
+      self <- { :hello, 1, 2 }
+      received |> { :hello, _, 2 }
+    end
+
+    future_fact "received 2 element tuples" do
       self <- { :hello, "sir" }
-      received |> matches { :hello, _ }
+      received |> { :hello, _ }
     end
   end
 
