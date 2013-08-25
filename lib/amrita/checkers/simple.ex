@@ -148,6 +148,7 @@ defmodule Amrita.Checkers.Simple do
   defmacro equals(actual, expected) do
     use_match = case expected do
       { :{}, _, _ }     -> true
+      { _, _ }          -> true
       e when is_list(e) -> true
                       _ -> false
     end
