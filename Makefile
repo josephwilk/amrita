@@ -2,7 +2,7 @@ VENDORED_ELIXIR=${PWD}/vendor/elixir/bin/elixir
 VENDORED_MIX=${PWD}/vendor/elixir/bin/mix
 RUN_VENDORED_MIX=${VENDORED_ELIXIR} ${VENDORED_MIX}
 VERSION := $(strip $(shell cat VERSION))
-STABLE_ELIXIR_VERSION = 0.10.2
+STABLE_ELIXIR_VERSION = 0.10.1
 
 .PHONY: all test
 
@@ -23,7 +23,7 @@ docs:
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
-ci: ci_${STABLE_ELIXIR_VERSION} ci_master
+ci: ci_master
 
 vendor/${STABLE_ELIXIR_VERSION}:
 	@rm -rf vendor/*
