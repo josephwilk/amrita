@@ -18,7 +18,13 @@ defmodule Amrita.Elixir.Pipeline do
   # Comparing to tuples
   defp pipeline_op(left, { :{}, _, _ }=right) do
     quote do
-      Amrita.Checkers.Simple.matches(unquote(left), unquote(right))
+      unquote(left) |> equals unquote(right)
+    end
+  end
+
+  defp pipeline_op(left, { _, _ }=right) do
+    quote do
+      unquote(left) |> equals unquote(right)
     end
   end
 
