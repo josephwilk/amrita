@@ -23,7 +23,7 @@ docs:
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
-ci: ci_master
+ci: ci_$(STABLE_ELIXIR_VERSION)
 
 vendor/${STABLE_ELIXIR_VERSION}:
 	@rm -rf vendor/*
