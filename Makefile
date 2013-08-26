@@ -23,7 +23,7 @@ docs:
 	git checkout gh-pages && git add docs && git commit -m "adding new docs" && git push origin gh-pages
 	git checkout master
 
-ci: ci_$(STABLE_ELIXIR_VERSION)
+ci: ci_$(STABLE_ELIXIR_VERSION) ci_master
 
 vendor/${STABLE_ELIXIR_VERSION}:
 	@rm -rf vendor/*
@@ -38,6 +38,7 @@ vendor/master:
 
 ci_master: vendor/master
 	@${VENDORED_ELIXIR} --version
+	git checkout "elixir_0.10.2"
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, compile, amrita
 
 ci_$(STABLE_ELIXIR_VERSION): vendor/${STABLE_ELIXIR_VERSION}
