@@ -1,11 +1,14 @@
 defmodule Mix.Tasks.Amrita do
   use Mix.Task
 
+  @switches [force: :boolean, color: :boolean, cover: :boolean,
+              trace: :boolean, max_cases: :integer]
+
   @shortdoc "Run Amrita tests"
   @recursive true
 
   def run(args) do
-    { opts, files } = OptionParser.parse(args, switches: @switches)
+    { opts, files, _ } = OptionParser.parse(args, switches: @switches)
 
     selectors = Enum.map files, fn file ->
       splits = String.split(file, ":")

@@ -7,7 +7,7 @@ defmodule Amrita.Formatter.Documentation do
   @timeout 30_000
   use GenServer.Behaviour
 
-  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 4, format_test_case_failure: 4]
+  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 3, format_test_case_failure: 3]
 
   defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0, scope: HashDict.new,
             test_failures: [], case_failures: [], pending_failures: []
@@ -133,7 +133,7 @@ defmodule Amrita.Formatter.Documentation do
 
   defp print_suite(counter, 0, num_pending, [], [], pending_failures, run_us, load_us) do
     IO.write "\n\nPending:\n\n"
-    Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2, File.cwd!)
+    Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2)
 
     IO.puts format_time(run_us, load_us)
     IO.write success("#{counter} facts, ")
@@ -149,12 +149,12 @@ defmodule Amrita.Formatter.Documentation do
 
     if num_pending > 0 do
       IO.write "Pending:\n\n"
-      Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2, File.cwd!)
+      Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2)
     end
 
     IO.write "Failures:\n\n"
-    num_fails = Enum.reduce Enum.reverse(test_failures), 0, print_test_failure(&1, &2, File.cwd!)
-    Enum.reduce Enum.reverse(case_failures), num_fails, print_test_case_failure(&1, &2, File.cwd!)
+    num_fails = Enum.reduce Enum.reverse(test_failures), 0, print_test_failure(&1, &2)
+    Enum.reduce Enum.reverse(case_failures), num_fails, print_test_case_failure(&1, &2)
 
     IO.puts format_time(run_us, load_us)
     message = "#{counter} facts"
@@ -175,18 +175,18 @@ defmodule Amrita.Formatter.Documentation do
     end
   end
 
-  defp print_test_pending(test, acc, cwd) do
-    IO.puts Amrita.Formatter.Format.format_test_pending(test, acc + 1, cwd, &pending_formatter/2)
+  defp print_test_pending(test, acc) do
+    IO.puts Amrita.Formatter.Format.format_test_pending(test, acc + 1, &pending_formatter/2)
     acc + 1
   end
 
-  defp print_test_failure(test, acc, cwd) do
-    IO.puts format_test_failure(test, acc + 1, cwd, &formatter/2)
+  defp print_test_failure(test, acc) do
+    IO.puts format_test_failure(test, acc + 1, &formatter/2)
     acc + 1
   end
 
-  defp print_test_case_failure(test_case, acc, cwd) do
-    IO.puts format_test_case_failure(test_case, acc + 1, cwd, &formatter/2)
+  defp print_test_case_failure(test_case, acc) do
+    IO.puts format_test_case_failure(test_case, acc + 1, &formatter/2)
     acc + 1
   end
 
