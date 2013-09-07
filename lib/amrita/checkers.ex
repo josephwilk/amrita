@@ -31,14 +31,14 @@ defmodule Amrita.Checkers do
       contents = Macro.escape(contents)
 
       quote do
-        def(unquote(fun_name), unquote(args), []) do
+        def unquote(fun_name)(unquote(args)) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
           unquote(contents)
         end
 
-        def(unquote(fun_name), unquote(neg_args), []) do
+        def unquote(fun_name)(unquote_splicing(neg_args)) do
           name = unquote(fun_name)
           expected = unquote(expected_arg)
           actual = unquote(Enum.take(args,1))
