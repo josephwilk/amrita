@@ -9,7 +9,7 @@ defmodule Integration.CheckerFacts do
        actual |> equals 1000
      end
 
-     future_fact "supports ! and positive form" do
+     fact "supports ! and positive form" do
        1000 |> thousand
        1001 |> ! thousand
 
@@ -25,30 +25,29 @@ defmodule Integration.CheckerFacts do
       actual |> equals expected
     end
 
-    future_fact "supports ! and postive form" do
+    fact "supports ! and postive form" do
       100 |> valid 100
       100 |> ! valid 101
 
-      fail do
-        100 |> valid 101
-        100 |> ! valid 100
-      end
+     fail do
+       100 |> valid 101
+       100 |> ! valid 100
+     end
     end
   end
 
-  facts "about checkers with many expected arguments" do
-    defchecker sumed_up(actual, expected, x, y, z) do
-      actual |> equals expected + x + y + z
-    end
-
-    future_fact "supports ! and postive form" do
-      190 |> sumed_up 100, 20, 30, 40
-
-      fail do
-        100 |> sumed_up 100, 20, 30, 40
-      end
-    end
-  end
-
+  # facts "about checkers with many expected arguments" do
+  #   defchecker sumed_up(actual, expected, x, y, z) do
+  #     actual |> equals expected + x + y + z
+  #   end
+  #
+  #   fact "supports ! and postive form" do
+  #     Integration.CheckerFacts.sumed_up(190, 100, 20, 30, 40)
+  #
+  #     fail do
+  #       100 |> sumed_up 100, 20, 30, 40
+  #     end
+  #   end
+  # end
 
 end

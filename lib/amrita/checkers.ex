@@ -2,36 +2,34 @@ defmodule Amrita.Checkers do
   @moduledoc false
 
   defmodule Helper do
-    
+
     @doc """
     Helper function to create your own checker functions.
-    
+
     ## Example:
-    
+
         defchecker thousand(actual) do
           actual |> 1000
         end
-        
+
         fact "using thousand checker" do
           1000 |> thousand
           1001 |> ! thousand
         end
-    
+
     """
     defmacro defchecker(name, _ // quote(do: _), contents) do
-      { fun_name, _, vars } = name
+      { fun_name, _, args } = name
 
-      neg_args = Enum.drop(vars, 1)
-      neg_args = Macro.escape(neg_args)
+      neg_args = Enum.drop(args, 1)
+      expected_arg = Enum.at(args,1)
 
-      expected_arg = Enum.at(vars,1)
-      expected_arg = Macro.escape(expected_arg)
-
-      args = Macro.escape(vars)
-      contents = Macro.escape(contents)
+      actual_arg = Enum.take(args,1)
+      call_args = Enum.concat(actual_arg, Enum.drop(args,2))
+      called_with_args = Enum.concat(actual_arg, Enum.drop(args,1))
 
       quote do
-        def unquote(fun_name)(unquote(args)) do
+        def unquote(fun_name)(unquote_splicing(args)) do
           import Kernel, except: [|>: 2]
           import Amrita.Elixir.Pipeline
 
@@ -39,20 +37,14 @@ defmodule Amrita.Checkers do
         end
 
         def unquote(fun_name)(unquote_splicing(neg_args)) do
-          name = unquote(fun_name)
-          expected = unquote(expected_arg)
-          actual = unquote(Enum.take(args,1))
-          args = Enum.concat(actual, unquote(Enum.drop(args,2 )))
-          call_args = unquote(args)
-
           case Enum.count(unquote(neg_args)) do
-            0 -> quote do: fn(actual) -> unquote(name)(actual); {nil, __ENV__.function}
-                 end
+             0 -> fn(actual) -> unquote(fun_name)(actual); {nil, __ENV__.function} end
 
-            _ -> quote do: fn(unquote_splicing(args)) ->
-                               unquote(name)(unquote_splicing(call_args)); {unquote(expected), __ENV__.function}
-                 end
-          end
+             _ -> fn(unquote_splicing(call_args)) ->
+                    unquote(fun_name)(unquote_splicing(called_with_args))
+                    {unquote(expected_arg), __ENV__.function}
+                  end
+           end
         end
       end
     end
