@@ -153,7 +153,7 @@ defmodule Amrita.Mocks do
        bucket = Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
         mocks_by_module = HashDict.get(acc, module, HashDict.new)
         mocks_by_fun    = HashDict.get(mocks_by_module, fun, [])
-        mocks = List.concat(mocks_by_fun, [{module, fun, args, nil ,value}])
+        mocks = Enum.concat(mocks_by_fun, [{module, fun, args, nil ,value}])
 
         Dict.put(acc, module, Dict.put(mocks_by_module, fun, mocks))
       end
@@ -189,11 +189,11 @@ defmodule Amrita.Mocks do
         results = Enum.reduce mocks_by_module, [], fn { _, mocks }, fn_acc ->
           results = Enum.reduce mocks, [],  fn mock, acc ->
             result = fun.(mock)
-            List.concat(acc, result)
+            Enum.concat(acc, result)
           end
-          List.concat(fn_acc, results)
+          Enum.concat(fn_acc, results)
         end
-        List.concat(all_acc, results)
+        Enum.concat(all_acc, results)
       end
     end
 

@@ -210,7 +210,7 @@ defmodule Amrita do
     """
     defmacro facts(description, _ // quote(do: _), contents) do
       quote do
-        @name_stack List.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
+        @name_stack Enum.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
         unquote(contents)
         if Enum.count(@name_stack) > 0 do
           @name_stack Enum.take(@name_stack, Enum.count(@name_stack) - 1)

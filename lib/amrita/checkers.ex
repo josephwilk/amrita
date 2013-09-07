@@ -42,7 +42,7 @@ defmodule Amrita.Checkers do
           name = unquote(fun_name)
           expected = unquote(expected_arg)
           actual = unquote(Enum.take(args,1))
-          args = List.concat(actual ,unquote(Enum.drop(args,2 )))
+          args = Enum.concat(actual, unquote(Enum.drop(args,2 )))
           call_args = unquote(args)
 
           case Enum.count(unquote(neg_args)) do
