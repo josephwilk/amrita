@@ -2,7 +2,7 @@ VENDORED_ELIXIR=${PWD}/vendor/elixir/bin/elixir
 VENDORED_MIX=${PWD}/vendor/elixir/bin/mix
 RUN_VENDORED_MIX=${VENDORED_ELIXIR} ${VENDORED_MIX}
 VERSION := $(strip $(shell cat VERSION))
-STABLE_ELIXIR_VERSION = 0.10.2
+STABLE_ELIXIR_VERSION = 0.10.3
 
 .PHONY: all test
 
