@@ -6,7 +6,7 @@ defmodule Amrita.Mixfile do
      version: version,
      name: "Amrita",
      source_url: "https://github.com/josephwilk/amrita",
-     elixir: "~> 0.10.1",
+     elixir: "~> 0.10.3",
      homepage_url: "http://amrita.io",
      env: [test: [deps: deps],
            dev:  [deps: deps ++ dev_deps]],
