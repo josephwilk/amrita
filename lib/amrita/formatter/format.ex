@@ -11,7 +11,7 @@ defmodule Amrita.Formatter.Format do
 
     test_info("#{counter})", color) <>
       error_info("#{format_test_name(test)}", color) <>
-      format_location([stacktrace], test_case, test_name, color)
+      format_location([List.last(stacktrace)], test_case, test_name, color)
   end
 
   def format_test_name(ExUnit.Test[name: name]) do
