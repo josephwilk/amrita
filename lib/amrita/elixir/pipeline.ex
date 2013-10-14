@@ -50,10 +50,6 @@ defmodule Amrita.Elixir.Pipeline do
   end
 
   defp pipeline_op(left, { call, line, args }=right) when is_list(args) do
-    case validate_pipeline_args(args) do
-      :error -> pipeline_error(right)
-      _ -> nil
-    end
     { call, line, [left|args] }
   end
 
@@ -74,12 +70,6 @@ defmodule Amrita.Elixir.Pipeline do
 
   defp pipeline_op(_, other) do
     pipeline_error(other)
-  end
-
-  defp validate_pipeline_args([]), do: nil
-  defp validate_pipeline_args([ {:&, _, _ } | _ ]), do: :error
-  defp validate_pipeline_args([_|t]) do
-    validate_pipeline_args(t)
   end
 
   defp pipeline_error(arg) do

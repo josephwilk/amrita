@@ -116,7 +116,7 @@ defmodule PipelineFacts do
     end
 
     fact "nested" do
-      [1, [2], 3] |> List.flatten |> Enum.map(fn(x) -> (x * 2) end) |> [2, 4, 6]
+      [1, [2], 3] |> List.flatten |> Enum.map(&(&1 *2)) |> [2, 4, 6]
 
       fail do
         [1, [2], 3] |> List.flatten |> Enum.map(fn(x) -> (x * 2) end) |> [2, 4, 9]
