@@ -28,7 +28,7 @@ defmodule Support do
   end
 
   defmodule Wrap do
-    def assertions([ do: forms ]) when is_list(forms), do: [do: Enum.map(forms, assertions(&1))]
+    def assertions([ do: forms ]) when is_list(forms), do: [do: Enum.map(forms, &assertions(&1))]
 
     def assertions([ do: { :provided, [line: line], [a, mocks] } ]) do
       inject_exception_test([ do: { :provided, [line: line], [a, assertions(mocks)]}], line)
@@ -37,7 +37,7 @@ defmodule Support do
     def assertions([ do: thing ]), do: [do: assertions(thing)]
 
     def assertions({ :__block__, m, forms }) do
-      { :__block__, m, Enum.map(forms, assertions(&1)) }
+      { :__block__, m, Enum.map(forms, &assertions(&1)) }
     end
 
     def assertions({ :|>, [line: line], _args } = test) do
