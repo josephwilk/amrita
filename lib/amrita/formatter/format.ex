@@ -11,7 +11,18 @@ defmodule Amrita.Formatter.Format do
 
     test_info("#{counter})", color) <>
       error_info("#{format_test_name(test)}", color) <>
-      format_location([List.last(stacktrace)], test_case, test_name, color)
+      format_location(find_case(stacktrace, test_case, test_name), test_case, test_name, color)
+  end
+
+  defp find_case([head|tail], test_case, test_name) do
+    case head do
+      { ^test_case, ^test_name, _, _ } -> [head]
+      _                                -> find_case(tail, test_case, test_name)
+    end
+  end
+
+  defp find_case([], _, _) do
+    []
   end
 
   def format_test_name(ExUnit.Test[name: name]) do
