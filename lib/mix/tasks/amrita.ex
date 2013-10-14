@@ -35,7 +35,7 @@ defmodule Mix.Tasks.Amrita do
     Amrita.Engine.Start.configure(Dict.take(opts, [:trace, :max_cases, :color, :selectors]))
 
     test_paths = project[:test_paths] || ["test"]
-    Enum.each(test_paths, require_test_helper(&1))
+    Enum.each(test_paths, &require_test_helper(&1))
 
     test_paths   = if files == [], do: test_paths, else: files
     test_pattern = project[:test_pattern] || "*.exs"
