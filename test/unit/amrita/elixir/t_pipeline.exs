@@ -116,10 +116,10 @@ defmodule PipelineFacts do
     end
 
     fact "nested" do
-      [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) |> [2, 4, 6]
+      [1, [2], 3] |> List.flatten |> Enum.map(fn(x) -> (x * 2) end) |> [2, 4, 6]
 
       fail do
-        [1, [2], 3] |> List.flatten |> Enum.map(&1 * 2) |> [2, 4, 9]
+        [1, [2], 3] |> List.flatten |> Enum.map(fn(x) -> (x * 2) end) |> [2, 4, 9]
       end
     end
 
@@ -132,17 +132,17 @@ defmodule PipelineFacts do
     end
 
     fact "map" do
-      Enum.map([1, 2, 3], &1 |> twice |> twice) |> [4, 8, 12]
+      Enum.map([1, 2, 3], &(&1 |> twice |> twice)) |> [4, 8, 12]
 
       fail do
-        Enum.map([1, 2, 3], &1 |> twice |> twice) |> [4, 8, 19]
+        Enum.map([1, 2, 3], &(&1 |> twice |> twice)) |> [4, 8, 19]
       end
     end
 
     defp twice(a), do: a * 2
 
     defp local(list) do
-      Enum.map(list, &1 * 2)
+      Enum.map(list, &(&1 * 2))
     end
   end
 

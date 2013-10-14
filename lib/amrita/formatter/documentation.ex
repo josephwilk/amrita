@@ -71,16 +71,16 @@ defmodule Amrita.Formatter.Documentation do
       print_indent(name_parts)
       IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
 
-      { :noreply, config.update_tests_counter(&1 + 1) }
+      { :noreply, config.update_tests_counter(&(&1 + 1)) }
     else
       IO.puts success("\r  #{format_test_name test}")
-      { :noreply, config.update_tests_counter(&1 + 1) }
+      { :noreply, config.update_tests_counter(&(&1 + 1)) }
     end
   end
 
   def handle_cast({ :test_finished, ExUnit.Test[failure: { :invalid, _ }] = test }, config) do
     IO.puts invalid("\r  #{format_test_name test}")
-    { :noreply, config.update_tests_counter(&1 + 1).update_invalid_counter(&1 + 1) }
+    { :noreply, config.update_tests_counter(&(&1 + 1)).update_invalid_counter(&(&1 + 1)) }
   end
 
   def handle_cast({ :test_finished, test }, config) do
@@ -98,15 +98,15 @@ defmodule Amrita.Formatter.Documentation do
       else
         IO.puts  pending("  #{format_test_name test}")
       end
-      { :noreply, config.update_pending_counter(&1 + 1).
-        update_pending_failures([test|&1]) }
+      { :noreply, config.update_pending_counter(&(&1 + 1)).
+        update_pending_failures(&([test|&1])) }
     else
       if(name_parts) do
         IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
       else
         IO.puts  failure("  #{format_test_name test}")
       end
-      { :noreply, config.update_tests_counter(&1 + 1).update_test_failures([test|&1]) }
+      { :noreply, config.update_tests_counter(&(&1 + 1)).update_test_failures(&([test|&1])) }
     end
   end
 
@@ -117,7 +117,7 @@ defmodule Amrita.Formatter.Documentation do
 
   def handle_cast({ :case_finished, test_case }, config) do
     if test_case.failure do
-      { :noreply, config.update_case_failures([test_case|&1]) }
+      { :noreply, config.update_case_failures(&([test_case|&1])) }
     else
       { :noreply, config }
     end
@@ -133,7 +133,7 @@ defmodule Amrita.Formatter.Documentation do
 
   defp print_suite(counter, 0, num_pending, [], [], pending_failures, run_us, load_us) do
     IO.write "\n\nPending:\n\n"
-    Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2)
+    Enum.reduce Enum.reverse(pending_failures), 0, &print_test_pending(&1, &2)
 
     IO.puts format_time(run_us, load_us)
     IO.write success("#{counter} facts, ")
@@ -149,12 +149,12 @@ defmodule Amrita.Formatter.Documentation do
 
     if num_pending > 0 do
       IO.write "Pending:\n\n"
-      Enum.reduce Enum.reverse(pending_failures), 0, print_test_pending(&1, &2)
+      Enum.reduce Enum.reverse(pending_failures), 0, &print_test_pending(&1, &2)
     end
 
     IO.write "Failures:\n\n"
-    num_fails = Enum.reduce Enum.reverse(test_failures), 0, print_test_failure(&1, &2)
-    Enum.reduce Enum.reverse(case_failures), num_fails, print_test_case_failure(&1, &2)
+    num_fails = Enum.reduce Enum.reverse(test_failures), 0, &print_test_failure(&1, &2)
+    Enum.reduce Enum.reverse(case_failures), num_fails, &print_test_case_failure(&1, &2)
 
     IO.puts format_time(run_us, load_us)
     message = "#{counter} facts"

@@ -202,20 +202,20 @@ defmodule Integration.AmritaFacts do
     end
 
     fact "for_all" do
-      [2, 4, 6, 8] |> for_all even(&1)
+      [2, 4, 6, 8] |> for_all(fn(x) -> even(x) end)
 
-      [2, 4, 6, 8] |> Enum.all? even(&1)
+      [2, 4, 6, 8] |> Enum.all?(fn(x) -> even(x) end)
 
       fail do
-        [2, 4, 7, 8] |> for_all even(&1)
+        [2, 4, 7, 8] |> for_all(fn(x) -> even(x) end)
       end
     end
 
     fact "for_some" do
-      [2, 4, 7, 8] |> for_some odd(&1)
+      [2, 4, 7, 8] |> for_some(fn(x) -> odd(x) end)
 
       fail do
-        [1, 3, 5, 7] |> for_some even(&1)
+        [1, 3, 5, 7] |> for_some(fn(x) -> even(x) end)
       end
     end
 

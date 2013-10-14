@@ -232,7 +232,7 @@ defmodule Amrita.Mocks do
     end
 
     def prerequisites(forms) do
-      prerequisites = Enum.map(forms, extract(&1))
+      prerequisites = Enum.map(forms, &extract(&1))
       Provided.Prerequisites.new(prerequisites)
     end
 
