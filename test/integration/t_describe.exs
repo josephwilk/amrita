@@ -5,6 +5,14 @@ defmodule Integration.Syntax.Describe do
 
   import Support
 
+  before(:all) do
+    IO.puts "Before all"
+  end
+
+  before(:each) do
+    IO.puts "Before each"
+  end
+
   describe "we can use describe in place of facts" do
     it "works like fact" do
       10 |> 10
@@ -20,4 +28,5 @@ defmodule Integration.Syntax.Describe do
       10 |> 10
     end
   end
+
 end

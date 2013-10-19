@@ -1,4 +1,6 @@
 defmodule Amrita.Syntax.Describe do
+  require ExUnit.Callbacks
+
   @moduledoc """
   Provides an alternative DSL to facts and fact.
   """
@@ -21,6 +23,14 @@ defmodule Amrita.Syntax.Describe do
       quote do
         Amrita.Facts.fact(unquote(description))
       end
+    end
+  end
+
+  defmacro before(scope, var // quote(do: _), block) do
+    if scope == :each do
+      quote do: ExUnit.Callbacks.setup(unquote(var), unquote(block))
+    else
+      quote do: ExUnit.Callbacks.setup_all(unquote(var), unquote(block))
     end
   end
 end
