@@ -367,4 +367,9 @@ defmodule Integration.AmritaFacts do
     end
   end
 
+  context "we can use context in place of facts" do
+    specify "specify works like fact" do
+      10 |> 10
+    end
+  end
 end

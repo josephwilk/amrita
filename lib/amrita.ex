@@ -66,22 +66,25 @@ defmodule Amrita do
     @moduledoc """
     Provides an alternative DSL to facts and fact.
     """
-
-    defmacro describe(description, thing // quote(do: _), contents) do
-      quote do
-        Amrita.Facts.facts(unquote(description), unquote(thing), unquote(contents))
+    lc facts_alias inlist [:context, :describe] do
+      defmacro unquote(facts_alias)(description, thing // quote(do: _), contents) do
+        quote do
+          Amrita.Facts.facts(unquote(description), unquote(thing), unquote(contents))
+        end
       end
     end
 
-    defmacro it(description, provided // [], meta // quote(do: _), contents) do
-      quote do
-        Amrita.Facts.fact(unquote(description), unquote(provided), unquote(meta), unquote(contents))
+    lc fact_alias inlist [:it, :specify] do
+      defmacro unquote(fact_alias)(description, provided // [], meta // quote(do: _), contents) do
+        quote do
+          Amrita.Facts.fact(unquote(description), unquote(provided), unquote(meta), unquote(contents))
+        end
       end
-    end
 
-    defmacro it(description) do
-      quote do
-        Amrita.Facts.fact(unquote(description))
+      defmacro unquote(fact_alias)(description) do
+        quote do
+          Amrita.Facts.fact(unquote(description))
+        end
       end
     end
   end
@@ -247,11 +250,9 @@ defmodule Amrita do
        def unquote(message)(unquote(var))  do
          unquote(contents)
        end
-       
+
        def unquote(:"__#{message}__")(), do: [file: __ENV__.file, line: __ENV__.line]
       end
     end
-    
   end
-
 end
