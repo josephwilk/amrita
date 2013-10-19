@@ -5,14 +5,6 @@ defmodule Integration.Syntax.Describe do
 
   import Support
 
-  before(:all) do
-    IO.puts "Before all"
-  end
-
-  before(:each) do
-    IO.puts "Before each"
-  end
-
   describe "we can use describe in place of facts" do
     it "works like fact" do
       10 |> 10
@@ -29,4 +21,30 @@ defmodule Integration.Syntax.Describe do
     end
   end
 
+  describe "hooks" do
+    before_all do
+      {:ok, before_all: :ok}
+    end
+
+    before_each do
+      {:ok, before_each: :ok}
+    end
+
+    specify "context information should be available in specs", context do
+      assert context[:before_each] == :ok
+      assert context[:before_all]  == :ok
+    end
+
+    after_each context do
+      assert context[:before_each] == :ok
+      assert context[:before_all] == :ok
+      :ok
+    end
+
+    after_all context do
+      assert context[:before_each] == nil
+      assert context[:before_all] == :ok
+      :ok
+    end
+  end
 end

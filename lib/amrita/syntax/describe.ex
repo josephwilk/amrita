@@ -26,12 +26,20 @@ defmodule Amrita.Syntax.Describe do
     end
   end
 
-  defmacro before(scope, var // quote(do: _), block) do
-    if scope == :each do
-      quote do: ExUnit.Callbacks.setup(unquote(var), unquote(block))
-    else
-      quote do: ExUnit.Callbacks.setup_all(unquote(var), unquote(block))
-    end
+  defmacro before_each(var // quote(do: _), block) do
+    quote do: ExUnit.Callbacks.setup(unquote(var), unquote(block))
+  end
+
+  defmacro before_all(var // quote(do: _), block) do
+    quote do: ExUnit.Callbacks.setup_all(unquote(var), unquote(block))
+  end
+
+  defmacro after_each(var // quote(do: _), block) do
+    quote do: ExUnit.Callbacks.teardown(unquote(var), unquote(block))
+  end
+
+  defmacro after_all(var // quote(do: _), block) do
+    quote do: ExUnit.Callbacks.teardown_all(unquote(var), unquote(block))
   end
 end
 
