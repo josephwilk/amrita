@@ -18,9 +18,7 @@ defmodule Integration.Mix do
     { :ok, [] }
   end
 
-  facts "about `mix amrita`" do
-    fact "supports running tests at a specific line number" do
-      File.write!"tmp/test/t_pants.exs", "
+  @pants_template "
 defmodule PantsFacts do
   use Amrita.Sweet
 
@@ -33,11 +31,24 @@ defmodule PantsFacts do
   end
 end"
 
+  facts "about `mix amrita`" do
+    fact "supports running tests at a specific line number" do
+      File.write!"tmp/test/t_pants.exs", @pants_template
+
       out = run_mix "amrita tmp/test/t_pants.exs:9"
 
-      out |> contains "passing example"
+      out |> contains "passing example\n"
       out |> contains "1 facts, 0 failures"
     end
-  end
 
+    fact "appends runtime when trace option is specified" do
+      File.write!"tmp/test/t_pants_trace.exs", @pants_template
+
+      out = run_mix "amrita tmp/test/t_pants_trace.exs --trace"
+
+      out |> contains %r/passing example \(.+?ms\)/
+      out |> contains %r/failing example \(.+?ms\)/
+      out |> contains "2 facts, 1 failures"
+    end
+  end
 end

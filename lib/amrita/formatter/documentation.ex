@@ -10,12 +10,12 @@ defmodule Amrita.Formatter.Documentation do
   import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 3, format_test_case_failure: 3]
 
   defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0, scope: HashDict.new,
-            test_failures: [], case_failures: [], pending_failures: []
+            test_failures: [], case_failures: [], pending_failures: [], trace: false
 
   ## Behaviour
 
-  def suite_started(_) do
-    { :ok, pid } = :gen_server.start_link(__MODULE__, [], [])
+  def suite_started(opts) do
+    { :ok, pid } = :gen_server.start_link(__MODULE__, opts[:trace], [])
     pid
   end
 
@@ -41,8 +41,8 @@ defmodule Amrita.Formatter.Documentation do
 
   ## Callbacks
 
-  def init(_) do
-    { :ok, Config[] }
+  def init(trace) do
+    { :ok, Config[trace: trace] }
   end
 
   def handle_call({ :suite_finished, run_us, load_us }, _from, config) do
@@ -69,11 +69,11 @@ defmodule Amrita.Formatter.Documentation do
   def handle_cast({ :test_finished, ExUnit.Test[failure: nil] = test }, config) do
     if(name_parts = scoped(test)) do
       print_indent(name_parts)
-      IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+      IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}#{trace_test_time(test, config)}\n")
 
       { :noreply, config.update_tests_counter(&(&1 + 1)) }
     else
-      IO.puts success("\r  #{format_test_name test}")
+      IO.puts success("\r  #{format_test_name test}#{trace_test_time(test, config)}")
       { :noreply, config.update_tests_counter(&(&1 + 1)) }
     end
   end
@@ -102,9 +102,9 @@ defmodule Amrita.Formatter.Documentation do
         update_pending_failures(&([test|&1])) }
     else
       if(name_parts) do
-        IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
+        IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}#{trace_test_time(test, config)}\n")
       else
-        IO.puts  failure("  #{format_test_name test}")
+        IO.puts  failure("  #{format_test_name test}#{trace_test_time(test, config)}")
       end
       { :noreply, config.update_tests_counter(&(&1 + 1)).update_test_failures(&([test|&1])) }
     end
@@ -244,4 +244,18 @@ defmodule Amrita.Formatter.Documentation do
   defp formatter(:location_info, msg), do: Amrita.Formatter.Format.colorize("cyan", msg)
   defp formatter(_,  msg),             do: msg
 
+  defp trace_test_time(_test, Config[trace: false]), do: ""
+  defp trace_test_time(test, _config) do
+    " (#{format_us(test.time)}ms)"
+  end
+
+  defp format_us(us) do
+    us = div(us, 10)
+    if us < 10 do
+      "0.0#{us}"
+    else
+      us = div us, 10
+      "#{div(us, 10)}.#{rem(us, 10)}"
+    end
+  end
 end
