@@ -51,37 +51,13 @@ defmodule Amrita do
 
         use Amrita.Facts
         use Amrita.Mocks
-        import Amrita.Describes
 
         import Amrita.Checkers.Helper
         import Amrita.Checkers.Simple
         import Amrita.Checkers.Collections
         import Amrita.Checkers.Exceptions
         import Amrita.Checkers.Messages
-      end
-    end
-  end
-
-  defmodule Describes do
-    @moduledoc """
-    Provides an alternative DSL to facts and fact.
-    """
-
-    defmacro describe(description, thing // quote(do: _), contents) do
-      quote do
-        Amrita.Facts.facts(unquote(description), unquote(thing), unquote(contents))
-      end
-    end
-
-    defmacro it(description, provided // [], meta // quote(do: _), contents) do
-      quote do
-        Amrita.Facts.fact(unquote(description), unquote(provided), unquote(meta), unquote(contents))
-      end
-    end
-
-    defmacro it(description) do
-      quote do
-        Amrita.Facts.fact(unquote(description))
+        import Amrita.Syntax.Describe
       end
     end
   end
@@ -247,11 +223,9 @@ defmodule Amrita do
        def unquote(message)(unquote(var))  do
          unquote(contents)
        end
-       
+
        def unquote(:"__#{message}__")(), do: [file: __ENV__.file, line: __ENV__.line]
       end
     end
-    
   end
-
 end

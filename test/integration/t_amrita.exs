@@ -351,20 +351,9 @@ defmodule Integration.AmritaFacts do
     assert 2 + 2 == 4
   end
 
-  describe "we can use describe in place of facts" do
-    it "works like fact" do
-      10 |> 10
-
-      fail do
-        1 |> 10
-      end
-    end
-  end
-
   facts :atoms_are_ok do
     fact :atoms_still_ok do
       1 |> 1
     end
   end
-
 end
