@@ -58,6 +58,8 @@ $ mix amrita # Run all your tests
 $ mix amrita test/integration/t_mocks.ex # Run a specific file
 
 $ mix amrita test/integration/t_mocks.ex:10 # Run a specific test at a line number
+
+$ mix amrita --trace # Show execution time for slow tests
 ```
 
 Now time to write some tests!
