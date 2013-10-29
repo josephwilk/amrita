@@ -76,10 +76,10 @@ defmodule Amrita do
     end
 
     defp fact_name(name) do
-      if is_binary(name) do
-        name
-      else
-        "#{name}"
+      cond do
+        is_binary(name) -> name
+        is_tuple(name)  -> name
+        true -> "#{name}"
       end
     end
 
