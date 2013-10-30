@@ -249,6 +249,13 @@ defmodule Integration.MockFacts do
     end
   end
 
+  future_fact "mock with a return value as a local var" do
+    x = 10
+    provided [Integration.MockFacts.Funk.hip?(_) |> x] do
+      Funk.hip?("shandy") |> x
+    end
+  end
+
   fact "mock with alternative syntax", provided: [Flip.flop(:ok) |> true] do
     Flip.flop(:ok) |> truthy
   end
