@@ -311,6 +311,10 @@ make ci
 make
 ```
 
+### Plugins
+
+See the wiki for various IDE plugins for Amrita: https://github.com/josephwilk/amrita/wiki/Plugins
+
 ### Docs
 
 http://josephwilk.github.io/amrita/docs
