@@ -294,6 +294,10 @@ Amrita tries its best to be polite with its errors:
 
 Checkout an example using Amrita with Dynamo: https://github.com/elixir-amrita/amrita_with_dynamo
 
+### Plugins
+
+See the wiki for various IDE plugins for Amrita: https://github.com/josephwilk/amrita/wiki/Plugins
+
 ## Amrita Development
 
 Hacking on Amrita.
@@ -310,10 +314,6 @@ make ci
 #Run tests against your current Elixir install
 make
 ```
-
-### Plugins
-
-See the wiki for various IDE plugins for Amrita: https://github.com/josephwilk/amrita/wiki/Plugins
 
 ### Docs
 
