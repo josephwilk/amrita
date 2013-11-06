@@ -54,7 +54,7 @@ defmodule Support do
           raise FactDidNotFail, file: __ENV__.file, line: unquote(line), form: unquote(Macro.escape(form))
         catch
           #Raised by :meck when a match is not found with a mock
-          :error, error in [:function_clause, :undef] -> true
+          :error, error when error in [:function_clause, :undef] -> true
         rescue
           error in [Amrita.FactError, Amrita.MockError] -> true
         end
