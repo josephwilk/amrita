@@ -46,16 +46,16 @@ defmodule Amrita.Mocks do
       prerequisites = Amrita.Mocks.Provided.Parse.prerequisites(forms)
       mock_modules = Provided.Prerequisites.all_modules(prerequisites)
       prerequisite_list = Macro.escape(Provided.Prerequisites.to_list(prerequisites))
-
       quote do
         prerequisites = Provided.Prerequisites.to_prerequisites(unquote(prerequisite_list))
+        local_bindings = binding()
 
         :meck.new(unquote(mock_modules), [:passthrough, :non_strict])
 
-        prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__)
+        prerequisites = unquote(__MODULE__).__resolve_args__(prerequisites, __MODULE__, __ENV__, local_bindings)
 
         Provided.Prerequisites.each_mock_list prerequisites, fn mocks ->
-          unquote(__MODULE__).__add_expect__(mocks, __MODULE__, __ENV__)
+          unquote(__MODULE__).__add_expect__(mocks, __MODULE__, __ENV__, local_bindings)
         end
 
         try do
@@ -77,14 +77,14 @@ defmodule Amrita.Mocks do
       end
     end
 
-    def __resolve_args__(prerequisites, target_module, env) do
+    def __resolve_args__(prerequisites, target_module, env, local_bindings // []) do
       Provided.Prerequisites.map prerequisites, fn { module, fun, args, _, value } ->
-        new_args = Enum.map args, fn arg -> __resolve_arg__(arg, target_module, env) end
+        new_args = Enum.map args, fn arg -> __resolve_arg__(arg, target_module, env, local_bindings) end
         { module, fun, new_args, args, value }
       end
     end
 
-    def __resolve_arg__(arg, target_module, env) do
+    def __resolve_arg__(arg, target_module, env, local_bindings // []) do
       case arg do
         { :_, _, _ }          -> anything
         { :fn, _meta, args }   -> { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
@@ -94,8 +94,12 @@ defmodule Amrita.Mocks do
           if __in_scope__(name, args, target_module) do
             apply(target_module, name, args)
           else
-            { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
-            evaled_arg
+            if is_atom(name) && Keyword.has_key?(local_bindings, name) do
+               local_bindings[name]
+            else
+              { evaled_arg, _ } = Code.eval_quoted(arg, [], env)
+              evaled_arg
+            end
           end
         _ -> arg
       end
@@ -107,9 +111,9 @@ defmodule Amrita.Mocks do
     end
 
 
-    def __add_expect__(mocks, target_module, env) do
+    def __add_expect__(mocks, target_module, env, local_vars) do
       args_specs = Enum.map mocks, fn { _, _, args, _, value } ->
-        value = __resolve_arg__(value, target_module, env)
+        value = __resolve_arg__(value, target_module, env, local_vars)
         { args, value }
       end
       { mock_module, fn_name, _, _, _ } = Enum.at(mocks, 0)

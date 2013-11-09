@@ -249,10 +249,10 @@ defmodule Integration.MockFacts do
     end
   end
 
-  future_fact "mock with a return value as a local var" do
+  fact "mock with a return value as a local var" do
     x = 10
     provided [Integration.MockFacts.Funk.hip?(_) |> x] do
-      Funk.hip?("shandy") |> x
+      Funk.hip?("shandy") |> 10
     end
   end
 
