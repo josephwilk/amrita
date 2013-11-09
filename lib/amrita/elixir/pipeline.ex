@@ -12,7 +12,16 @@ defmodule Amrita.Elixir.Pipeline do
   end
 
   defp pipeline_op(left, { call, line, atom }) when is_atom(atom) do
-    { call, line, [left] }
+    x = quote do
+      local_var_value = binding[unquote(call)]
+      if local_var_value do
+        unquote(left) |> equals local_var_value
+      else
+        unquote(Macro.escape({call, line, [left]}))
+      end
+    end
+    IO.puts Macro.to_string(x)
+    x
   end
 
   # Comparing to tuples
