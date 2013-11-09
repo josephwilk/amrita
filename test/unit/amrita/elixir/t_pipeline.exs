@@ -4,10 +4,10 @@ defmodule PipelineFacts do
   use Amrita.Sweet
   import Support
 
-  #For now this is impossible:
-  # a |> b         => _ |> { :a, _, nil  }
-  # true |> falsey => _ |> { :falsey, _, nil }
-  # We cannot tell the different between a function and a local var reference.
+  def example(x) do
+    x |> equals 10
+  end
+
   fact "|> supports expected value as a var" do
     a = "var test"
     b = "var test"
@@ -18,7 +18,7 @@ defmodule PipelineFacts do
     10 |> a
 
     b = 10
-    b |> 10
+    b |> example
 
     fail do
       a = "var test"
@@ -32,10 +32,6 @@ defmodule PipelineFacts do
       b = 11
       10 |> b
     end
-  end
-
-  fact "this should fail" do
-    true |> falsey
   end
 
   facts "defaults to equals checker" do
@@ -139,7 +135,13 @@ defmodule PipelineFacts do
       end
     end
 
-    fact "local" do
+    defp twice(a), do: a * 2
+
+    defp local(list) do
+      Enum.map(list, &(&1 * 2))
+    end
+
+    future_fact "local" do
       [1, [2], 3] |> List.flatten |> local |> [2, 4, 6]
 
       fail do
@@ -147,7 +149,7 @@ defmodule PipelineFacts do
       end
     end
 
-    fact "map" do
+    future_fact "map" do
       Enum.map([1, 2, 3], &(&1 |> twice |> twice)) |> [4, 8, 12]
 
       fail do
@@ -155,11 +157,6 @@ defmodule PipelineFacts do
       end
     end
 
-    defp twice(a), do: a * 2
-
-    defp local(list) do
-      Enum.map(list, &(&1 * 2))
-    end
   end
 
 end

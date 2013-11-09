@@ -12,35 +12,33 @@ defmodule Amrita.Elixir.Pipeline do
   end
 
   defp pipeline_op(left, { call, line, atom }) when is_atom(atom) do
-    x = quote do
+    quote do
       local_var_value = binding[unquote(call)]
       if local_var_value do
-        unquote(left) |> equals local_var_value
+        unquote(left) |> Amrita.Checkers.Simple.equals local_var_value
       else
-        Code.eval_quoted({unquote(call), unquote(line), [unquote(left)]}, binding,  __ENV__)
+        Code.eval_quoted({unquote(call), unquote(line), [unquote(left)]}, binding, __ENV__)
       end
     end
-    IO.puts Macro.to_string(x)
-    x
   end
 
   # Comparing to tuples
   defp pipeline_op(left, { :{}, _, _ }=right) do
     quote do
-      unquote(left) |> equals unquote(right)
+      unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
     end
   end
 
   defp pipeline_op(left, { _, _ }=right) do
     quote do
-      unquote(left) |> equals unquote(right)
+      unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
     end
   end
 
   # Comparing ranges
   defp pipeline_op({ :.., _, _ }=left, { :.., _, _ }=right) do
     quote do
-      unquote(left) |> equals unquote(right)
+      unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
     end
   end
 
