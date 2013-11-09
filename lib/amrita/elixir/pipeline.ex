@@ -17,12 +17,9 @@ defmodule Amrita.Elixir.Pipeline do
       if local_var_value do
         unquote(left) |> Amrita.Checkers.Simple.equals local_var_value
       else
-        fun = Module.function(__MODULE__, unquote(call), 1)
-        try do
-          fun.(unquote(left))
-        rescue
-          e in [UndefinedFunctionError] -> Code.eval_quoted({unquote(call), unquote(line), [unquote(left)]}, binding, __ENV__)
-        end
+      Code.eval_quoted({unquote(call), unquote(line), [unquote(left)]},
+                       binding,
+                       __ENV__.to_keywords |> Keyword.put(:delegate_locals_to, __MODULE__))
       end
     end
   end
