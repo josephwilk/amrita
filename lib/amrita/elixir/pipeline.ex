@@ -17,7 +17,7 @@ defmodule Amrita.Elixir.Pipeline do
       if local_var_value do
         unquote(left) |> equals local_var_value
       else
-        unquote(Macro.escape({call, line, [left]}))
+        Code.eval_quoted({unquote(call), unquote(line), [unquote(left)]}, binding,  __ENV__)
       end
     end
     IO.puts Macro.to_string(x)
