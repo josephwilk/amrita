@@ -58,7 +58,7 @@ defmodule Amrita.Elixir.Pipeline do
     end
   end
 
-  defp pipeline_op(left, { call, line, args }=right) when is_list(args) do
+  defp pipeline_op(left, { call, line, args }) when is_list(args) do
     { call, line, [left|args] }
   end
 
