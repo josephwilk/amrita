@@ -135,28 +135,6 @@ defmodule PipelineFacts do
       end
     end
 
-    defp twice(a), do: a * 2
-
-    defp local(list) do
-      Enum.map(list, &(&1 * 2))
-    end
-
-    future_fact "local" do
-      [1, [2], 3] |> List.flatten |> local |> [2, 4, 6]
-
-      fail do
-        [1, [2], 3] |> List.flatten |> local |> [2, 4, 9]
-      end
-    end
-
-    future_fact "map" do
-      Enum.map([1, 2, 3], &(&1 |> twice |> twice)) |> [4, 8, 12]
-
-      fail do
-        Enum.map([1, 2, 3], &(&1 |> twice |> twice)) |> [4, 8, 19]
-      end
-    end
-
   end
 
 end

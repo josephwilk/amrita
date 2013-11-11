@@ -1,6 +1,5 @@
 defmodule Amrita.Checkers.Collections do
   alias Amrita.Message, as: Message
-  alias Amrita.Checker, as: Checker
 
   @moduledoc """
   Checkers which are designed to work with collections (lists, tuples, keyword lists, strings).

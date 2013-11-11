@@ -1,6 +1,5 @@
 defmodule Amrita.Checkers.Simple do
   alias Amrita.Message, as: Message
-  alias Amrita.Checker, as: Checker
 
   @moduledoc """
   Checkers for operating on single forms like numbers, atoms, bools, floats, etc.
