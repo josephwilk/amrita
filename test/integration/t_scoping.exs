@@ -34,9 +34,4 @@ defmodule Integration.ScopingFacts do
     meta[:pong] |> ! :ping
   end
 
-  future_fact "locally scoped var used in an assert" do
-    x = 10
-    10 |> x
-  end
-
 end
