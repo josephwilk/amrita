@@ -214,7 +214,7 @@ defmodule Amrita.Checkers.Simple do
       [1, 2, 3, 4] |> ! contains 999 ; true
       [1, 2, 3, 4] |> ! contains 4   ; false
   """
-  def :!.(actual, checker) when is_function(checker) do
+  def unquote(:!)(actual, checker) when is_function(checker) do
     r = try do
       checker.(actual)
       rescue
@@ -225,7 +225,7 @@ defmodule Amrita.Checkers.Simple do
     if r, do: Message.fail(actual, r, __ENV__.function)
   end
 
-  def :!.(actual, value) do
+  def unquote(:!)(actual, value) do
     value |> ! equals actual
   end
 end
