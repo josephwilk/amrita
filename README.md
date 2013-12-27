@@ -147,10 +147,10 @@ defmodule ExampleFacts do
       # So we can write the above as
       1 - 10 |> -9
             
-      #Pattern matching with tuples
+      # Pattern matching with tuples
       { 1, 2, { 3, 4 } } |> equals {1, _, { _, 4 } }
 
-      #Which is the same as 
+      # Which is the same as 
       { 1, 2, { 3, 4 } } |> {1, _, { _, 4 } }
     end
 
@@ -238,13 +238,13 @@ defmodule ExampleFacts do
   end
 
   future_fact "I'm not run yet, just printed as a reminder. Like a TODO" do
-    #Never run
+    # Never run
     false |> truthy
   end
 
   fact "a fact without a body is much like a TODO"
 
-  #Backwards compatible with ExUnit
+  # Backwards compatible with ExUnit
   test "arithmetic" do
     assert 1 + 1 == 2
   end
@@ -257,14 +257,14 @@ end
 The syntax for assertions is as follows:
 
 ```elixir
-#Equality check
+# Equality check
 ACTUAL |> [EXPECTED]
-#Not equal check
+# Not equal check
 ACTUAL |> ! [EXPECTED]
 
-#Using a checker function
+# Using a checker function
 ACTUAL |> CHECKER [EXPECTED]
-#or negative form
+# or negative form
 ACTUAL |> !CHECKER [EXPECTED]
 ```
 
@@ -308,10 +308,10 @@ Amrita runs tests against Elixir's latest stable release and against Elixir mast
 Make is your friend for running these tests:
 
 ```
-#Run lastest stable and elixir master
+# Run lastest stable and elixir master
 make ci
 
-#Run tests against your current Elixir install
+# Run tests against your current Elixir install
 make
 ```
 
