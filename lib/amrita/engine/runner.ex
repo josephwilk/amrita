@@ -88,13 +88,13 @@ defmodule Amrita.Engine.Runner do
         { test_case, context }
       catch
         kind, error ->
-          { test_case.failure({ kind, Exception.normalize(kind, error), filtered_stacktrace }), nil }
+          { test_case.state({ :failed, { kind, Exception.normalize(kind, error)}, filtered_stacktrace }), nil }
       end
 
       tests = tests_for(case_name, config)
 
-      if test_case.failure do
-        tests = Enum.map tests, fn test -> test.failure({ :invalid, test_case }) end
+      if test_case.state != nil do
+        tests = Enum.map tests, fn test -> test.state({ :invalid, test_case }) end
         self_pid <- { self, :case_finished, test_case, tests }
       else
         Enum.each tests, &run_test(config, &1, context)
@@ -104,7 +104,7 @@ defmodule Amrita.Engine.Runner do
           test_case
         catch
           kind, error ->
-            test_case.failure { kind, Exception.normalize(kind, error), filtered_stacktrace }
+            test_case.state({ :failed, { kind, Exception.normalize(kind, error), filtered_stacktrace }})
         end
 
         self_pid <- { self, :case_finished, test_case, [] }
@@ -117,7 +117,7 @@ defmodule Amrita.Engine.Runner do
         config.formatter.case_finished(config.formatter_id, test_case)
         pid <- { case_pid, :case_finished, test_case }
       { :DOWN, ^case_ref, :process, ^case_pid, { error, stacktrace } } ->
-        test_case = test_case.failure { :EXIT, error, filter_stacktrace(stacktrace) }
+        test_case = test_case.state({ :failed, { :EXIT, error, filter_stacktrace(stacktrace) }})
         config.formatter.case_finished(config.formatter_id, test_case)
         pid <- { case_pid, :case_finished, test_case }
     end
@@ -136,17 +136,17 @@ defmodule Amrita.Engine.Runner do
 
           test = try do
             apply case_name, test.name, [context]
-            test
+            test.state(:passed)
           catch
             kind1, error1 ->
-              test.failure { kind1, Exception.normalize(kind1, error1), filtered_stacktrace }
+              test.state({ :failed, { kind1, Exception.normalize(kind1, error1), filtered_stacktrace }})
           end
 
           case_name.__ex_unit__(:teardown, Keyword.put(context, :test, test))
           test
         catch
           kind2, error2 ->
-            test.failure { kind2, Exception.normalize(kind2, error2), filtered_stacktrace }
+            test.state({ :failed, { kind2, Exception.normalize(kind2, error2), filtered_stacktrace }})
         end
       end)
 
@@ -157,7 +157,7 @@ defmodule Amrita.Engine.Runner do
       { ^test_pid, :test_finished, test } ->
         config.formatter.test_finished(config.formatter_id, test)
       { :DOWN, ^test_ref, :process, ^test_pid, { error, stacktrace } } ->
-        test = test.failure { :EXIT, error, filter_stacktrace(stacktrace) }
+        test = test.state({ :failed, { :EXIT, error, filter_stacktrace(stacktrace) }})
         config.formatter.test_finished(config.formatter_id, test)
     end
   end
