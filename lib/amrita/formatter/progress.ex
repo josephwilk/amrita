@@ -113,7 +113,7 @@ defmodule Amrita.Formatter.Progress do
   end
 
   def handle_cast({ :case_finished, test_case }, config) do
-    if test_case.failure do
+    if test_case.state && test_case.state != :passed do
       { :noreply, config.update_case_failures(&([test_case|&1])) }
     else
       { :noreply, config }
