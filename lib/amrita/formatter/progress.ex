@@ -12,7 +12,7 @@ defmodule Amrita.Formatter.Progress do
   @timeout 30_000
   use GenServer.Behaviour
 
-  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 3, format_test_case_failure: 3]
+  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 5, format_test_case_failure: 4]
 
   defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0,
                     test_failures: [], case_failures: [], pending_failures: [], trace: false
@@ -65,7 +65,7 @@ defmodule Amrita.Formatter.Progress do
     { :noreply, config }
   end
 
-  def handle_cast({ :test_finished, ExUnit.Test[failure: nil] = test }, config) do
+  def handle_cast({ :test_finished, ExUnit.Test[state: :passed] = test }, config) do
     if config.trace do
       IO.puts success("\r  * #{trace_test_name test}")
     else
@@ -74,7 +74,7 @@ defmodule Amrita.Formatter.Progress do
     { :noreply, config.update_tests_counter(&(&1 + 1)) }
   end
 
-  def handle_cast({ :test_finished, ExUnit.Test[failure: { :invalid, _ }] = test }, config) do
+  def handle_cast({ :test_finished, ExUnit.Test[state: { :invalid, _ }] = test }, config) do
     if config.trace do
       IO.puts invalid("\r  * #{trace_test_name test}")
     else
@@ -85,7 +85,7 @@ defmodule Amrita.Formatter.Progress do
   end
 
   def handle_cast({ :test_finished, test }, config) do
-    ExUnit.Test[case: _test_case, name: _test, failure: { _kind, reason, _stacktrace }] = test
+    ExUnit.Test[case: _test_case, name: _test, state: { :failed, { _kind, reason, _stacktrace }}] = test
     exception_type = reason.__record__(:name)
 
     if exception_type == Elixir.Amrita.FactPending do
@@ -113,7 +113,7 @@ defmodule Amrita.Formatter.Progress do
   end
 
   def handle_cast({ :case_finished, test_case }, config) do
-    if test_case.failure do
+    if test_case.state && test_case.state != :passed do
       { :noreply, config.update_case_failures(&([test_case|&1])) }
     else
       { :noreply, config }
@@ -175,13 +175,13 @@ defmodule Amrita.Formatter.Progress do
     end
   end
 
-  defp print_test_failure(test, acc) do
-    IO.puts format_test_failure(test, acc + 1, &formatter/2)
+  defp print_test_failure(ExUnit.Test[name: name, case: mod, state: { :failed, tuple }], acc) do
+    IO.puts format_test_failure(mod, name, tuple, acc + 1, &formatter/2)
     acc + 1
   end
 
-  defp print_test_case_failure(test_case, acc) do
-    IO.puts format_test_case_failure(test_case, acc + 1, &formatter/2)
+  defp print_test_case_failure(ExUnit.TestCase[name: name, state: { :failed, tuple }], acc) do
+    IO.puts format_test_case_failure(name, tuple, acc + 1, &formatter/2)
     acc + 1
   end
 
