@@ -1,7 +1,7 @@
 defmodule Amrita.Formatter.Format do
   @moduledoc false
 
-  import Exception, only: [format_stacktrace_entry: 2]
+  import Exception, only: [format_stacktrace_entry: 1]
 
   @doc """
   Receives a pending test and formats it.
@@ -53,9 +53,8 @@ defmodule Amrita.Formatter.Format do
   end
 
   defp format_stacktrace(stacktrace, _case, _test, color) do
-    cwd = System.cwd
     location_info("stacktrace:", color) <>
-      Enum.map_join(stacktrace, fn(s) -> stacktrace_info format_stacktrace_entry(s, cwd), color end)
+      Enum.map_join(stacktrace, fn(s) -> stacktrace_info format_stacktrace_entry(s), color end)
   end
 
   defp test_info(msg, nil),   do: "  " <> msg <> " "
