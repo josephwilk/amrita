@@ -11,7 +11,7 @@ defmodule Amrita.Checkers.Messages do
   checking
 
   ## Examples
-      self <- :hello
+      send(self, :hello)
       received |> msg(:hello)
 
   """

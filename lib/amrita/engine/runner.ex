@@ -95,7 +95,7 @@ defmodule Amrita.Engine.Runner do
 
       if test_case.state != nil do
         tests = Enum.map tests, fn test -> test.state({ :invalid, test_case }) end
-        self_pid <- { self, :case_finished, test_case, tests }
+        send(self_pid, { self, :case_finished, test_case, tests })
       else
         Enum.each tests, &run_test(config, &1, context)
 
@@ -107,7 +107,7 @@ defmodule Amrita.Engine.Runner do
             test_case.state({ :failed, { kind, Exception.normalize(kind, error), filtered_stacktrace }})
         end
 
-        self_pid <- { self, :case_finished, test_case, [] }
+        send(self_pid, { self, :case_finished, test_case, [] })
       end
     end
 
@@ -115,11 +115,11 @@ defmodule Amrita.Engine.Runner do
       { ^case_pid, :case_finished, test_case, tests } ->
         Enum.map tests, &config.formatter.test_finished(config.formatter_id, &1)
         config.formatter.case_finished(config.formatter_id, test_case)
-        pid <- { case_pid, :case_finished, test_case }
+        send(pid, { case_pid, :case_finished, test_case })
       { :DOWN, ^case_ref, :process, ^case_pid, { error, stacktrace } } ->
         test_case = test_case.state({ :failed, { :EXIT, error, filter_stacktrace(stacktrace) }})
         config.formatter.case_finished(config.formatter_id, test_case)
-        pid <- { case_pid, :case_finished, test_case }
+        send(pid, { case_pid, :case_finished, test_case })
     end
   end
 
@@ -150,7 +150,7 @@ defmodule Amrita.Engine.Runner do
         end
       end)
 
-      self_pid <- { self, :test_finished, test.time(us) }
+      send(self_pid, { self, :test_finished, test.time(us) })
     end
 
     receive do

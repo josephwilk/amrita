@@ -1,4 +1,4 @@
-Code.require_file "../../test_helper.exs", __FILE__
+Code.require_file "../../test_helper.exs", __ENV__.file
 
 defmodule Integration.AmritaFacts do
   use Amrita.Sweet
@@ -226,15 +226,15 @@ defmodule Integration.AmritaFacts do
   facts "message checkers" do
     future_fact "receive" do
       receive |> :hello
-      self <- :hello
+      send(self, :hello)
     end
 
     fact "received" do
-      self <- :hello
+      send(self, :hello)
       received |> :hello
 
       fail "wrong match" do
-        self <- :sod
+        send(self, :sod)
         received |> :hello
       end
 
@@ -244,7 +244,7 @@ defmodule Integration.AmritaFacts do
     end
 
     fact "received tuples" do
-      self <- { :hello, 1, 2 }
+      send(self, { :hello, 1, 2 })
       received |> { :hello, _, 2 }
     end
   end
