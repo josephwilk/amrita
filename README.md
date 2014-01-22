@@ -39,7 +39,7 @@ Amrita.start(formatter: Amrita.Formatter.Documentation)
  * Mix in `Amrita.Sweet` which will bring in everything you need to use Amrita:
 
 ```elixir
-Code.require_file "../test_helper.exs", __FILE__
+Code.require_file "../test_helper.exs", __ENV__.file
 
 defmodule ExampleFacts do
   use Amrita.Sweet
@@ -133,7 +133,7 @@ end
 Amrita is also all about checker based testing!
 
 ```elixir
-Code.require_file "../test_helper.exs", __FILE__
+Code.require_file "../test_helper.exs", __ENV__.file
 
 defmodule ExampleFacts do
   use Amrita.Sweet
