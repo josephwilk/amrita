@@ -1,7 +1,7 @@
 defmodule Amrita.Engine.Start do
   @moduledoc false
 
-  def now(options // []) do
+  def now(options \\ []) do
     :application.start(:elixir)
     :application.start(:ex_unit)
 

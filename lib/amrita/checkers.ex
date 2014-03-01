@@ -18,7 +18,7 @@ defmodule Amrita.Checkers do
         end
 
     """
-    defmacro defchecker(name, _ // quote(do: _), contents) do
+    defmacro defchecker(name, _ \\ quote(do: _), contents) do
       { fun_name, _, args } = name
 
       neg_args = Enum.drop(args, 1)
