@@ -2,7 +2,7 @@ VENDORED_ELIXIR=${PWD}/vendor/elixir/bin/elixir
 VENDORED_MIX=${PWD}/vendor/elixir/bin/mix
 RUN_VENDORED_MIX=${VENDORED_ELIXIR} ${VENDORED_MIX}
 VERSION := $(strip $(shell cat VERSION))
-STABLE_ELIXIR_VERSION = 0.12.2
+STABLE_ELIXIR_VERSION = 0.12.4
 
 .PHONY: all test
 
@@ -28,7 +28,7 @@ ci: ci_${STABLE_ELIXIR_VERSION} ci_master
 vendor/${STABLE_ELIXIR_VERSION}:
 	@rm -rf vendor/*
 	@mkdir -p vendor/elixir
-	@wget --no-clobber -q https://github.com/elixir-lang/elixir/releases/download/v${STABLE_ELIXIR_VERSION}/v${STABLE_ELIXIR_VERSION}.zip && unzip -qq v${STABLE_ELIXIR_VERSION}.zip -d vendor/elixir
+	@wget --no-clobber -q https://github.com/elixir-lang/elixir/releases/download/v${STABLE_ELIXIR_VERSION}/precompiled.zip && unzip -qq precompiled.zip -d vendor/elixir
 
 vendor/master:
 	@rm -rf vendor/*
