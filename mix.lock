@@ -1,2 +1,2 @@
 [ "ex_doc": {:git, "git://github.com/elixir-lang/ex_doc.git", "aecbe8cf755fc81d76e2924d69a33642b7945af9", []},
-  "meck": {:git, "git://github.com/eproxus/meck.git", "62265e4a89297b3415502351a35082933225d1af", [{:branch, "develop"}]} ]
+  "meck": {:git, "git://github.com/eproxus/meck.git", "62265e4a89297b3415502351a35082933225d1af", [branch: "master"]} ]

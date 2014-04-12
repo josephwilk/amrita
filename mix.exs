@@ -22,7 +22,7 @@ defmodule Amrita.Mixfile do
   end
 
   defp deps do
-    [{:meck, [branch: "develop" ,github: "eproxus/meck"]}]
+    [{:meck, [branch: "master" ,github: "eproxus/meck"]}]
   end
 
   defp dev_deps do
