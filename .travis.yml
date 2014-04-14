@@ -1,4 +1,4 @@
 language: erlang
 script: make ci
 otp_release:
-  - R17B
+  - 17.0
