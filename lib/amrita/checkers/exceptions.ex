@@ -39,10 +39,12 @@ defmodule Amrita.Checkers.Exceptions do
     end
   end
 
-  defp failed_exception_match(error, expected) when is_regex(expected) do
-    message = error.message
-    if not(Regex.match?(expected, message)) do
-      Message.fail message, expected, __ENV__.function
+  defp failed_exception_match(error, expected) do
+    if Regex.regex?(expected) do
+      message = error.message
+      if not(Regex.match?(expected, message)) do
+        Message.fail message, expected, __ENV__.function
+      end
     end
   end
 

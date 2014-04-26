@@ -21,9 +21,12 @@ defmodule Amrita.Checkers.Collections do
     r = case collection do
           c when is_tuple(c)           -> element in tuple_to_list(c)
           c when is_list(c)            -> element in c
-          c when is_regex(element)     -> Regex.match?(element, c)
           c when is_bitstring(element) -> String.contains?(c, element)
         end
+    
+    if Regex.regex?(element) do
+      r = Regex.match?(element, collection)
+    end
 
     if (not r), do: Message.fail(collection, element, __ENV__.function)
   end
