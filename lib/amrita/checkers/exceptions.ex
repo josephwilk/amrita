@@ -11,7 +11,7 @@ defmodule Amrita.Checkers.Exceptions do
 
   ## Example
       fn -> raise Exception end |> raises Exception ; true
-      fn -> raise "Jolly jolly gosh" end |> raises %r"j(\w)+y" ; true
+      fn -> raise "Jolly jolly gosh" end |> raises ~r"j(\w)+y" ; true
 
       fn -> true end            |> raises Exception ; false
   """

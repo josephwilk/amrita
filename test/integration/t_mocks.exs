@@ -62,12 +62,12 @@ defmodule Integration.MockFacts do
   facts "about mocks with fn matcher arguments" do
 
     fact "fn matches against a regexp" do
-      provided [Flip.flop(fn x -> x =~ %r"moo" end) |> true] do
+      provided [Flip.flop(fn x -> x =~ ~r"moo" end) |> true] do
         Flip.flop("this is a mooo thing") |> true
       end
 
       fail do
-        provided [Flip.flop(fn x -> x =~ %r"moo" end) |> true] do
+        provided [Flip.flop(fn x -> x =~ ~r"moo" end) |> true] do
           Flip.flop("this is a doo thing") |> true
           Flip.flop("this is a zoo thing") |> true
         end
@@ -92,13 +92,13 @@ defmodule Integration.MockFacts do
 
     facts "mock with elixir types" do
       fact "regex" do
-        provided [Integration.MockFacts.Funk.hip?(%r"monkey") |> false] do
-          Funk.hip?(%r"monkey") |> falsey
+        provided [Integration.MockFacts.Funk.hip?(~r"monkey") |> false] do
+          Funk.hip?(~r"monkey") |> falsey
         end
 
         fail do
-          provided [Integration.MockFacts.Funk.hip?(%r"monkey") |> false] do
-            Funk.hip?(%r"mon") |> falsey
+          provided [Integration.MockFacts.Funk.hip?(~r"monkey") |> false] do
+            Funk.hip?(~r"mon") |> falsey
           end
         end
       end

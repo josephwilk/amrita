@@ -105,7 +105,7 @@ end
 #### Powerful custom predicates for argument matching
 ```elixir
 fact "mock with a matcher function" do
-  provided [Polite.swear?(fn arg -> arg =~ %r"moo") |> false] do
+  provided [Polite.swear?(fn arg -> arg =~ ~r"moo") |> false] do
     Polite.swear?("its ok to moo really") |> falsey
   end
 end
@@ -175,7 +175,7 @@ defmodule ExampleFacts do
     fact "contains works with strings" do
       "mad hatters tea party" |> contains "hatters"
 
-      "mad hatter tea party" |> contains %r"h(\w+)er"
+      "mad hatter tea party" |> contains ~r"h(\w+)er"
     end
 
     fact "has_prefix checks if the start of a collection matches" do

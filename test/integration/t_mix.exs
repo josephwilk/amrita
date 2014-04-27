@@ -5,7 +5,7 @@ defmodule Integration.Mix do
 
   def run_mix(cmd) do
     mix = System.find_executable("mix") || "vendor/elixir/bin/elixir vendor/elixir/bin/mix"
-    iolist_to_binary(:os.cmd(%c(sh -c "#{mix} #{cmd}")))
+    iolist_to_binary(:os.cmd(~c(sh -c "#{mix} #{cmd}")))
   end
 
   setup do
@@ -46,8 +46,8 @@ end"
 
       out = run_mix "amrita tmp/test/t_pants_trace.exs --trace"
 
-      out |> contains %r/passing example \(.+?ms\)/
-      out |> contains %r/failing example \(.+?ms\)/
+      out |> contains ~r/passing example \(.+?ms\)/
+      out |> contains ~r/failing example \(.+?ms\)/
       out |> contains "2 facts, 1 failures"
     end
   end

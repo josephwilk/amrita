@@ -12,7 +12,7 @@ defmodule Amrita.Formatter.Progress do
   @timeout 30_000
   use GenServer.Behaviour
 
-  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 5, format_test_case_failure: 4]
+  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 6, format_test_case_failure: 5]
 
   defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0,
                     test_failures: [], case_failures: [], pending_failures: [], trace: false
@@ -176,12 +176,12 @@ defmodule Amrita.Formatter.Progress do
   end
 
   defp print_test_failure(ExUnit.Test[name: name, case: mod, state: { :failed, tuple }], acc) do
-    IO.puts format_test_failure(mod, name, tuple, acc + 1, &formatter/2)
+    IO.puts format_test_failure(mod, name, tuple, acc + 1, :infinity, &formatter/2)
     acc + 1
   end
 
   defp print_test_case_failure(ExUnit.TestCase[name: name, state: { :failed, tuple }], acc) do
-    IO.puts format_test_case_failure(name, tuple, acc + 1, &formatter/2)
+    IO.puts format_test_case_failure(name, tuple, acc + 1, :infinity, &formatter/2)
     acc + 1
   end
 
