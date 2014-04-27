@@ -31,8 +31,12 @@ defmodule Amrita.Mocks.History do
     :meck.history(module)
   end
 
-  defp args_match([expected_arg|t1], [actual_arg|t2]) when is_regex(expected_arg) and is_bitstring(actual_arg) do
-    Regex.match?(expected_arg, actual_arg) && args_match(t1, t2)
+  defp args_match([expected_arg|t1], [actual_arg|t2]) when is_bitstring(actual_arg) do
+    if Regex.regex?(expected_arg) do
+       Regex.match?(expected_arg, actual_arg) && args_match(t1, t2)
+    else
+      (expected_arg == actual_arg) && args_match(t1, t2)
+    end
   end
 
   defp args_match([expected_arg|t1], [actual_arg|t2]) do
