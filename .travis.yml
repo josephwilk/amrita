@@ -1,6 +1,7 @@
+language: erlang
+otp_release: 
+  - 17.0
 install:
-  - wget http://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
-  - sudo dpkg -i erlang-solutions_1.0_all.deb
   - git clone git://github.com/rebar/rebar.git
   - cd rebar && ./bootstrap
   - export PATH=$PATH:`pwd` && cd ..
