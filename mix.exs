@@ -15,9 +15,7 @@ defmodule Amrita.Mixfile do
                        {"Source", "http://github.com/josephwilk/amrita"}],
               contributors: ["Joseph Wilk"],
               licenses: ["MIT"]],
-     env: [test: [deps: deps],
-           dev:  [deps: deps ++ dev_deps]],
-     deps: deps]
+     deps: deps(Mix.env)]
   end
 
   def version do
@@ -28,7 +26,19 @@ defmodule Amrita.Mixfile do
     []
   end
 
-  defp deps do
+  defp deps(:dev) do
+    base_deps
+  end
+
+  defp deps(:test) do
+    base_deps ++ dev_deps
+  end
+  
+  defp deps(_) do
+    base_deps
+  end
+
+  defp base_deps do
     [{:meck, [branch: "master" ,github: "eproxus/meck"]}]
   end
 
