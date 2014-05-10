@@ -128,13 +128,13 @@ defmodule Integration.MockFacts do
       end
 
       fact "dict" do
-        provided [Integration.MockFacts.Funk.hip?(HashDict.new([{:a,1}])) |> false] do
-          Funk.hip?(HashDict.new([{:a, 1}])) |> falsey
+        provided [Integration.MockFacts.Funk.hip?(Enum.into([{:a, 1}], [])) |> false] do
+          Funk.hip?(Enum.into([{:a, 1}], [])) |> falsey
         end
 
         fail do
-          provided [Integration.MockFacts.Funk.hip?(HashDict.new([{:a, 1}])) |> false] do
-            Funk.hip?(HashDict.new([{:a, 2}])) |> falsey
+          provided [Integration.MockFacts.Funk.hip?(Enum.into([{:a, 1}], [])) |> false] do
+            Funk.hip?(Enum.into([{:a, 2}], [])) |> falsey
           end
         end
       end
