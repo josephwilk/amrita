@@ -101,10 +101,10 @@ defmodule PipelineFacts do
     end
 
     fact "hashdict" do
-      HashDict.new([{:b, 1}, {:a, 2}]) |> HashDict.new([{:b, 1}, {:a, 2}])
+      Enum.into([{:b, 1}], [{:a, 2}]) |> equals Enum.into([{:b, 1}], [{:a, 2}])
 
       fail do
-        HashDict.new([{:b, 1}, {:a, 2}]) |> HashDict.new([{:b, 1}, {:a, 6}])
+        Enum.into([{:b, 1}], [{:a, 2}]) |> equals Enum.into([{:b, 1}], [{:a, 6}])
       end
     end
 
