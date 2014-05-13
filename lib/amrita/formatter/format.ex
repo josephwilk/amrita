@@ -6,8 +6,8 @@ defmodule Amrita.Formatter.Format do
   @doc """
   Receives a pending test and formats it.
   """
-  def format_test_pending(ExUnit.Test[] = test, counter, color) do
-    ExUnit.Test[case: test_case, name: test_name, state: { :failed, { _kind, _reason, stacktrace }}] = test
+  def format_test_pending(%ExUnit.Test{} = test, counter, color) do
+    %ExUnit.Test{case: test_case, name: test_name, state: { :failed, { _kind, _reason, stacktrace }}} = test
 
     test_info("#{counter})", color) <>
       error_info("#{format_test_name(test)}", color) <>
@@ -25,7 +25,7 @@ defmodule Amrita.Formatter.Format do
     []
   end
 
-  def format_test_name(ExUnit.Test[name: name]) do
+  def format_test_name(%ExUnit.Test{name: name}) do
     case atom_to_binary(name) do
       "test_" <> rest -> rest
       "test " <> rest -> rest
