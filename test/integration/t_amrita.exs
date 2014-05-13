@@ -159,7 +159,7 @@ defmodule Integration.AmritaFacts do
 
       "mad hatter tea party" |> contains "hatter"
 
-      "mad hatter tea party" |> contains %r"h(\w+)er"
+      "mad hatter tea party" |> contains ~r"h(\w+)er"
 
       fail do
         [1, 2, 3] |> contains 4
@@ -181,7 +181,7 @@ defmodule Integration.AmritaFacts do
     end
 
     fact "has_prefix with Sets" do
-      [1, 2, 3] |> has_prefix HashSet.new([2, 1])
+      [1, 2, 3] |> has_prefix Enum.into([2,1], HashSet.new)
     end
 
     fact "has_suffix" do
@@ -198,7 +198,7 @@ defmodule Integration.AmritaFacts do
     end
 
     fact "hash suffix with Sets" do
-      [1, 2, 3] |> has_suffix HashSet.new([3,2])
+      [1, 2, 3] |> has_suffix Enum.into([3,2],HashSet.new)
     end
 
     fact "for_all" do
@@ -261,12 +261,12 @@ defmodule Integration.AmritaFacts do
     end
 
     fact "should allow checking of exceptions by message" do
-      fn -> raise TestException end |> raises %r".*gosh.*"
+      fn -> raise TestException end |> raises ~r".*gosh.*"
 
       fn -> raise TestException end |> raises "golly gosh, sorry"
 
       fail do
-        fn -> raise TestException end |> raises %r"pants"
+        fn -> raise TestException end |> raises ~r"pants"
       end
     end
   end
@@ -315,7 +315,7 @@ defmodule Integration.AmritaFacts do
     fact "raises" do
       fn -> raise TestException end |> ! raises AmritaFacts.MadeUpException
 
-      fn -> raise TestException end |> ! raises %r".*posh.*"
+      fn -> raise TestException end |> ! raises ~r".*posh.*"
 
       fail do
         fn -> raise TestException end |> ! raises TestException

@@ -14,7 +14,7 @@ defmodule Amrita do
       Amrita.start(formatter: Amrita.Formatter.Documentation)
 
   """
-  def start(opts // []) do
+  def start(opts \\ []) do
     formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
     Amrita.Engine.Start.now formatter: formatter
   end
@@ -22,7 +22,7 @@ defmodule Amrita do
   @doc """
   Polite version of start.
   """
-  def please_start(opts // []) do
+  def please_start(opts \\ []) do
     start(opts)
   end
 
@@ -37,7 +37,7 @@ defmodule Amrita do
     """
 
     @doc false
-    defmacro __using__(opts // []) do
+    defmacro __using__(opts \\ []) do
       async = Keyword.get(opts, :async, false)
       quote do
         if !Enum.any?(__ENV__.requires, fn(x) -> x == ExUnit.Case end) do
@@ -110,7 +110,7 @@ defmodule Amrita do
           meta[:pong] |> "pong"
         end
     """
-    defmacro fact(description, provided // [], var // quote(do: _), contents) do
+    defmacro fact(description, provided \\ [], var \\ quote(do: _), contents) do
       var = case provided do
         [provided: _] -> var
         []            -> var
@@ -165,7 +165,7 @@ defmodule Amrita do
           ..
         end
     """
-    defmacro future_fact(description, _ // quote(do: _), _) do
+    defmacro future_fact(description, _ \\ quote(do: _), _) do
       quote do
         deffact Enum.join(@name_stack, "") <> unquote(fact_name(description)) do
           Amrita.Message.pending unquote(description)
@@ -184,7 +184,7 @@ defmodule Amrita do
           end
         end
     """
-    defmacro facts(description, _ // quote(do: _), contents) do
+    defmacro facts(description, _ \\ quote(do: _), contents) do
       quote do
         @name_stack Enum.concat(@name_stack, [unquote(fact_name(description)) <> " - "])
         unquote(contents)
@@ -195,7 +195,7 @@ defmodule Amrita do
     end
 
     @doc false
-    defmacro deffact(message, var // quote(do: _), contents) do
+    defmacro deffact(message, var \\ quote(do: _), contents) do
       contents =
        case contents do
          [do: _] ->

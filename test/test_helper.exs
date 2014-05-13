@@ -13,7 +13,7 @@ defmodule Support do
     end
   end
 
-  defmacro failing_fact(name, _ // quote(do: _), contents) do
+  defmacro failing_fact(name, _ \\ quote(do: _), contents) do
     quote do
       fact unquote(name) do
         fail unquote(name) do
@@ -23,7 +23,7 @@ defmodule Support do
     end
   end
 
-  defmacro fail(_name // "", _ // quote(do: _), contents) do
+  defmacro fail(_name \\ "", _ \\ quote(do: _), contents) do
     Support.Wrap.assertions(contents)
   end
 

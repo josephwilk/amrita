@@ -11,7 +11,7 @@ defmodule Amrita.Checkers.Exceptions do
 
   ## Example
       fn -> raise Exception end |> raises Exception ; true
-      fn -> raise "Jolly jolly gosh" end |> raises %r"j(\w)+y" ; true
+      fn -> raise "Jolly jolly gosh" end |> raises ~r"j(\w)+y" ; true
 
       fn -> true end            |> raises Exception ; false
   """
@@ -39,15 +39,15 @@ defmodule Amrita.Checkers.Exceptions do
     end
   end
 
-  defp failed_exception_match(error, expected) when is_regex(expected) do
-    message = error.message
-    if not(Regex.match?(expected, message)) do
-      Message.fail message, expected, __ENV__.function
-    end
-  end
-
   defp failed_exception_match(error, expected) do
-    Message.fail error.__record__(:name), expected, __ENV__.function
+    if Regex.regex?(expected) do
+      message = error.message
+      if not(Regex.match?(expected, message)) do
+        Message.fail message, expected, __ENV__.function
+      end
+    else
+      Message.fail error.__record__(:name), expected, __ENV__.function
+    end
   end
 
   @doc false

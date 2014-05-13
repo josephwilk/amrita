@@ -8,7 +8,7 @@ defmodule Amrita.Mocks do
 
   """
 
-  defmacro __using__(_ // []) do
+  defmacro __using__(_ \\ []) do
     quote do
       import Amrita.Mocks.Provided
     end
@@ -77,14 +77,14 @@ defmodule Amrita.Mocks do
       end
     end
 
-    def __resolve_args__(prerequisites, target_module, env, local_bindings // []) do
+    def __resolve_args__(prerequisites, target_module, env, local_bindings \\ []) do
       Provided.Prerequisites.map prerequisites, fn { module, fun, args, _, value } ->
         new_args = Enum.map args, fn arg -> __resolve_arg__(arg, target_module, env, local_bindings) end
         { module, fun, new_args, args, value }
       end
     end
 
-    def __resolve_arg__(arg, target_module, env, local_bindings // []) do
+    def __resolve_arg__(arg, target_module, env, local_bindings \\ []) do
       case arg do
         { :_, _, _ }          -> anything
         { :fn, _meta, args }   -> { evaled_arg, _ } = Code.eval_quoted(arg, [], env)

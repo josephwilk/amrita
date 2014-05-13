@@ -17,8 +17,8 @@ defmodule HistoryFacts do
       Faker.shout("the mighty BOOSH")
       Faker.whisper("journey through space and time")
 
-      History.match?(Faker, :shout, [%r"mighty"]) |> truthy
-      History.match?(Faker, :shout, [%r"wrong"]) |> falsey
+      History.match?(Faker, :shout, [~r"mighty"]) |> truthy
+      History.match?(Faker, :shout, [~r"wrong"]) |> falsey
     end
 
     fact "regex arguments match regex arguments" do
@@ -26,11 +26,11 @@ defmodule HistoryFacts do
       :meck.expect(Saker, :shout, fn x -> x end)
       :meck.expect(Saker, :whisper, fn x -> x end)
 
-      Saker.shout(%r"funk")
+      Saker.shout(~r"funk")
       Saker.whisper("shh")
 
-      History.match?(Saker, :shout, [%r"funk"]) |> truthy
-      History.match?(Saker, :shout, [%r"sunk"]) |> falsey
+      History.match?(Saker, :shout, [~r"funk"]) |> truthy
+      History.match?(Saker, :shout, [~r"sunk"]) |> falsey
     end
 
   end
