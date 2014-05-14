@@ -5,7 +5,7 @@ defmodule Integration.Mix do
 
   def run_mix(cmd) do
     mix = System.find_executable("mix") || "vendor/elixir/bin/elixir vendor/elixir/bin/mix"
-    iolist_to_binary(:os.cmd(~c(sh -c "#{mix} #{cmd}")))
+    iodata_to_binary(:os.cmd(~c(sh -c "#{mix} #{cmd}")))
   end
 
   setup do
