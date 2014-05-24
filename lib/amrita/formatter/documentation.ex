@@ -7,7 +7,7 @@ defmodule Amrita.Formatter.Documentation do
   @timeout 30_000
   use GenServer.Behaviour
 
-  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 6, format_test_case_failure: 5]
+  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 5, format_test_case_failure: 5]
 
   defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0, scope: HashDict.new,
             test_failures: [], case_failures: [], pending_failures: [], trace: false
@@ -55,7 +55,7 @@ defmodule Amrita.Formatter.Documentation do
     super(reqest, from, config)
   end
 
-  def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
+  def handle_cast({ :test_started, %ExUnit.Test{} = test }, config) do
     if(name_parts = scoped(test)) do
       if(scope = new_scope(config, name_parts)) do
         print_scopes(name_parts)
@@ -66,7 +66,7 @@ defmodule Amrita.Formatter.Documentation do
     { :noreply, config }
   end
 
-  def handle_cast({ :test_finished, ExUnit.Test[state: :passed] = test }, config) do
+  def handle_cast({ :test_finished, %ExUnit.Test{state: :passed} = test }, config) do
     if(name_parts = scoped(test)) do
       print_indent(name_parts)
       IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}#{trace_test_time(test, config)}\n")
@@ -78,13 +78,13 @@ defmodule Amrita.Formatter.Documentation do
     end
   end
 
-  def handle_cast({ :test_finished, ExUnit.Test[state: { :invalid, _ }] = test }, config) do
+  def handle_cast({ :test_finished, %ExUnit.Test{state: { :invalid, _ }} = test }, config) do
     IO.puts invalid("\r  #{format_test_name test}")
     { :noreply, config.update_tests_counter(&(&1 + 1)).update_invalid_counter(&(&1 + 1)) }
   end
 
   def handle_cast({ :test_finished, test }, config) do
-    ExUnit.Test[case: _test_case, name: _test, state: { :failed, { _kind, reason, _stacktrace }}] = test
+    %ExUnit.Test{case: _test_case, name: _test, state: { :failed, { _kind, reason, _stacktrace }}} = test
     exception_type = reason.__record__(:name)
 
     name_parts = scoped(test)
@@ -110,7 +110,7 @@ defmodule Amrita.Formatter.Documentation do
     end
   end
 
-  def handle_cast({ :case_started, ExUnit.TestCase[name: name] }, config) do
+  def handle_cast({ :case_started, %ExUnit.TestCase{name: name} }, config) do
     IO.puts("\n#{name}")
     { :noreply, config }
   end
@@ -127,7 +127,7 @@ defmodule Amrita.Formatter.Documentation do
     super(request, config)
   end
 
-  defp format_test_name(ExUnit.Test[] = test) do
+  defp format_test_name(%ExUnit.Test{} = test) do
     Amrita.Formatter.Format.format_test_name(test)
   end
 
@@ -180,12 +180,12 @@ defmodule Amrita.Formatter.Documentation do
     acc + 1
   end
 
-  defp print_test_failure(ExUnit.Test[name: name, case: mod, state: { :failed, tuple }], acc) do
-    IO.puts format_test_failure(mod, name, tuple, acc + 1, :infinity, &formatter/2)
+  defp print_test_failure(%ExUnit.Test{name: name, case: mod, state: { :failed, tuple }}=test, acc) do
+    IO.puts format_test_failure(test, tuple, acc + 1, :infinity, &formatter/2)
     acc + 1
   end
 
-  defp print_test_case_failure(ExUnit.TestCase[name: name, state: { :failed, tuple }], acc) do
+  defp print_test_case_failure(%ExUnit.TestCase{name: name, state: { :failed, tuple }}, acc) do
     IO.puts format_test_case_failure(name, tuple, acc + 1, :infinity, &formatter/2)
     acc + 1
   end

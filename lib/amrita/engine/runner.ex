@@ -78,7 +78,7 @@ defmodule Amrita.Engine.Runner do
   end
 
   defp run_test_case(config, pid, case_name) do
-    test_case = ExUnit.TestCase[name: case_name]
+    test_case = %ExUnit.TestCase{name: case_name}
     config.formatter.case_started(config.formatter_id, test_case)
 
     self_pid = self
@@ -185,7 +185,7 @@ defmodule Amrita.Engine.Runner do
 
     lc { function, 1 } inlist exports, is_test?(atom_to_list(function)) &&
                                        Amrita.Engine.TestPicker.run?(case_name, function, config.selectors) do
-      ExUnit.Test[name: function, case: case_name]
+      %ExUnit.Test{name: function, case: case_name}
     end
   end
 
