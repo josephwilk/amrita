@@ -94,7 +94,7 @@ defmodule Amrita.Engine.Runner do
       tests = tests_for(case_name, config)
 
       if test_case.state != nil do
-        tests = Enum.map tests, fn test -> test.state({ :invalid, test_case }) end
+        tests = Enum.map tests, fn test -> %{test | state: { :invalid, test_case }} end
         send(self_pid, { self, :case_finished, test_case, tests })
       else
         Enum.each tests, &run_test(config, &1, context)
@@ -117,13 +117,13 @@ defmodule Amrita.Engine.Runner do
         config.formatter.case_finished(config.formatter_id, test_case)
         send(pid, { case_pid, :case_finished, test_case })
       { :DOWN, ^case_ref, :process, ^case_pid, { error, stacktrace } } ->
-        test_case = test_case.state({ :failed, { :EXIT, error, filter_stacktrace(stacktrace) }})
+        test_case = %{test_case | state: { :failed, { :EXIT, error, filter_stacktrace(stacktrace) }}}
         config.formatter.case_finished(config.formatter_id, test_case)
         send(pid, { case_pid, :case_finished, test_case })
     end
   end
 
-  defp run_test(config, test, context) do
+  defp run_test(config, %ExUnit.Test{case: case_name, name: name} = test, context) do
     case_name = test.case
     config.formatter.test_started(config.formatter_id, test)
 
@@ -136,21 +136,21 @@ defmodule Amrita.Engine.Runner do
 
           test = try do
             apply case_name, test.name, [context]
-            test.state(:passed)
+            %{test | state: :passed}
           catch
             kind1, error1 ->
-              test.state({ :failed, { kind1, Exception.normalize(kind1, error1), filtered_stacktrace }})
+              failed = { :failed, { kind1, Exception.normalize(kind1, error1), filtered_stacktrace }}
+              %{test | state: failed}
           end
 
           case_name.__ex_unit__(:teardown, Keyword.put(context, :test, test))
           test
         catch
           kind2, error2 ->
-            test.state({ :failed, { kind2, Exception.normalize(kind2, error2), filtered_stacktrace }})
+            %{test | state: { :failed, { kind2, Exception.normalize(kind2, error2), filtered_stacktrace }}}
         end
       end)
-
-      send(self_pid, { self, :test_finished, test.time(us) })
+      send(self_pid, { self, :test_finished, %{test | time: us} })
     end
 
     receive do
@@ -182,10 +182,15 @@ defmodule Amrita.Engine.Runner do
 
   defp tests_for(case_name, config) do
     exports = case_name.__info__(:functions)
-
-    lc { function, 1 } inlist exports, is_test?(atom_to_list(function)) &&
+    ex_unit_tests = case_name.__ex_unit__(:case).tests
+  
+    for { function, 1 } <- exports, is_test?(atom_to_list(function)) &&
                                        Amrita.Engine.TestPicker.run?(case_name, function, config.selectors) do
-      %ExUnit.Test{name: function, case: case_name}
+      tags = case Enum.find(ex_unit_tests, &(&1.name == :"#{function}")) do
+        %ExUnit.Test{tags: tags} -> tags
+        _ -> apply case_name, :"__#{function}__", []
+      end
+      %ExUnit.Test{name: function, case: case_name, tags: tags}
     end
   end
 
@@ -204,4 +209,5 @@ defmodule Amrita.Engine.Runner do
   # All other cases
   defp filter_stacktrace([h|t]), do: [h|filter_stacktrace(t)]
   defp filter_stacktrace([]), do: []
+
 end
