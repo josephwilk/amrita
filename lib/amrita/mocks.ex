@@ -151,7 +151,7 @@ defmodule Amrita.Mocks do
   defmodule Provided.Prerequisites do
     @moduledoc false
 
-    defrecordp :prereqs, bucket: [HashDict.new(HashDict.new)]
+    defrecordp :prereqs, bucket: [Enum.into([],[])]
 
     def new(prerequisites) do
        bucket = Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
