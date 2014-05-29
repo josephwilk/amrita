@@ -1,5 +1,6 @@
 defmodule Amrita.Checkers.Collections do
   alias Amrita.Message, as: Message
+  require Record
 
   @moduledoc """
   Checkers which are designed to work with collections (lists, tuples, keyword lists, strings).
@@ -50,7 +51,7 @@ defmodule Amrita.Checkers.Collections do
       "I cannot explain myself for I am not myself" |> has_prefix "I"
 
   """
-  def has_prefix(collection, prefix) when is_list(collection) and is_record(prefix, HashSet) do
+  def has_prefix(collection, prefix) when is_list(collection) and Record.record?(prefix, HashSet) do
     collection_prefix = Enum.take(collection, Enum.count(prefix))
 
     r = fail_fast_contains?(collection_prefix, prefix)
@@ -93,7 +94,7 @@ defmodule Amrita.Checkers.Collections do
       "I cannot explain myself for I am not myself" |> has_suffix "myself"
 
   """
-  def has_suffix(collection, suffix) when is_list(collection) and is_record(suffix, HashSet) do
+  def has_suffix(collection, suffix) when is_list(collection) and Record.record?(suffix, HashSet) do
     collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
 
     r = fail_fast_contains?(collection_suffix, suffix)
