@@ -1,2 +1,3 @@
-defexception Amrita.FactPending, message: "Pending" do
+defmodule Amrita.FactPending do
+  defexception message: "Pending"
 end

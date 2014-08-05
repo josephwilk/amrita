@@ -60,7 +60,7 @@ defmodule Amrita.Formatter.Progress do
     super(reqest, from, config)
   end
 
-  def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
+  def handle_cast({ :test_started, %ExUnit.Test{} = test }, config) do
     if config.trace, do: IO.write("  * #{trace_test_name test}")
     { :noreply, config }
   end

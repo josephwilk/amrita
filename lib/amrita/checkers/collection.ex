@@ -1,5 +1,6 @@
 defmodule Amrita.Checkers.Collections do
   alias Amrita.Message, as: Message
+  require Record
 
   @moduledoc """
   Checkers which are designed to work with collections (lists, tuples, keyword lists, strings).
@@ -22,7 +23,7 @@ defmodule Amrita.Checkers.Collections do
       r = Regex.match?(element, collection)
     else
       r = case collection do
-            c when is_tuple(c)           -> element in tuple_to_list(c)
+            c when is_tuple(c)           -> element in Tuple.to_list(c)
             c when is_list(c)            -> element in c
             c when is_bitstring(element) -> String.contains?(c, element)
           end
@@ -50,7 +51,7 @@ defmodule Amrita.Checkers.Collections do
       "I cannot explain myself for I am not myself" |> has_prefix "I"
 
   """
-  def has_prefix(collection, prefix) when is_list(collection) and is_record(prefix, HashSet) do
+  def has_prefix(collection, prefix) when is_list(collection) and Record.record?(prefix, HashSet) do
     collection_prefix = Enum.take(collection, Enum.count(prefix))
 
     r = fail_fast_contains?(collection_prefix, prefix)
@@ -61,8 +62,8 @@ defmodule Amrita.Checkers.Collections do
   def has_prefix(collection, prefix) do
     r = case collection do
           c when is_tuple(c) ->
-            collection_prefix = Enum.take(tuple_to_list(collection), tuple_size(prefix))
-            collection_prefix = list_to_tuple(collection_prefix)
+            collection_prefix = Enum.take(Tuple.to_list(collection), tuple_size(prefix))
+            collection_prefix = Tuple.to_list(collection_prefix)
             collection_prefix == prefix
           c when is_list(c)  ->
             Enum.take(collection, Enum.count(prefix)) == prefix
@@ -93,7 +94,7 @@ defmodule Amrita.Checkers.Collections do
       "I cannot explain myself for I am not myself" |> has_suffix "myself"
 
   """
-  def has_suffix(collection, suffix) when is_list(collection) and is_record(suffix, HashSet) do
+  def has_suffix(collection, suffix) when is_list(collection) and Record.record?(suffix, HashSet) do
     collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
 
     r = fail_fast_contains?(collection_suffix, suffix)
@@ -104,8 +105,8 @@ defmodule Amrita.Checkers.Collections do
   def has_suffix(collection, suffix) do
     r = case collection do
           c when is_tuple(c) ->
-            collection_suffix = Enum.drop(tuple_to_list(collection), tuple_size(collection) - tuple_size(suffix))
-            collection_suffix = list_to_tuple(collection_suffix)
+            collection_suffix = Enum.drop(Tuple.to_list(collection), tuple_size(collection) - tuple_size(suffix))
+            collection_suffix = Tuple.to_list(collection_suffix)
             collection_suffix == suffix
           c when is_list(c) ->
             collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
