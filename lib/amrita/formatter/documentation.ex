@@ -55,7 +55,7 @@ defmodule Amrita.Formatter.Documentation do
     super(reqest, from, config)
   end
 
-  def handle_cast({ :test_started, ExUnit.Test[] = test }, config) do
+  def handle_cast({ :test_started, %ExUnit.Test{} = test }, config) do
     if(name_parts = scoped(test)) do
       if(scope = new_scope(config, name_parts)) do
         print_scopes(name_parts)
@@ -127,7 +127,7 @@ defmodule Amrita.Formatter.Documentation do
     super(request, config)
   end
 
-  defp format_test_name(ExUnit.Test[] = test) do
+  defp format_test_name(%ExUnit.Test{} = test) do
     Amrita.Formatter.Format.format_test_name(test)
   end
 

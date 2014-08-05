@@ -20,15 +20,16 @@ defmodule Amrita.Checkers.Exceptions do
       function.()
       Message.fail expected_exception, "No exception raised", __ENV__.function
     rescue
-      error in [expected_exception] -> error
+      #error in [expected_exception] -> error
       error ->
-        name = error.__record__(:name)
+        name = error.__struct__
 
-        if name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError, Amrita.MockError] do
-          raise(error)
-        else
-          failed_exception_match(error, expected_exception)
+        cond do
+          name == expected_exception -> error
+          name in [ExUnit.AssertionError, ExUnit.ExpectationError, Amrita.FactError, Amrita.MockError] -> raise(error)
+          true -> failed_exception_match(error, expected_exception)
         end
+
     end
   end
 

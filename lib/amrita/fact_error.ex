@@ -1,9 +1,9 @@
-defexception Amrita.FactError,
-                    expected: nil,
-                    actual: nil,
-                    predicate: "",
-                    negation: false,
-                    prelude: "Expected" do
+defmodule Amrita.FactError do
+  defexception expected: nil,
+               actual: nil,
+               predicate: "",
+               negation: false,
+               prelude: "Expected"
 
   def message do
     "fact failed"

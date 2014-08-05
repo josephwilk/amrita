@@ -9,7 +9,7 @@ defmodule Amrita.Mixfile do
      name: "Amrita",
      description: "A polite, well mannered and thoroughly upstanding testing framework for Elixir",
      source_url: "https://github.com/josephwilk/amrita",
-     elixir: "~> 0.13.0",
+     elixir: "~> 0.15.0",
      homepage_url: "http://amrita.io",
      package: [links: [{"Website", "http://amrita.io"},
                        {"Source", "http://github.com/josephwilk/amrita"}],

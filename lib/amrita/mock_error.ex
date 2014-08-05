@@ -1,6 +1,6 @@
-defexception Amrita.MockError,
-                    errors: [],
-                    prelude: "Expected" do
+defmodule Amrita.MockError do
+  defexception errors: [],
+               prelude: "Expected"
 
   def message(exception) do
     "#{exception.prelude}:\n" <> messages(exception)

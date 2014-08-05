@@ -12,6 +12,6 @@ defmodule Amrita.Elixir.Version do
 
   def as_ints do
     elixir_version = String.split(System.version, ~r"[\.-]")
-    Enum.map elixir_version, fn x -> if x != "dev", do: binary_to_integer(x) end
+    Enum.map elixir_version, fn x -> if x != "dev", do: String.to_integer(x) end
   end
 end

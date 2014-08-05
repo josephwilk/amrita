@@ -1,7 +1,8 @@
 defmodule Amrita.Engine.Runner do
   @moduledoc false
+  require Record
 
-  defrecord Config, formatter: Amrita.Formatter.Progress, formatter_id: nil,
+  Record.defrecord Config, formatter: Amrita.Formatter.Progress, formatter_id: nil,
                     max_cases: 4, taken_cases: 0, async_cases: [], sync_cases: [], selectors: []
 
   def run(async, sync, opts, load_us) do
@@ -27,7 +28,7 @@ defmodule Amrita.Engine.Runner do
     end
   end
 
-  defp loop(Config[] = config) do
+  defp loop(%Config{} = config) do
     available = config.max_cases - config.taken_cases
 
     cond do
@@ -164,7 +165,7 @@ defmodule Amrita.Engine.Runner do
 
   ## Helpers
 
-  defp take_async_cases(Config[] = config, count) do
+  defp take_async_cases(%Config{} = config, count) do
     case config.async_cases do
       [] -> nil
       cases ->
@@ -173,7 +174,7 @@ defmodule Amrita.Engine.Runner do
     end
   end
 
-  defp take_sync_cases(Config[] = config) do
+  defp take_sync_cases(%Config{} = config) do
     case config.sync_cases do
       [h|t] -> { config.sync_cases(t), [h] }
       []    -> nil
@@ -182,11 +183,16 @@ defmodule Amrita.Engine.Runner do
 
   defp tests_for(case_name, config) do
     exports = case_name.__info__(:functions)
+    ex_unit_tests = case_name.__ex_unit__(:case).tests
 
-    lc { function, 1 } inlist exports, is_test?(atom_to_list(function)) &&
-                                       Amrita.Engine.TestPicker.run?(case_name, function, config.selectors) do
-      ExUnit.Test[name: function, case: case_name]
-    end
+    for { function, 1 } <- exports, is_test?(Atom.to_string(function)) &&
+                                            Amrita.Engine.TestPicker.run?(case_name, function, config.selectors) do
+          tags = case Enum.find(ex_unit_tests, &(&1.name == :"#{function}")) do
+            %ExUnit.Test{tags: tags} -> tags
+            _ -> apply case_name, :"__#{function}__", []
+          end
+          %ExUnit.Test{name: function, case: case_name, tags: tags}
+        end
   end
 
   defp is_test?('test_' ++ _), do: true
