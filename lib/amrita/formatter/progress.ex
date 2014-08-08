@@ -8,13 +8,15 @@ defmodule Amrita.Formatter.Progress do
   Along with a summary detailing all fails
   """
 
+  require Record
+  use GenServer
+
   @behaviour ExUnit.Formatter
   @timeout 30_000
-  use GenServer.Behaviour
 
-  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 6, format_test_case_failure: 5]
+  import ExUnit.Formatter, only: [format_time: 2, format_test_failure: 5, format_test_case_failure: 5]
 
-  defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0,
+  Record.defrecord Config, tests_counter: 0, invalid_counter: 0, pending_counter: 0,
                     test_failures: [], case_failures: [], pending_failures: [], trace: false
 
   ## Behaviour
@@ -65,7 +67,7 @@ defmodule Amrita.Formatter.Progress do
     { :noreply, config }
   end
 
-  def handle_cast({ :test_finished, ExUnit.Test[state: :passed] = test }, config) do
+  def handle_cast({ :test_finished, %ExUnit.Test{state: :passed} = test }, config) do
     if config.trace do
       IO.puts success("\r  * #{trace_test_name test}")
     else
@@ -74,7 +76,7 @@ defmodule Amrita.Formatter.Progress do
     { :noreply, config.update_tests_counter(&(&1 + 1)) }
   end
 
-  def handle_cast({ :test_finished, ExUnit.Test[state: { :invalid, _ }] = test }, config) do
+  def handle_cast({ :test_finished, %ExUnit.Test{state: { :invalid, _ }} = test }, config) do
     if config.trace do
       IO.puts invalid("\r  * #{trace_test_name test}")
     else
@@ -85,7 +87,7 @@ defmodule Amrita.Formatter.Progress do
   end
 
   def handle_cast({ :test_finished, test }, config) do
-    ExUnit.Test[case: _test_case, name: _test, state: { :failed, { _kind, reason, _stacktrace }}] = test
+    %ExUnit.Test{case: _test_case, name: _test, state: { :failed, { _kind, reason, _stacktrace }}} = test
     exception_type = reason.__record__(:name)
 
     if exception_type == Elixir.Amrita.FactPending do
@@ -107,7 +109,7 @@ defmodule Amrita.Formatter.Progress do
     end
   end
 
-  def handle_cast({ :case_started, ExUnit.TestCase[name: name] }, config) do
+  def handle_cast({ :case_started, %ExUnit.TestCase{name: name} }, config) do
     if config.trace, do: IO.puts("\n#{name}")
     { :noreply, config }
   end
@@ -124,8 +126,8 @@ defmodule Amrita.Formatter.Progress do
     super(request, config)
   end
 
-  defp trace_test_name(ExUnit.Test[name: name]) do
-    case atom_to_binary(name) do
+  defp trace_test_name(%ExUnit.Test{name: name}) do
+    case Atom.to_string(name) do
       "test_" <> rest -> rest
       "test " <> rest -> rest
     end
@@ -175,12 +177,12 @@ defmodule Amrita.Formatter.Progress do
     end
   end
 
-  defp print_test_failure(ExUnit.Test[name: name, case: mod, state: { :failed, tuple }], acc) do
-    IO.puts format_test_failure(mod, name, tuple, acc + 1, :infinity, &formatter/2)
+  defp print_test_failure(%ExUnit.Test{name: name, case: mod, state: { :failed, tuple }} = test, acc) do
+    IO.puts format_test_failure(test, tuple, acc + 1, :infinity, &formatter/2)
     acc + 1
   end
 
-  defp print_test_case_failure(ExUnit.TestCase[name: name, state: { :failed, tuple }], acc) do
+  defp print_test_case_failure(%ExUnit.TestCase{name: name, state: { :failed, tuple }}, acc) do
     IO.puts format_test_case_failure(name, tuple, acc + 1, :infinity, &formatter/2)
     acc + 1
   end
