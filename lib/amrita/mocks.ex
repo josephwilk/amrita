@@ -8,6 +8,8 @@ defmodule Amrita.Mocks do
 
   """
 
+  require Record
+
   defmacro __using__(_ \\ []) do
     quote do
       import Amrita.Mocks.Provided
@@ -19,7 +21,7 @@ defmodule Amrita.Mocks do
     The Mocking DSL.
     """
 
-    defrecord Error, module: nil, fun: nil, args: nil, raw_args: nil, history: []
+    Record.defrecord Error, module: nil, fun: nil, args: nil, raw_args: nil, history: []
 
     @doc """
     Adds prerequisites to a test.
@@ -151,7 +153,7 @@ defmodule Amrita.Mocks do
   defmodule Provided.Prerequisites do
     @moduledoc false
 
-    defrecordp :prereqs, bucket: [HashDict.new(HashDict.new)]
+    Record.defrecordp :prereqs, bucket: [Enum.into([Enum.into([{}], [])], [])]
 
     def new(prerequisites) do
        bucket = Enum.reduce prerequisites, HashDict.new, fn {module, fun, args, value}, acc ->
@@ -227,7 +229,9 @@ defmodule Amrita.Mocks do
   defmodule Provided.Parse do
     @moduledoc false
 
-    defexception Error, form: []  do
+    defmodule Error do
+      defexception form: [] 
+
       def message(exception) do
         "Amrita could not understand your `provided`:\n" <>
         "     " <> Macro.to_string(exception.form) <> "\n" <>

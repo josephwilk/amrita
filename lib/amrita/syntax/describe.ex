@@ -4,7 +4,7 @@ defmodule Amrita.Syntax.Describe do
   @moduledoc """
   Provides an alternative DSL to facts and fact.
   """
-  lc facts_alias inlist [:context, :describe] do
+  for facts_alias <- [:context, :describe] do
     defmacro unquote(facts_alias)(description, thing \\ quote(do: _), contents) do
       quote do
         Amrita.Facts.facts(unquote(description), unquote(thing), unquote(contents))
@@ -12,7 +12,7 @@ defmodule Amrita.Syntax.Describe do
     end
   end
 
-  lc fact_alias inlist [:it, :specify] do
+  for fact_alias <- [:it, :specify] do
     defmacro unquote(fact_alias)(description, provided \\ [], meta \\ quote(do: _), contents) do
       quote do
         Amrita.Facts.fact(unquote(description), unquote(provided), unquote(meta), unquote(contents))

@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Amrita do
     selectors = Enum.map files, fn file ->
       splits = String.split(file, ":")
       case splits do
-        [file, line] -> [file: file, line: binary_to_integer(line)]
+        [file, line] -> [file: file, line: String.to_integer(line)]
         _ -> [file: file]
       end
     end

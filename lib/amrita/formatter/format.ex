@@ -26,7 +26,7 @@ defmodule Amrita.Formatter.Format do
   end
 
   def format_test_name(%ExUnit.Test{name: name}) do
-    case atom_to_binary(name) do
+    case Atom.to_string(name) do
       "test_" <> rest -> rest
       "test " <> rest -> rest
     end

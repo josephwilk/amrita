@@ -28,7 +28,7 @@ defmodule Amrita.Engine.Runner do
     end
   end
 
-  defp loop(%Config{} = config) do
+  defp loop(Config = config) do
     available = config.max_cases - config.taken_cases
 
     cond do
@@ -165,7 +165,7 @@ defmodule Amrita.Engine.Runner do
 
   ## Helpers
 
-  defp take_async_cases(%Config{} = config, count) do
+  defp take_async_cases(Config = config, count) do
     case config.async_cases do
       [] -> nil
       cases ->
@@ -174,7 +174,7 @@ defmodule Amrita.Engine.Runner do
     end
   end
 
-  defp take_sync_cases(%Config{} = config) do
+  defp take_sync_cases(Config = config) do
     case config.sync_cases do
       [h|t] -> { config.sync_cases(t), [h] }
       []    -> nil
@@ -186,7 +186,7 @@ defmodule Amrita.Engine.Runner do
     ex_unit_tests = case_name.__ex_unit__(:case).tests
 
     for { function, 1 } <- exports, is_test?(Atom.to_string(function)) &&
-                                            Amrita.Engine.TestPicker.run?(case_name, function, config.selectors) do
+                                           Amrita.Engine.TestPicker.run?(case_name, function, config.selectors) do
           tags = case Enum.find(ex_unit_tests, &(&1.name == :"#{function}")) do
             %ExUnit.Test{tags: tags} -> tags
             _ -> apply case_name, :"__#{function}__", []
