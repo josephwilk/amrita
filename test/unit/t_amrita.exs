@@ -6,7 +6,7 @@ defmodule Unit.AmritaFacts do
   fixtures = [[[playerA: 0, playerB: 0], :playerA, [playerA: 15, playerB: 0]]]
 
   facts "Dynamically constructed fact/facts names" do
-    lc [state, player, expected_state] inlist fixtures do
+    for [state, player, expected_state] <- fixtures  do
       @player player
       @state  state
       @expected_state expected_state

@@ -1,31 +1,34 @@
 defmodule Amrita.Engine.Start do
   @moduledoc false
 
+  use Application
+
   def now(options \\ []) do
-    :application.start(:elixir)
-    :application.start(:ex_unit)
-
+    #{:ok, _} = Application.ensure_all_started(:ex_unit)
+    
     configure(options)
+    if Application.get_env(:ex_unit, :autorun, true) do
+          Application.put_env(:ex_unit, :autorun, false)
 
-    System.at_exit fn
-      0 ->
-        failures = Amrita.Engine.Start.run
-        System.at_exit fn _ ->
-          if failures > 0, do: System.halt(1), else: System.halt(0)
-        end
-      _ ->
-        :ok
-    end
-  end
+          System.at_exit fn
+            0 ->
+              %{failures: failures} = ExUnit.run
+              System.at_exit fn _ ->
+                if failures > 0, do: exit({:shutdown, 1})
+              end
+            _ ->
+              :ok
+          end
+        end  end
 
   def configure(options) do
     Enum.each options, fn { k, v } ->
-      :application.set_env(:ex_unit, k, v)
+      Application.put_env(:ex_unit, k, v)
     end
   end
 
   def configuration do
-    :application.get_all_env(:ex_unit)
+    Application.get_all_env(:ex_unit)
   end
 
   def run do

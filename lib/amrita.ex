@@ -14,10 +14,23 @@ defmodule Amrita do
       Amrita.start(formatter: Amrita.Formatter.Documentation)
 
   """
-  def start(opts \\ []) do
-    formatter = Keyword.get(opts, :formatter, Amrita.Formatter.Progress)
-    Amrita.Engine.Start.now formatter: formatter
+  def start(_type, _args) do
+#    IO.inspect opts
+     import Supervisor.Spec
+     
+     children = [worker(ExUnit.Server, []), worker(ExUnit.OnExitHandler, [])]
+     opts = [strategy: :one_for_one, name: ExUnit.Supervisor]
+     Supervisor.start_link(children, opts)
+    #
+    #
+    # Amrita.Engine.Start.now formatter: formatter
+    # {:ok, []}
   end
+
+
+   def start(options \\ []) do
+     Amrita.Engine.Start.now(options)
+   end
 
   @doc """
   Polite version of start.
@@ -219,6 +232,8 @@ defmodule Amrita do
        else
          :"test_#{message}"
        end
+       
+       ExUnit.Case.__on_definition__(__ENV__, message)
 
        def unquote(message)(unquote(var))  do
          unquote(contents)

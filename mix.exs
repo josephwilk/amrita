@@ -9,7 +9,7 @@ defmodule Amrita.Mixfile do
      name: "Amrita",
      description: "A polite, well mannered and thoroughly upstanding testing framework for Elixir",
      source_url: "https://github.com/josephwilk/amrita",
-     elixir: "~> 0.15.0",
+     elixir: "~> 1.0.0",
      homepage_url: "http://amrita.io",
      package: [links: [{"Website", "http://amrita.io"},
                        {"Source", "http://github.com/josephwilk/amrita"}],
@@ -23,7 +23,19 @@ defmodule Amrita.Mixfile do
   end
 
   def application do
-    []
+    [registered: [ExUnit.Server],
+       mod: {Amrita, []},
+       env: [
+         # Calculated on demand
+         # max_cases: :erlang.system_info(:schedulers_online),
+         # seed: rand(),
+
+         autorun: true,
+         colors: [],
+         trace: false,
+         formatters: [Amrita.Formatter.Documentation],
+         include: [],
+         exclude: []]]
   end
 
   defp deps(:dev) do
