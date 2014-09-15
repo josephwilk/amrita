@@ -6,7 +6,7 @@ defmodule Amrita.Formatter.Format do
   @doc """
   Receives a pending test and formats it.
   """
-  def format_test_pending(%ExUnit.Test{} = test, counter, color) do
+  def format_test_pending(test, {kind, reason, stacktrace}, counter, width, color) do
     %ExUnit.Test{case: test_case, name: test_name, state: { :failed, { _kind, _reason, stacktrace }}} = test
 
     test_info("#{counter})", color) <>
@@ -33,12 +33,11 @@ defmodule Amrita.Formatter.Format do
   end
 
   def colorize(escape, string) do
-    if System.get_env("NO_COLOR") do
-      string
-    else
-      IO.ANSI.escape_fragment("%{#{escape}}") <> string <> IO.ANSI.escape_fragment("%{reset}")
-    end
-  end
+    enabled = true
+      [IO.ANSI.format_fragment(escape, enabled),
+       string,
+       IO.ANSI.format_fragment(:reset, enabled)] |> IO.iodata_to_binary
+   end
 
   defp format_location([{ test_case, test, _, [ file: file, line: line ] }|_], test_case, test, color) do
     location_info("# #{Path.relative_to_cwd(file)}:#{line}", color)

@@ -1,5 +1,6 @@
 defmodule Support do
-  defexception FactDidNotFail, [:line, :file, :form] do
+  defmodule FactDidNotFail do
+  defexception [:line, :file, :form] 
     def message(exception) do
       "Expected:\n" <>
         "      #{Macro.to_string(exception.form)} " <> exception.location <> "\n" <>
@@ -64,8 +65,4 @@ defmodule Support do
   end
 end
 
-if Amrita.Elixir.Version.less_than_or_equal?([0, 9, 3]) do
-  Amrita.start
-else
-  Amrita.start(formatter: Amrita.Formatter.Documentation)
-end
+Amrita.start(formatters: [Amrita.Formatter.Documentation])

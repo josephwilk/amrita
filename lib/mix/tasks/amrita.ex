@@ -29,7 +29,7 @@ defmodule Mix.Tasks.Amrita do
 
     Mix.Task.run "app.start", args
 
-    project = Mix.project
+    project = Mix.Project.config
 
     :application.load(:ex_unit)
     Amrita.Engine.Start.configure(Dict.take(opts, [:trace, :max_cases, :color, :selectors]))

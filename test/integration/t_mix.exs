@@ -5,17 +5,18 @@ defmodule Integration.Mix do
 
   def run_mix(cmd) do
     mix = System.find_executable("mix") || "vendor/elixir/bin/elixir vendor/elixir/bin/mix"
-    iodata_to_binary(:os.cmd(~c(sh -c "#{mix} #{cmd}")))
+    IO.iodata_to_binary(:os.cmd(~c(sh -c "#{mix} #{cmd}")))
   end
 
   setup do
     File.mkdir_p("tmp/test")
-    { :ok, [] }
-  end
+    
+    on_exit do
+      File.rm_rf!("tmp")
+      :ok
+    end
 
-  teardown do
-    File.rm_rf!("tmp")
-    { :ok, [] }
+    :ok
   end
 
   @pants_template "

@@ -35,11 +35,11 @@ defmodule Amrita.Syntax.Describe do
   end
 
   defmacro after_each(var \\ quote(do: _), block) do
-    quote do: ExUnit.Callbacks.teardown(unquote(var), unquote(block))
+    quote do: ExUnit.Callbacks.on_exit(unquote(var), unquote(block))
   end
 
-  defmacro after_all(var \\ quote(do: _), block) do
-    quote do: ExUnit.Callbacks.teardown_all(unquote(var), unquote(block))
-  end
+  # defmacro after_all(var \\ quote(do: _), block) do
+  #   quote do: ExUnit.Callbacks.teardown_all(unquote(var), unquote(block))
+  # end
 end
 

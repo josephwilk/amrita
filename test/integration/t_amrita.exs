@@ -249,7 +249,9 @@ defmodule Integration.AmritaFacts do
     end
   end
 
-  defexception TestException, message: "golly gosh, sorry"
+  defmodule TestException do
+  defexception message: "golly gosh, sorry"
+  end
 
   facts "exceptions" do
     fact "should allow checking of exceptions" do
