@@ -108,11 +108,11 @@ defmodule PipelineFacts do
       end
     end
 
-    fact "hashset" do
-      HashSet.new([1,2,3]) |> HashSet.new([1,2,3])
+    future_fact "hashset" do
+      Enum.into [1,2,3], %HashSet{} |> Enum.into [1,2,3], %HashSet{}
 
       fail do
-        HashSet.new([1,2,3]) |> HashSet.new([1,2,4])
+        Enum.into [1,2,3], %HashSet{} |> Enum.into [1,2,4], %HashSet{}
       end
     end
 

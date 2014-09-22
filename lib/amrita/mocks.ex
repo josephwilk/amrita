@@ -21,7 +21,7 @@ defmodule Amrita.Mocks do
     The Mocking DSL.
     """
 
-    Record.defrecord Error, module: nil, fun: nil, args: nil, raw_args: nil, history: []
+    Record.defrecord :error, [module: nil, fun: nil, args: nil, raw_args: nil, history: []]
 
     @doc """
     Adds prerequisites to a test.
@@ -133,6 +133,7 @@ defmodule Amrita.Mocks do
 
   defmodule Provided.Check do
   @moduledoc false
+    require Amrita.Mocks.Provided
 
     def fails(prerequisites) do
       Provided.Prerequisites.reduce prerequisites, [], fn mock -> called?(mock) end
@@ -140,11 +141,11 @@ defmodule Amrita.Mocks do
 
     defp called?({module, fun, args, raw_args, _}) do
       case :meck.called(module, fun, args) do
-        false -> [Provided.Error.new(module: module,
-                                     fun: fun,
-                                     args: args,
-                                     raw_args: raw_args,
-                                     history: Amrita.Mocks.History.matches(module, fun))]
+        false -> [Provided.error(module: module,
+                                 fun: fun,
+                                 args: args,
+                                 raw_args: raw_args,
+                                 history: Amrita.Mocks.History.matches(module, fun))]
         _     -> []
       end
     end
@@ -258,7 +259,7 @@ defmodule Amrita.Mocks do
     end
 
     defp extract(form) do
-      raise Error.new(form: form)
+      raise Error, form: form
     end
 
   end
