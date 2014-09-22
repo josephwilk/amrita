@@ -1,5 +1,7 @@
 #Amrita
 
+NOTE: Elixir 1.0 support is being worked on here: https://github.com/josephwilk/amrita/tree/chasing-elixir-master
+
 [![Build Status](https://travis-ci.org/josephwilk/amrita.png?branch=master)](https://travis-ci.org/josephwilk/amrita)
 
 A polite, well mannered and thoroughly upstanding testing framework for [Elixir](http://elixir-lang.org/).
