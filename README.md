@@ -8,6 +8,8 @@ A polite, well mannered and thoroughly upstanding testing framework for [Elixir]
 
 ![Elixir of life](http://s2.postimg.org/kmlrx9dp5/6337_33695901.jpg)
 
+NOTE: Support for Elixir 1.0 is current in progress and is hiding here: https://github.com/josephwilk/amrita/tree/chasing-elixir-master until stable.
+
 ##Install
 
 Add to your mix.exs
