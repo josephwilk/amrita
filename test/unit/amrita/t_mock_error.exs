@@ -6,23 +6,24 @@ defmodule MockErrorFacts do
 
   facts "about mock error messages" do
     fact "message contains actual call" do
-      error = Provided.Error.new(module: Amrita,
-                                 fun: :pants,
-                                 args: [:hatter],
-                                 history: [{Amrita, :pants, [:platter]}])
-      error = Amrita.MockError.new(mock_fail: true, errors: [error])
+      error =  Provided.error(module: Amrita,
+                              fun: :pants,
+                              args: [:hatter],
+                              history: [{Amrita, :pants, [:platter]}])
+                              IO.inspect error
+      error = %Amrita.MockError{errors: [error]}
 
-      error.message |> contains "Amrita.pants(:platter)"
+      Amrita.MockError.message(error) |> contains "Amrita.pants(:platter)"
     end
 
     fact "message contains expected call" do
-      error = Provided.Error.new(module: Amrita,
-                                 fun: :pants,
-                                 args: [:hatter],
-                                 history: [{Amrita, :pants, [:platter]}])
-      error = Amrita.MockError.new(mock_fail: true, errors: [error])
+      error = Provided.error(module: Amrita,
+                             fun: :pants,
+                             args: [:hatter],
+                             history: [{Amrita, :pants, [:platter]}])
+      error = %Amrita.MockError{errors: [error]}
 
-      error.message |> contains "Amrita.pants(:hatter)"
+      Amrita.MockError.message(error) |> contains "Amrita.pants(:hatter)"
     end
 
   end

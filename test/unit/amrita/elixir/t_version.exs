@@ -2,6 +2,7 @@ Code.require_file "../../../../test_helper.exs", __ENV__.file
 
 defmodule VersionFacts do
   use Amrita.Sweet
+  require Amrita.Sweet
 
   alias Amrita.Elixir.Version, as: Version
 

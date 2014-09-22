@@ -11,7 +11,7 @@ defmodule Amrita.FactError do
 
   def message(exception) do
     "#{exception.prelude}:\n" <>
-      "     #{exception.actual_result} |> #{exception.full_checker}"
+      "     #{Amrita.FactError.actual_result(exception)} |> #{Amrita.FactError.full_checker(exception)}"
   end
 
   def full_checker(exception) do
