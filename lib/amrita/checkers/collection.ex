@@ -63,7 +63,7 @@ defmodule Amrita.Checkers.Collections do
     r = case collection do
           c when is_tuple(c) ->
             collection_prefix = Enum.take(Tuple.to_list(collection), tuple_size(prefix))
-            collection_prefix = Tuple.to_list(collection_prefix)
+            collection_prefix = List.to_tuple(collection_prefix)
             collection_prefix == prefix
           c when is_list(c)  ->
             Enum.take(collection, Enum.count(prefix)) == prefix
@@ -106,7 +106,7 @@ defmodule Amrita.Checkers.Collections do
     r = case collection do
           c when is_tuple(c) ->
             collection_suffix = Enum.drop(Tuple.to_list(collection), tuple_size(collection) - tuple_size(suffix))
-            collection_suffix = Tuple.to_list(collection_suffix)
+            collection_suffix = List.to_tuple(collection_suffix)
             collection_suffix == suffix
           c when is_list(c) ->
             collection_suffix = Enum.drop(collection, Enum.count(collection) - Enum.count(suffix))
