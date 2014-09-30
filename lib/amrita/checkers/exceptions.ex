@@ -47,7 +47,7 @@ defmodule Amrita.Checkers.Exceptions do
         Message.fail message, expected, __ENV__.function
       end
     else
-      Message.fail error.__record__(:name), expected, __ENV__.function
+      Message.fail error.__struct__, expected, __ENV__.function
     end
   end
 
