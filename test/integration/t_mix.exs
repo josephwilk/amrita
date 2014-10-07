@@ -11,7 +11,7 @@ defmodule Integration.Mix do
   setup do
     File.mkdir_p("tmp/test")
     
-    on_exit do
+    on_exit fn ->
       File.rm_rf!("tmp")
       :ok
     end
