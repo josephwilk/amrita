@@ -37,14 +37,17 @@ vendor/master:
 	make --quiet -C vendor/elixir > /dev/null 2>&1
 
 ci_master: vendor/master
+	mix local.hex --force
 	@${VENDORED_ELIXIR} --version
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, compile, amrita
 
 ci_$(STABLE_ELIXIR_VERSION): vendor/${STABLE_ELIXIR_VERSION}
+	mix local.hex --force
 	@${VENDORED_ELIXIR} --version
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, compile, amrita
 
 test_vendored:
+	mix local.hex --force
 	@${VENDORED_ELIXIR} --version
 	@${RUN_VENDORED_MIX} clean
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, compile, amrita
