@@ -128,22 +128,6 @@ defmodule Amrita.Engine.Runner do
        EM.case_finished(config.manager, test_case)
        send pid, {self, :case_finished, test_case}
      end
-     
-     defp prepare_tests(config, tests) do
-       tests   = shuffle(config, tests)
-       include = config.include
-       exclude = config.exclude
-
-       for test <- tests do
-         tags = Map.put(test.tags, :test, test.name)
-         case ExUnit.Filters.eval(include, exclude, tags, tests) do
-           :ok           -> %{test | tags: tags}
-           {:error, tag} -> %{test | state: {:skip, "due to #{tag} filter"}}
-         end
-       end
-     end
-    
-    
     
      defp spawn_case(config, test_case, tests) do
         parent = self
@@ -307,5 +291,5 @@ defmodule Amrita.Engine.Runner do
             {:error, tag} -> %{test | state: {:skip, "due to #{tag} filter"}}
           end
         end
-      end    
+      end
 end
