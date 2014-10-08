@@ -10,12 +10,12 @@ defmodule Integration.CheckerFacts do
      end
 
      fact "supports ! and positive form" do
-       1000 |> thousand
-       1001 |> ! thousand
+       1000 |> thousand()
+       1001 |> ! thousand()
 
        fail do
-         1001 |> thousand
-         1000 |> ! thousand
+         1001 |> thousand()
+         1000 |> ! thousand()
        end
      end
    end

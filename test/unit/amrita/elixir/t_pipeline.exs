@@ -18,7 +18,8 @@ defmodule PipelineFacts do
     10 |> a
 
     b = 10
-    b |> example
+    
+    b |> example()
 
     fail do
       a = "var test"
