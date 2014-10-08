@@ -5,16 +5,23 @@ defmodule Amrita.Engine.RunnerStats do
   use GenEvent
 
   def init(_opts) do
-    {:ok, %{total: 0, failures: 0}}
+    {:ok, %{total: 0, failures: 0, pending: 0}}
   end
 
   def handle_call(:stop, map) do
     {:remove_handler, map}
   end
 
-  def handle_event({:test_finished, %ExUnit.Test{state: {tag, _}}},
-                   %{total: total, failures: failures} = map) when tag in [:failed, :invalid] do
-    {:ok, %{map | total: total + 1, failures: failures + 1}}
+  def handle_event({:test_finished, %ExUnit.Test{state: {tag, e}}},
+                   %{total: total, failures: failures, pending: pending} = map) when tag in [:failed, :invalid] do
+
+    {_kind, reason, _stack} = e
+    exception_type = reason.__struct__
+    if exception_type == Elixir.Amrita.FactPending do
+      {:ok, %{map | total: total + 1, failures: failures, pending: pending + 1 }}
+    else
+      {:ok, %{map | total: total + 1, failures: failures + 1, pending: pending}}
+    end
   end
 
   def handle_event({:test_finished, %ExUnit.Test{state: {:skip, _}}}, map) do
