@@ -134,7 +134,7 @@ defmodule Amrita.Engine.Runner do
 
         {case_pid, case_ref} =
           spawn_monitor(fn ->
-            Amrita.Engine.OnExitHandler.register(self)
+            ExUnit.OnExitHandler.register(self)
 
             case exec_case_setup(test_case) do
               {:ok, test_case, context} ->
