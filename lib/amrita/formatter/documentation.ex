@@ -24,7 +24,7 @@ defmodule Amrita.Formatter.Documentation do
         width: get_terminal_width(),
         tests_counter: 0,
         failures_counter: 0,
-        invalids_counter: 0,
+        invalid_counter: 0,
         pending_counter: 0,
         test_failures: [],
         pending_failures: [],
@@ -35,17 +35,17 @@ defmodule Amrita.Formatter.Documentation do
   end
 
   def handle_event({:suite_finished, run_us, load_us}, config) do
-    print_suite(config, run_us, load_us, config.failures_counter)
+    print_suite(config, run_us, load_us)
     :remove_handler
   end
    
   def handle_event({:test_started, %ExUnit.Test{} = test}, config) do
     if(name_parts = scoped(test)) do
-           if(scope = new_scope(config, name_parts)) do
-             print_scopes(name_parts)
-             config = %{ config | scope: HashDict.put(config.scope, scope, [])}
-           end
-         end
+      if(scope = new_scope(config, name_parts)) do
+        print_scopes(name_parts)
+        config = %{ config | scope: HashDict.put(config.scope, scope, [])}
+      end
+    end
     { :ok, config }
   end
 
@@ -53,10 +53,13 @@ defmodule Amrita.Formatter.Documentation do
     if(name_parts = scoped(test)) do
       print_indent(name_parts)
       IO.write success(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}#{trace_test_time(test, config)}\n")
-   
       {:ok, %{config | tests_counter: config.tests_counter + 1}}
     else
-      IO.puts success("\r  #{format_test_name test}#{trace_test_time(test, config)}")
+      if config.trace do
+        IO.puts success(trace_test_result(test), config)
+      else
+        IO.write success("\r  #{format_test_name test}\n")
+      end
       {:ok, %{config | tests_counter: config.tests_counter + 1}}
     end
   end
@@ -78,15 +81,17 @@ defmodule Amrita.Formatter.Documentation do
     exception_type = reason.__struct__
 
     name_parts = scoped(test)
-    if(name_parts) do
-      print_indent(name_parts)
-    end
+    if name_parts, do: print_indent(name_parts)
 
     if exception_type == Elixir.Amrita.FactPending do
       if(name_parts) do
         IO.write pending(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}\n")
       else
-        IO.puts  pending("  #{format_test_name test}")
+        if config.trace do
+          IO.puts failure(trace_test_result(test), config)
+        else
+          IO.puts pending("  #{format_test_name test}")
+        end
       end
       config = %{config | pending_counter: config.pending_counter + 1}
         {:ok, %{config | pending_failures: [test|config.pending_failures] }}
@@ -94,7 +99,11 @@ defmodule Amrita.Formatter.Documentation do
       if(name_parts) do
         IO.write failure(String.lstrip "#{Enum.at(name_parts, Enum.count(name_parts)-1)}#{trace_test_time(test, config)}\n")
       else
-        IO.puts  failure("  #{format_test_name test}#{trace_test_time(test, config)}")
+        if config.trace do
+          IO.puts failure("  #{format_test_name test}#{trace_test_time(test, config)}")
+        else
+          IO.puts failure("  #{format_test_name test}")
+        end
       end
       
       config = %{config | tests_counter: config.tests_counter + 1,
@@ -166,20 +175,20 @@ defmodule Amrita.Formatter.Documentation do
     Amrita.Formatter.Format.format_test_name(test)
   end
 
-  defp print_suite(config, run_us, load_us, failures_count=0) do
+  defp print_suite(config = %{ failures_counter: 0 }, run_us, load_us) do
     IO.write "\n\nPending:\n\n"
-      Enum.reduce Enum.reverse(config.pending_failures), 0, &print_test_pending(&1, &2, config)
+    Enum.reduce Enum.reverse(config.pending_failures), 0, &print_test_pending(&1, &2, config)
 
-      IO.puts format_time(run_us, load_us)
-      IO.write success("#{config.tests_counter} facts, ")
-      if config.pending_counter > 0 do
-        IO.write success("#{config.pending_counter} pending, ")
-      end
-      IO.write success "0 failures"
-      IO.write "\n"
+    IO.puts format_time(run_us, load_us)
+    message = "#{config.tests_counter} facts, "
+    if config.pending_counter > 0 do
+      message = message <> "#{config.pending_counter} pending, "
+    end
+    message = message <> "0 failures"
+    IO.puts success(message)
   end
 
-  defp print_suite(config, run_us, load_us, _) do
+  defp print_suite(config, run_us, load_us) do
     IO.write "\n\n"
 
     if config.pending_counter > 0 do
@@ -197,6 +206,7 @@ defmodule Amrita.Formatter.Documentation do
     if config.invalid_counter > 0 do
       message = message <>  ", #{config.invalid_counter} invalid"
     end
+
     if config.pending_counter > 0 do
       message = message <>  ", #{config.pending_counter} pending"
     end
@@ -320,34 +330,33 @@ defmodule Amrita.Formatter.Documentation do
   end
   
   defp colorize(escape, string, %{colors: colors}) do
-      enabled = colors[:enabled]
-      [IO.ANSI.format_fragment(escape, enabled),
-       string,
-       IO.ANSI.format_fragment(:reset, enabled)] |> IO.iodata_to_binary
-    end
+    enabled = colors[:enabled]
+    [IO.ANSI.format_fragment(escape, enabled),
+      string,
+      IO.ANSI.format_fragment(:reset, enabled)] |> IO.iodata_to_binary
+  end
 
-    defp success(msg, config) do
-      colorize([:green], msg, config)
-    end
+  defp success(msg, config) do
+    colorize([:green], msg, config)
+  end
 
-    defp invalid(msg, config) do
-      colorize([:yellow], msg, config)
-    end
+  defp invalid(msg, config) do
+    colorize([:yellow], msg, config)
+  end
 
-    defp failure(msg, config) do
-      colorize([:red], msg, config)
-    end
+  defp failure(msg, config) do
+    colorize([:red], msg, config)
+  end
 
-    defp formatter(:error_info, msg, config),    do: colorize([:red], msg, config)
-    defp formatter(:extra_info, msg, config),    do: colorize([:cyan], msg, config)
-    defp formatter(:location_info, msg, config), do: colorize([:bright, :black], msg, config)
-    defp formatter(_,  msg, _config),            do: msg
+  defp formatter(:error_info, msg, config),    do: colorize([:red], msg, config)
+  defp formatter(:extra_info, msg, config),    do: colorize([:cyan], msg, config)
+  defp formatter(:location_info, msg, config), do: colorize([:bright, :black], msg, config)
+  defp formatter(_,  msg, _config),            do: msg
 
-    defp get_terminal_width do
-      case :io.columns do
-        {:ok, width} -> max(40, width)
-        _ -> 80
-      end
+  defp get_terminal_width do
+    case :io.columns do
+      {:ok, width} -> max(40, width)
+      _ -> 80
     end
-  
+  end
 end
