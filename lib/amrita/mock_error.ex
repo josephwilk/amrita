@@ -10,7 +10,6 @@ defmodule Amrita.MockError do
   end
 
   defp messages(exception) do
-    IO.inspect exception.errors
     errors = Enum.map(exception.errors, fn e -> expected_call(e) <> actual_calls(e) end)
     Enum.join(errors, "\n")
   end
