@@ -12,7 +12,7 @@ defmodule Amrita.Engine.Start do
 
           System.at_exit fn
             0 ->
-              %{failures: failures} = ExUnit.run
+              %{failures: failures} = Amrita.Engine.Start.run
               System.at_exit fn _ ->
                 if failures > 0, do: exit({:shutdown, 1})
               end
