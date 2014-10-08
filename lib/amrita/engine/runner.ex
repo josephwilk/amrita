@@ -283,6 +283,16 @@ defmodule Amrita.Engine.Runner do
         include = config.include
         exclude = config.exclude
 
+        tests = Enum.sort tests, fn(c,c1) ->
+          c_levels = Enum.count(String.split(Atom.to_string(c.name), " - "))
+          c1_levels = Enum.count(String.split(Atom.to_string(c1.name), " - "))
+          if(c_levels == c1_levels) do
+            c.name <= c1.name
+          else
+            c_levels < c1_levels
+          end
+        end
+
         for test <- tests do
           tags = Map.put(test.tags, :test, test.name)
           case ExUnit.Filters.eval(include, exclude, tags, tests) do
