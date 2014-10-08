@@ -11,8 +11,7 @@ defmodule Amrita.Mixfile do
      source_url: "https://github.com/josephwilk/amrita",
      elixir: "~> 1.0.0",
      homepage_url: "http://amrita.io",
-     package: [links: [{"Website", "http://amrita.io"},
-                       {"Source", "http://github.com/josephwilk/amrita"}],
+     package: [links: %{"Website" => "http://amrita.io", "Source" => "http://github.com/josephwilk/amrita"},
               contributors: ["Joseph Wilk"],
               licenses: ["MIT"]],
      deps: deps(Mix.env)]
