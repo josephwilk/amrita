@@ -5,7 +5,7 @@ defmodule Amrita.Engine.Runner do
 #  Record.defrecord Config, formatter: Amrita.Formatter.Progress, formatter_id: nil,
 #                    max_cases: 4, taken_cases: 0, async_cases: [], sync_cases: [], selectors: []
 
-  alias ExUnit.EventManager, as: EM
+  alias Amrita.Engine.EventManager, as: EM
 
   @stop_timeout 30_000
 
@@ -13,7 +13,7 @@ defmodule Amrita.Engine.Runner do
     opts = normalize_opts(opts)
 
     {:ok, pid} = EM.start_link
-    formatters = [ExUnit.RunnerStats|opts[:formatters]]
+    formatters = [Amrita.Engine.RunnerStats|opts[:formatters]]
     Enum.each formatters, &(:ok = EM.add_handler(pid, &1, opts))
 
     config = %{
@@ -30,12 +30,12 @@ defmodule Amrita.Engine.Runner do
     { run_us, _ } =
       :timer.tc fn ->
         EM.suite_started(config.manager, opts)
-        loop %{config | sync_cases:  shuffle(config, sync),
-                        async_cases: shuffle(config, async)}
+        loop %{config | sync_cases:  sync,
+                        async_cases: async}
       end
 
     EM.suite_finished(config.manager, run_us, load_us)
-    EM.call(config.manager, ExUnit.RunnerStats, :stop, @stop_timeout)
+    EM.call(config.manager, Amrita.Engine.RunnerStats, :stop, @stop_timeout)
   end
 
   defp normalize_opts(opts) do
@@ -46,7 +46,7 @@ defmodule Amrita.Engine.Runner do
         Keyword.put(opts, :trace, false)
       end
 
-    {include, exclude} = ExUnit.Filters.normalize(opts[:include], opts[:exclude])
+    {include, exclude} = Amrita.Engine.Filters.normalize(opts[:include], opts[:exclude])
 
     opts
     |> Keyword.put(:exclude, exclude)
@@ -134,7 +134,7 @@ defmodule Amrita.Engine.Runner do
 
         {case_pid, case_ref} =
           spawn_monitor(fn ->
-            ExUnit.OnExitHandler.register(self)
+            Amrita.Engine.OnExitHandler.register(self)
 
             case exec_case_setup(test_case) do
               {:ok, test_case, context} ->
@@ -280,7 +280,6 @@ defmodule Amrita.Engine.Runner do
       defp prune_stacktrace([]), do: [] 
     
       defp prepare_tests(config, tests) do
-        tests   = shuffle(config, tests)
         include = config.include
         exclude = config.exclude
 
