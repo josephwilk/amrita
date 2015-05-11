@@ -32,6 +32,13 @@ defmodule Amrita.Elixir.Pipeline do
     end
   end
 
+  # Comparing map
+  defp pipeline_op(left, {:%{}, _, _}=right) do
+    quote do
+      unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
+    end
+  end
+
   defp pipeline_op(left, { _, _ }=right) do
     quote do
       unquote(left) |> Amrita.Checkers.Simple.equals unquote(right)
