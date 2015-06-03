@@ -2,7 +2,7 @@ VENDORED_ELIXIR=${PWD}/vendor/elixir/bin/elixir
 VENDORED_MIX=${PWD}/vendor/elixir/bin/mix
 RUN_VENDORED_MIX=${VENDORED_ELIXIR} ${VENDORED_MIX}
 VERSION := $(strip $(shell cat VERSION))
-STABLE_ELIXIR_VERSION = 1.0.0
+STABLE_ELIXIR_VERSION = 1.0.4
 
 .PHONY: all test
 
@@ -25,11 +25,6 @@ docs:
 
 ci: ci_${STABLE_ELIXIR_VERSION} 
 
-vendor/${STABLE_ELIXIR_VERSION}:
-	@rm -rf vendor/*
-	@mkdir -p vendor/elixir
-	wget --no-check-certificate --no-clobber -q https://github.com/elixir-lang/elixir/releases/download/v${STABLE_ELIXIR_VERSION}/Precompiled.zip && unzip -qq Precompiled.zip -d vendor/elixir
-
 vendor/master:
 	@rm -rf vendor/*
 	@mkdir -p vendor/elixir
@@ -41,10 +36,8 @@ ci_master: vendor/master
 	${RUN_VENDORED_MIX} local.hex --force
 	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, compile, amrita
 
-ci_$(STABLE_ELIXIR_VERSION): vendor/${STABLE_ELIXIR_VERSION}
-	${RUN_VENDORED_MIX} local.hex --force
-	@${VENDORED_ELIXIR} --version
-	@MIX_ENV=test ${RUN_VENDORED_MIX} do clean, deps.get, compile, amrita
+ci_$(STABLE_ELIXIR_VERSION): 
+	@MIX_ENV=test mix do clean, deps.get, compile, amrita
 
 test_vendored:
 	${RUN_VENDORED_MIX} local.hex --force
