@@ -1,4 +1,4 @@
-#Amrita
+# Amrita
 
 [![Build Status](https://travis-ci.org/josephwilk/amrita.svg?branch=master)](https://travis-ci.org/josephwilk/amrita)
 
@@ -6,7 +6,7 @@ A polite, well mannered and thoroughly upstanding testing framework for [Elixir]
 
 ![Elixir of life](http://s2.postimg.org/kmlrx9dp5/6337_33695901.jpg)
 
-##Install
+## Install
 
 Add to your mix.exs
 
@@ -24,7 +24,7 @@ After adding Amrita as a dependency, to install please run:
 mix deps.get
 ```
 
-##Getting started
+## Getting started
 
 Ensure you start Amrita in: test/test_helper.exs
 ```elixir
